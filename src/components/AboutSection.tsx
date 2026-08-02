@@ -1,5 +1,7 @@
-import Image from "next/image";
+"use client";
+
 import { CheckCircle, ShieldCheck, Flame, Store } from "lucide-react";
+import TiltedCard from "@/components/reactbits/TiltedCard";
 
 export default function AboutSection() {
   return (
@@ -16,23 +18,20 @@ export default function AboutSection() {
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           
-          {/* Shop Photo */}
+          {/* Shop Photo with 3D Tilt Effect */}
           <div className="lg:col-span-5 relative">
-            <div className="relative rounded-xl border border-[#C5A059]/60 p-1 bg-white shadow-md">
-              <div className="relative rounded-lg overflow-hidden aspect-[4/3] bg-[#1A110B]">
-                <Image
-                  src="/محل.jpg"
-                  alt="محل بن بدران في ميت غمر"
-                  fill
-                  className="object-cover hover:scale-105 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#1A110B]/90 via-transparent to-transparent flex items-end p-3 text-white">
-                  <p className="font-amiri text-base md:text-lg text-[#C5A059]">
-                    فرع بن بدران الرئيسي بميت غمر
-                  </p>
-                </div>
-              </div>
-            </div>
+            <TiltedCard
+              imageSrc="/محل.jpg"
+              altText="محل بن بدران في ميت غمر"
+              captionText="محل بن بدران بميت غمر 📍"
+              containerHeight="260px"
+              containerWidth="100%"
+              imageHeight="100%"
+              imageWidth="100%"
+              scaleOnHover={1.04}
+              rotateAmplitude={12}
+              showTooltip={true}
+            />
 
             {/* Local Ribbon */}
             <div className="absolute -top-3 -right-3 heritage-ribbon text-[10px] font-alexandria font-bold shadow-md z-10">

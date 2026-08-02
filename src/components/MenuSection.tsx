@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { CATEGORIES, MENU_ITEMS, PRINTED_MENU_PAGES, MenuItem } from "@/data/menu";
 import { Search, ShoppingBag, X, ZoomIn, Grid, FileText, ChevronLeft, ChevronRight, Eye } from "lucide-react";
+import SpotlightCard from "@/components/reactbits/SpotlightCard";
 
 interface MenuSectionProps {
   onAddToCart: (item: MenuItem, selectedPrice: { unit: string; price: number }) => void;
@@ -165,7 +166,7 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
               </div>
             </div>
 
-            {/* Menu Items Grid */}
+            {/* Menu Items Grid with Spotlight Effect */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               {filteredItems.map((item) => {
                 const selectedPriceIndex = selectedWeights[item.id] || 0;
@@ -173,12 +174,13 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
                 const pageIndex = getCategoryPageIndex(item.category);
 
                 return (
-                  <div
+                  <SpotlightCard
                     key={item.id}
-                    className="relative p-4 bg-white rounded-xl border border-[#1A110A]/15 hover:border-[#C5A059] transition-all shadow-xs flex flex-col justify-between"
+                    className="p-4 bg-white rounded-xl border border-[#1A110A]/15 hover:border-[#C5A059] transition-all shadow-xs flex flex-col justify-between"
+                    spotlightColor="rgba(197, 160, 89, 0.18)"
                   >
                     {item.isSpecial && (
-                      <span className="absolute -top-2.5 right-4 heritage-ribbon text-[10px]">
+                      <span className="absolute -top-2.5 right-4 heritage-ribbon text-[10px] z-10">
                         خلطة بدران
                       </span>
                     )}
@@ -209,7 +211,7 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
                     </div>
 
                     {/* Weight Options Selector & Add Button */}
-                    <div className="pt-2.5 border-t border-dashed border-[#1A110A]/10 flex flex-wrap items-center justify-between gap-2">
+                    <div className="pt-2.5 border-t border-dashed border-[#1A110A]/10 flex flex-wrap items-center justify-between gap-2 relative z-10">
                       {/* Weight Selector */}
                       <div className="flex flex-wrap gap-1">
                         {item.prices.map((p, idx) => (
@@ -236,7 +238,7 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
                         <span>أضف للسلة</span>
                       </button>
                     </div>
-                  </div>
+                  </SpotlightCard>
                 );
               })}
             </div>

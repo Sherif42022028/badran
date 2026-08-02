@@ -1,5 +1,9 @@
+"use client";
+
 import Image from "next/image";
 import { Coffee, Award, Clock, MapPin, Sparkles } from "lucide-react";
+import ShinyText from "@/components/reactbits/ShinyText";
+import Magnet from "@/components/reactbits/Magnet";
 
 export default function Hero() {
   return (
@@ -26,9 +30,14 @@ export default function Hero() {
           </span>
         </div>
 
-        {/* Main Headline */}
+        {/* Main Headline with Metallic Gold Shimmer */}
         <h2 className="font-amiri text-3xl sm:text-4xl md:text-5xl font-bold text-[#1A110B] mb-3 leading-snug">
-          بن بدران.. أصل القهوة والتحويجة البلدي في ميت غمر
+          <ShinyText
+            text="بن بدران.. أصل القهوة والتحويجة البلدي في ميت غمر"
+            color="#1A110B"
+            shineColor="#C5A059"
+            speed={3}
+          />
         </h2>
 
         {/* Description Paragraph */}
@@ -36,23 +45,27 @@ export default function Hero() {
           بن نقي 100%، طحن وتحمير طازة قدام عينك في المحل يومياً، مع أجود أنواع الحبهان الهندي الأخضر والمستكة اليوناني الأصلي، وخلطات فرنسية بنكهات البندق والشوكولاتة بالفانيليا.
         </p>
 
-        {/* CTA Buttons */}
+        {/* CTA Buttons with Magnetic Pull */}
         <div className="flex flex-col sm:flex-row justify-center items-center gap-3 mb-6">
-          <a
-            href="#menu"
-            className="w-full sm:w-auto bg-[#1A110B] hover:bg-[#2A1D15] text-[#FAF8F5] font-alexandria font-bold text-xs md:text-sm px-6 py-2.5 rounded-lg border border-[#C5A059]/40 transition-all shadow-xs flex items-center justify-center gap-2 group"
-          >
-            <Coffee className="w-4 h-4 text-[#C5A059]" />
-            <span>تصفح الأسعار والمنيو</span>
-          </a>
+          <Magnet padding={40} magnetStrength={3}>
+            <a
+              href="#menu"
+              className="w-full sm:w-auto bg-[#1A110B] hover:bg-[#2A1D15] text-[#FAF8F5] font-alexandria font-bold text-xs md:text-sm px-6 py-2.5 rounded-lg border border-[#C5A059]/40 transition-all shadow-xs flex items-center justify-center gap-2 group"
+            >
+              <Coffee className="w-4 h-4 text-[#C5A059]" />
+              <span>تصفح الأسعار والمنيو</span>
+            </a>
+          </Magnet>
 
-          <a
-            href="#blend-builder"
-            className="w-full sm:w-auto bg-[#C5A059] hover:bg-[#B08B46] text-white font-alexandria font-bold text-xs md:text-sm px-6 py-2.5 rounded-lg transition-all shadow-xs flex items-center justify-center gap-2 active:scale-95"
-          >
-            <Sparkles className="w-4 h-4 text-white" />
-            <span>ركّب خلطتك بنفسك</span>
-          </a>
+          <Magnet padding={40} magnetStrength={3}>
+            <a
+              href="#blend-builder"
+              className="w-full sm:w-auto bg-[#C5A059] hover:bg-[#B08B46] text-white font-alexandria font-bold text-xs md:text-sm px-6 py-2.5 rounded-lg transition-all shadow-xs flex items-center justify-center gap-2 active:scale-95"
+            >
+              <Sparkles className="w-4 h-4 text-white" />
+              <span>ركّب خلطتك بنفسك</span>
+            </a>
+          </Magnet>
         </div>
 
         {/* Natural Local Badges */}
