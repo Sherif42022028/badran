@@ -51,16 +51,16 @@ export default function BlendBuilder() {
   };
 
   return (
-    <section id="blend-builder" className="py-10 md:py-16 px-4 max-w-7xl mx-auto">
-      <div className="framed-section p-8 md:p-14">
+    <section id="blend-builder" className="py-4 md:py-8 px-4 max-w-7xl mx-auto">
+      <div className="framed-section p-5 sm:p-8 md:p-10">
         
         {/* Section Header */}
-        <div className="text-center mb-10">
-          <span className="solid-badge text-base md:text-lg mb-3">
+        <div className="text-center mb-6">
+          <span className="solid-badge text-xs md:text-sm mb-2 py-1 px-3">
             <Sparkles className="w-4 h-4 text-[#C5A059]" />
             <span>ازاي بتحب قهوتك؟ ركّب خلطتك بنفسك</span>
           </span>
-          <p className="font-alexandria text-xs md:text-sm text-[#1A110A]/75 max-w-2xl mx-auto mt-3 font-light">
+          <p className="font-alexandria text-xs md:text-sm text-[#1A110A]/75 max-w-2xl mx-auto mt-2 font-light">
             اختار درجة التحميص ونسبة الحبهان والإضافات اللي تظبط مزاجك، ونجهزها ونطحنها لك خصيصاً في المحل.
           </p>
         </div>
@@ -68,19 +68,19 @@ export default function BlendBuilder() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
           {/* Builder Controls */}
-          <div className="lg:col-span-8 space-y-7 font-alexandria">
+          <div className="lg:col-span-8 space-y-6 font-alexandria">
             
             {/* 1. Roast Selection */}
             <div>
-              <label className="font-amiri text-xl font-bold text-[#1A110A] block mb-3">
+              <label className="font-amiri text-lg font-bold text-[#1A110A] block mb-2">
                 1. درجة التحميص:
               </label>
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-3 gap-2.5">
                 {["فاتح", "وسط", "غامق"].map((title) => (
                   <button
                     key={title}
                     onClick={() => setRoast(title)}
-                    className={`p-3.5 rounded-lg border text-xs sm:text-sm font-bold transition-all ${
+                    className={`p-3 rounded-lg border text-xs font-bold transition-all ${
                       roast === title
                         ? "bg-[#1A110A] text-[#C5A059] border-[#C5A059]"
                         : "bg-white text-[#1A110A] border-[#1A110A]/15 hover:bg-[#1A110A]/5"
@@ -94,15 +94,15 @@ export default function BlendBuilder() {
 
             {/* 2. Cardamom & Spices */}
             <div>
-              <label className="font-amiri text-xl font-bold text-[#1A110A] block mb-3">
+              <label className="font-amiri text-lg font-bold text-[#1A110A] block mb-2">
                 2. مستوى التحويج والحبهان:
               </label>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
                 {["سادة", "محوج خفيف", "محوج وسط", "محوج رويال سوبر"].map((item) => (
                   <button
                     key={item}
                     onClick={() => setCardamom(item)}
-                    className={`p-3 rounded-lg border text-xs font-bold transition-all ${
+                    className={`p-2.5 rounded-lg border text-xs font-bold transition-all ${
                       cardamom === item
                         ? "bg-[#3D120E] text-white border-[#C5A059]/50"
                         : "bg-white text-[#1A110A] border-[#1A110A]/15 hover:bg-[#1A110A]/5"
@@ -116,10 +116,10 @@ export default function BlendBuilder() {
 
             {/* 3. Base Coffee Origin */}
             <div>
-              <label className="font-amiri text-xl font-bold text-[#1A110A] block mb-3">
+              <label className="font-amiri text-lg font-bold text-[#1A110A] block mb-2">
                 3. نوع البن الأساسي:
               </label>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
                 {[
                   "خلطة كولومبي وحبشي",
                   "بن يمني أصيل 100%",
@@ -128,7 +128,7 @@ export default function BlendBuilder() {
                   <button
                     key={item}
                     onClick={() => setOrigin(item)}
-                    className={`p-3.5 rounded-lg border text-xs sm:text-sm font-bold transition-all ${
+                    className={`p-3 rounded-lg border text-xs font-bold transition-all ${
                       origin === item
                         ? "bg-[#1A110A] text-[#C5A059] border-[#C5A059]"
                         : "bg-white text-[#1A110A] border-[#1A110A]/15 hover:bg-[#1A110A]/5"
@@ -142,23 +142,23 @@ export default function BlendBuilder() {
 
             {/* 4. Special Additions */}
             <div>
-              <label className="font-amiri text-xl font-bold text-[#1A110A] block mb-3">
+              <label className="font-amiri text-lg font-bold text-[#1A110A] block mb-2">
                 4. الإضافات الخاصة:
               </label>
-              <div className="flex flex-wrap gap-3">
+              <div className="flex flex-wrap gap-2.5">
                 {["مستكة يوناني", "زر ورد طبيعي", "جوزة الطيب", "قرفة خشابي"].map((item) => {
                   const selected = additions.includes(item);
                   return (
                     <button
                       key={item}
                       onClick={() => toggleAddition(item)}
-                      className={`px-4 py-2.5 rounded-lg text-xs font-bold flex items-center gap-2 transition-all ${
+                      className={`px-3.5 py-2 rounded-lg text-xs font-bold flex items-center gap-2 transition-all ${
                         selected
                           ? "bg-[#C5A059] text-white border border-[#C5A059]"
                           : "bg-white text-[#1A110A] border border-[#1A110A]/15 hover:bg-[#1A110A]/5"
                       }`}
                     >
-                      <CheckCircle className={`w-4 h-4 ${selected ? "text-white" : "opacity-30"}`} />
+                      <CheckCircle className={`w-3.5 h-3.5 ${selected ? "text-white" : "opacity-30"}`} />
                       <span>{item}</span>
                     </button>
                   );
@@ -168,15 +168,15 @@ export default function BlendBuilder() {
 
             {/* 5. Weight Selection */}
             <div>
-              <label className="font-amiri text-xl font-bold text-[#1A110A] block mb-3">
+              <label className="font-amiri text-lg font-bold text-[#1A110A] block mb-2">
                 5. الوزن المطلوب:
               </label>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
                 {["ثمن كيلو (125جم)", "ربع كيلو (250جم)", "نصف كيلو (500جم)", "كيلو كامل"].map((w) => (
                   <button
                     key={w}
                     onClick={() => setWeight(w)}
-                    className={`p-3 rounded-lg border text-xs font-bold transition-all ${
+                    className={`p-2.5 rounded-lg border text-xs font-bold transition-all ${
                       weight === w
                         ? "bg-[#1A110A] text-[#C5A059] border-[#C5A059]"
                         : "bg-white text-[#1A110A] border-[#1A110A]/15"
@@ -191,49 +191,49 @@ export default function BlendBuilder() {
           </div>
 
           {/* Live Order Summary Card */}
-          <div className="lg:col-span-4 bg-[#1A110A] text-[#FAF8F5] p-6 rounded-xl border border-[#C5A059]/40 shadow-md sticky top-24 font-alexandria space-y-5">
-            <h4 className="font-amiri text-2xl text-[#C5A059] border-b border-dashed border-[#C5A059]/30 pb-3 flex items-center gap-2">
-              <Coffee className="w-5 h-5 text-[#C5A059]" />
+          <div className="lg:col-span-4 bg-[#1A110A] text-[#FAF8F5] p-5 rounded-xl border border-[#C5A059]/40 shadow-md sticky top-24 font-alexandria space-y-4">
+            <h4 className="font-amiri text-xl text-[#C5A059] border-b border-dashed border-[#C5A059]/30 pb-2.5 flex items-center gap-2">
+              <Coffee className="w-4 h-4 text-[#C5A059]" />
               <span>ملخص خلطتك الخاصة</span>
             </h4>
 
-            <div className="space-y-2.5 text-xs text-[#FAF8F5]/90">
-              <div className="flex justify-between border-b border-dashed border-[#C5A059]/20 pb-2">
+            <div className="space-y-2 text-xs text-[#FAF8F5]/90">
+              <div className="flex justify-between border-b border-dashed border-[#C5A059]/20 pb-1.5">
                 <span className="text-[#C5A059]">التحميص:</span>
                 <span className="font-bold">{roast}</span>
               </div>
-              <div className="flex justify-between border-b border-dashed border-[#C5A059]/20 pb-2">
+              <div className="flex justify-between border-b border-dashed border-[#C5A059]/20 pb-1.5">
                 <span className="text-[#C5A059]">التحويج:</span>
                 <span className="font-bold">{cardamom}</span>
               </div>
-              <div className="flex justify-between border-b border-dashed border-[#C5A059]/20 pb-2">
+              <div className="flex justify-between border-b border-dashed border-[#C5A059]/20 pb-1.5">
                 <span className="text-[#C5A059]">الأساس:</span>
                 <span className="font-bold">{origin}</span>
               </div>
-              <div className="flex justify-between border-b border-dashed border-[#C5A059]/20 pb-2">
+              <div className="flex justify-between border-b border-dashed border-[#C5A059]/20 pb-1.5">
                 <span className="text-[#C5A059]">الإضافات:</span>
                 <span className="font-bold text-[#C5A059]">
                   {additions.length > 0 ? additions.join("، ") : "لا يوجد"}
                 </span>
               </div>
-              <div className="flex justify-between border-b border-dashed border-[#C5A059]/20 pb-2">
+              <div className="flex justify-between border-b border-dashed border-[#C5A059]/20 pb-1.5">
                 <span className="text-[#C5A059]">الوزن:</span>
                 <span className="font-bold">{weight}</span>
               </div>
             </div>
 
             <div className="pt-2 border-t border-dashed border-[#C5A059]/40 flex items-baseline justify-between">
-              <span className="font-alexandria text-sm text-[#FAF8F5]">السعر التقديري:</span>
-              <span className="font-price font-bold text-3xl text-[#C5A059]">
+              <span className="font-alexandria text-xs text-[#FAF8F5]">السعر التقديري:</span>
+              <span className="font-price font-bold text-2xl text-[#C5A059]">
                 {totalCalculated} <span className="text-xs text-[#FAF8F5]">ج.م</span>
               </span>
             </div>
 
             <button
               onClick={handleWhatsAppOrder}
-              className="w-full bg-[#25D366] hover:bg-[#1ebd59] text-white font-alexandria font-bold text-base py-3.5 rounded-lg transition-all shadow-xs flex items-center justify-center gap-2 mt-4"
+              className="w-full bg-[#25D366] hover:bg-[#1ebd59] text-white font-alexandria font-bold text-sm py-3 rounded-lg transition-all shadow-xs flex items-center justify-center gap-2 mt-3"
             >
-              <MessageSquare className="w-5 h-5" />
+              <MessageSquare className="w-4 h-4" />
               <span>اطلب الخلطة عبر الواتساب</span>
             </button>
           </div>

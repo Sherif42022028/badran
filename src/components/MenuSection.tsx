@@ -56,23 +56,23 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
   };
 
   return (
-    <section id="menu" className="py-10 md:py-16 px-4 max-w-7xl mx-auto">
-      <div className="framed-section p-6 sm:p-10 md:p-14">
+    <section id="menu" className="py-4 md:py-8 px-4 max-w-7xl mx-auto">
+      <div className="framed-section p-5 sm:p-8 md:p-10">
         
         {/* Section Title */}
-        <div className="text-center mb-10">
-          <span className="solid-badge text-base md:text-lg mb-3">
+        <div className="text-center mb-6">
+          <span className="solid-badge text-xs md:text-sm mb-2 py-1 px-3">
             <span>أسعار المنيو والمنتجات</span>
           </span>
-          <p className="font-alexandria text-xs md:text-sm text-[#1A110A]/75 max-w-2xl mx-auto mt-3 font-light">
+          <p className="font-alexandria text-xs md:text-sm text-[#1A110A]/75 max-w-2xl mx-auto mt-2 font-light">
             تصفح أسعار البن المحدثة للطلب المباشر، أو اضغط لمشاهدة صفحات المنيو المطبوع الأصلي بالصور.
           </p>
 
           {/* Mode Switcher Tabs */}
-          <div className="inline-flex p-1 bg-[#1A110A]/5 rounded-lg mt-6 border border-[#C5A059]/30">
+          <div className="inline-flex p-1 bg-[#1A110A]/5 rounded-lg mt-4 border border-[#C5A059]/30">
             <button
               onClick={() => setActiveTab("digital")}
-              className={`px-5 py-2.5 rounded-md font-alexandria text-xs md:text-sm font-bold flex items-center gap-2 transition-all ${
+              className={`px-5 py-2 rounded-md font-alexandria text-xs md:text-sm font-bold flex items-center gap-2 transition-all ${
                 activeTab === "digital"
                   ? "bg-[#1A110A] text-[#FAF8F5] shadow-xs"
                   : "text-[#1A110A] hover:bg-[#1A110A]/10"
@@ -83,7 +83,7 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
             </button>
             <button
               onClick={() => setActiveTab("printed")}
-              className={`px-5 py-2.5 rounded-md font-alexandria text-xs md:text-sm font-bold flex items-center gap-2 transition-all ${
+              className={`px-5 py-2 rounded-md font-alexandria text-xs md:text-sm font-bold flex items-center gap-2 transition-all ${
                 activeTab === "printed"
                   ? "bg-[#1A110A] text-[#FAF8F5] shadow-xs"
                   : "text-[#1A110A] hover:bg-[#1A110A]/10"
@@ -97,16 +97,16 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
 
         {/* ================= DIGITAL MENU LEDGER TABLE ================= */}
         {activeTab === "digital" && (
-          <div className="space-y-8 animate-fadeIn">
+          <div className="space-y-6 animate-fadeIn">
             
             {/* Quick Banner to open Printed Menu Lightbox */}
-            <div className="p-4 bg-[#1A110A] rounded-xl border border-[#C5A059]/40 text-white flex flex-col sm:flex-row items-center justify-between gap-3 shadow-xs">
+            <div className="p-3.5 bg-[#1A110A] rounded-xl border border-[#C5A059]/40 text-white flex flex-col sm:flex-row items-center justify-between gap-3 shadow-xs">
               <div className="flex items-center gap-3">
-                <div className="p-2.5 bg-[#C5A059] text-white rounded-lg shrink-0">
-                  <Eye className="w-5 h-5" />
+                <div className="p-2 bg-[#C5A059] text-white rounded-lg shrink-0">
+                  <Eye className="w-4 h-4" />
                 </div>
                 <div>
-                  <h5 className="font-amiri text-lg text-[#C5A059] font-bold">
+                  <h5 className="font-amiri text-base text-[#C5A059] font-bold">
                     معرض المنيو المطبوع بالصور
                   </h5>
                   <p className="font-alexandria text-xs text-[#FAF8F5]/80 font-light">
@@ -116,20 +116,20 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
               </div>
               <button
                 onClick={() => setLightboxIndex(0)}
-                className="bg-[#C5A059] hover:bg-[#B08B46] text-white px-5 py-2 rounded-lg font-alexandria text-xs font-bold shrink-0 transition-all"
+                className="bg-[#C5A059] hover:bg-[#B08B46] text-white px-4 py-1.5 rounded-lg font-alexandria text-xs font-bold shrink-0 transition-all"
               >
                 تصفح المنيو المطبوع 🖼️
               </button>
             </div>
 
             {/* Search & Category Filter Bar */}
-            <div className="flex flex-col md:flex-row items-center justify-between gap-4 border-b border-dashed border-[#C5A059]/30 pb-6">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-4 border-b border-dashed border-[#C5A059]/30 pb-4">
               
               {/* Category Badges */}
               <div className="flex flex-wrap items-center justify-center md:justify-start gap-2">
                 <button
                   onClick={() => setSelectedCategory("all")}
-                  className={`px-3.5 py-1.5 rounded-lg text-xs font-bold font-alexandria transition-all ${
+                  className={`px-3 py-1.5 rounded-lg text-xs font-bold font-alexandria transition-all ${
                     selectedCategory === "all"
                       ? "bg-[#3D120E] text-white border border-[#C5A059]/50"
                       : "bg-white text-[#1A110A] border border-[#1A110A]/15 hover:bg-[#1A110A]/5"
@@ -141,7 +141,7 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
                   <button
                     key={cat.id}
                     onClick={() => setSelectedCategory(cat.id)}
-                    className={`px-3.5 py-1.5 rounded-lg text-xs font-bold font-alexandria transition-all ${
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold font-alexandria transition-all ${
                       selectedCategory === cat.id
                         ? "bg-[#3D120E] text-white border border-[#C5A059]/50"
                         : "bg-white text-[#1A110A] border border-[#1A110A]/15 hover:bg-[#1A110A]/5"
@@ -153,20 +153,20 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
               </div>
 
               {/* Search Box */}
-              <div className="relative w-full md:w-72">
+              <div className="relative w-full md:w-64">
                 <input
                   type="text"
                   placeholder="ابحث عن نوع بن أو مشروب..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-3 pr-10 py-2.5 bg-white border border-[#1A110A]/20 rounded-lg text-xs font-alexandria focus:outline-none focus:border-[#C5A059]"
+                  className="w-full pl-3 pr-9 py-2 bg-white border border-[#1A110A]/20 rounded-lg text-xs font-alexandria focus:outline-none focus:border-[#C5A059]"
                 />
-                <Search className="w-4 h-4 text-[#C5A059] absolute right-3.5 top-3" />
+                <Search className="w-4 h-4 text-[#C5A059] absolute right-3 top-2.5" />
               </div>
             </div>
 
             {/* Menu Items Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               {filteredItems.map((item) => {
                 const selectedPriceIndex = selectedWeights[item.id] || 0;
                 const priceObj = item.prices[selectedPriceIndex] || item.prices[0];
@@ -175,48 +175,48 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
                 return (
                   <div
                     key={item.id}
-                    className="relative p-5 bg-white rounded-xl border border-[#1A110A]/15 hover:border-[#C5A059] transition-all shadow-xs flex flex-col justify-between"
+                    className="relative p-4 bg-white rounded-xl border border-[#1A110A]/15 hover:border-[#C5A059] transition-all shadow-xs flex flex-col justify-between"
                   >
                     {item.isSpecial && (
-                      <span className="absolute -top-3 right-5 heritage-ribbon text-[10px]">
+                      <span className="absolute -top-2.5 right-4 heritage-ribbon text-[10px]">
                         خلطة بدران
                       </span>
                     )}
 
                     <div>
                       {/* Name & Price Line */}
-                      <div className="flex items-baseline justify-between gap-3 border-b border-dashed border-[#C5A059]/25 pb-3 mb-3">
+                      <div className="flex items-baseline justify-between gap-3 border-b border-dashed border-[#C5A059]/25 pb-2.5 mb-2.5">
                         <div className="flex items-center gap-2">
-                          <h4 className="font-amiri text-2xl font-bold text-[#1A110A]">
+                          <h4 className="font-amiri text-xl font-bold text-[#1A110A]">
                             {item.name}
                           </h4>
                           <button
                             onClick={() => setLightboxIndex(pageIndex)}
                             title="معاينة صفحة المنيو المطبوعة الخاصة بهذا الصنف"
-                            className="text-[#C5A059] hover:text-[#1A110A] p-1 rounded transition-colors"
+                            className="text-[#C5A059] hover:text-[#1A110A] p-0.5 rounded transition-colors"
                           >
-                            <Eye className="w-4 h-4" />
+                            <Eye className="w-3.5 h-3.5" />
                           </button>
                         </div>
-                        <div className="font-price font-bold text-xl text-[#C5A059]">
+                        <div className="font-price font-bold text-lg text-[#C5A059]">
                           {priceObj.price} <span className="text-xs text-[#1A110A]">ج.م</span>
                         </div>
                       </div>
 
-                      <p className="font-alexandria text-xs text-[#1A110A]/75 mb-4 leading-relaxed font-light">
+                      <p className="font-alexandria text-xs text-[#1A110A]/75 mb-3 leading-relaxed font-light">
                         {item.description}
                       </p>
                     </div>
 
                     {/* Weight Options Selector & Add Button */}
-                    <div className="pt-3 border-t border-dashed border-[#1A110A]/10 flex flex-wrap items-center justify-between gap-2">
+                    <div className="pt-2.5 border-t border-dashed border-[#1A110A]/10 flex flex-wrap items-center justify-between gap-2">
                       {/* Weight Selector */}
-                      <div className="flex flex-wrap gap-1.5">
+                      <div className="flex flex-wrap gap-1">
                         {item.prices.map((p, idx) => (
                           <button
                             key={idx}
                             onClick={() => handleWeightChange(item.id, idx)}
-                            className={`px-2.5 py-1 rounded-md text-[11px] font-alexandria font-semibold transition-all ${
+                            className={`px-2 py-0.5 rounded text-[11px] font-alexandria font-semibold transition-all ${
                               selectedPriceIndex === idx
                                 ? "bg-[#1A110A] text-[#FAF8F5]"
                                 : "bg-[#F7F4EF] text-[#1A110A] hover:bg-[#1A110A]/10 border border-[#1A110A]/10"
@@ -230,7 +230,7 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
                       {/* Add to Cart Button */}
                       <button
                         onClick={() => onAddToCart(item, priceObj)}
-                        className="bg-[#1A110A] hover:bg-[#2A1D15] text-white px-4 py-2 rounded-lg text-xs font-bold font-alexandria flex items-center gap-1.5 transition-all border border-[#C5A059]/30 active:scale-95 shrink-0"
+                        className="bg-[#1A110A] hover:bg-[#2A1D15] text-white px-3.5 py-1.5 rounded-lg text-xs font-bold font-alexandria flex items-center gap-1.5 transition-all border border-[#C5A059]/30 active:scale-95 shrink-0"
                       >
                         <ShoppingBag className="w-3.5 h-3.5 text-[#C5A059]" />
                         <span>أضف للسلة</span>
@@ -242,7 +242,7 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
             </div>
 
             {filteredItems.length === 0 && (
-              <div className="text-center py-12 font-alexandria text-sm text-[#66584F]">
+              <div className="text-center py-10 font-alexandria text-sm text-[#66584F]">
                 لم نجد عناصر تطابق بحثك. يرجى تجربة بحث آخر.
               </div>
             )}
@@ -251,19 +251,19 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
 
         {/* ================= PRINTED MENU GALLERY (1-7) ================= */}
         {activeTab === "printed" && (
-          <div className="space-y-6 animate-fadeIn">
+          <div className="space-y-5 animate-fadeIn">
             <p className="text-center font-alexandria text-xs md:text-sm text-[#1A110A]/75">
               اضغط على أي صفحة لمشاهدتها بالحجم الكامل ومعاينة كافة الأسعار والأصناف كما هي في المحل.
             </p>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
               {PRINTED_MENU_PAGES.map((page, index) => (
                 <div
                   key={page.id}
                   onClick={() => setLightboxIndex(index)}
                   className="group relative rounded-xl border border-[#C5A059]/40 overflow-hidden bg-white shadow-xs cursor-pointer hover:shadow-md transition-all"
                 >
-                  <div className="relative aspect-[3/4] w-full bg-[#1A110A]">
+                  <div className="relative aspect-[3/4] w-full bg-[#1A110B]">
                     <Image
                       src={page.src}
                       alt={page.title}
@@ -276,7 +276,7 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
                     </div>
                   </div>
 
-                  <div className="p-3.5 bg-white border-t border-[#1A110A]/10 flex items-center justify-between">
+                  <div className="p-3 bg-white border-t border-[#1A110A]/10 flex items-center justify-between">
                     <span className="font-alexandria font-bold text-xs text-[#1A110A]">
                       صفحة {page.id}: {page.title}
                     </span>

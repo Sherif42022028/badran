@@ -35,16 +35,16 @@ export default function LocationContact() {
   };
 
   return (
-    <section id="contact" className="py-10 md:py-16 px-4 max-w-7xl mx-auto">
-      <div className="framed-section p-8 md:p-14">
+    <section id="contact" className="py-4 md:py-8 px-4 max-w-7xl mx-auto">
+      <div className="framed-section p-5 sm:p-8 md:p-10">
         
         {/* Title */}
-        <div className="text-center mb-10">
-          <span className="solid-badge text-base md:text-lg mb-3">
+        <div className="text-center mb-6">
+          <span className="solid-badge text-xs md:text-sm mb-2 py-1 px-3">
             <MapPin className="w-4 h-4 text-[#C5A059]" />
             <span>موقع الفرع ووسائل التواصل</span>
           </span>
-          <p className="font-alexandria text-xs md:text-sm text-[#1A110A]/75 max-w-2xl mx-auto mt-3 font-light">
+          <p className="font-alexandria text-xs md:text-sm text-[#1A110A]/75 max-w-2xl mx-auto mt-2 font-light">
             يسعدنا تشريفكم في فرعنا بميت غمر أو التواصل السريع للطلبات والاستفسارات الخاصة.
           </p>
         </div>
@@ -52,36 +52,36 @@ export default function LocationContact() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
           {/* Branch Details Cards */}
-          <div className="lg:col-span-5 space-y-4 font-alexandria">
+          <div className="lg:col-span-5 space-y-3 font-alexandria">
             
-            <div className="p-5 bg-white rounded-xl border border-[#1A110A]/15 flex items-start gap-4 shadow-xs">
-              <div className="p-3 bg-[#1A110A] text-[#C5A059] rounded-lg shrink-0 border border-[#C5A059]/30">
-                <MapPin className="w-5 h-5 text-[#C5A059]" />
+            <div className="p-4 bg-white rounded-xl border border-[#1A110A]/15 flex items-start gap-3.5 shadow-xs">
+              <div className="p-2.5 bg-[#1A110A] text-[#C5A059] rounded-lg shrink-0 border border-[#C5A059]/30">
+                <MapPin className="w-4 h-4 text-[#C5A059]" />
               </div>
               <div>
-                <h4 className="font-amiri text-xl font-bold text-[#1A110A]">عنوان الفرع الرئيسي</h4>
-                <p className="text-xs text-[#1A110A]/85 mt-1 leading-relaxed">
+                <h4 className="font-amiri text-lg font-bold text-[#1A110A]">عنوان الفرع الرئيسي</h4>
+                <p className="text-xs text-[#1A110A]/85 mt-0.5 leading-relaxed">
                   مدينة ميت غمر - محافظة الدقهلية - مصر
                 </p>
-                <span className="inline-block mt-2 text-[11px] text-[#66584F] font-medium">
+                <span className="inline-block mt-1 text-[11px] text-[#66584F] font-medium">
                   (بن بدران - الشارع الرئيسي)
                 </span>
               </div>
             </div>
 
-            <div className="p-5 bg-white rounded-xl border border-[#1A110A]/15 flex items-start gap-4 shadow-xs">
-              <div className="p-3 bg-[#1A110A] text-[#C5A059] rounded-lg shrink-0 border border-[#C5A059]/30">
-                <Phone className="w-5 h-5 text-[#C5A059]" />
+            <div className="p-4 bg-white rounded-xl border border-[#1A110A]/15 flex items-start gap-3.5 shadow-xs">
+              <div className="p-2.5 bg-[#1A110A] text-[#C5A059] rounded-lg shrink-0 border border-[#C5A059]/30">
+                <Phone className="w-4 h-4 text-[#C5A059]" />
               </div>
               <div>
-                <h4 className="font-amiri text-xl font-bold text-[#1A110A]">أرقام الهاتف والطلب المباشر</h4>
-                <p className="font-price font-bold text-xl text-[#C5A059] mt-1">
+                <h4 className="font-amiri text-lg font-bold text-[#1A110A]">أرقام الهاتف والطلب المباشر</h4>
+                <p className="font-price font-bold text-lg text-[#C5A059] mt-0.5">
                   01020499680
                 </p>
-                <div className="flex gap-2 mt-3">
+                <div className="flex gap-2 mt-2">
                   <a
                     href="tel:01020499680"
-                    className="px-3.5 py-1.5 bg-[#1A110A] text-[#FAF8F5] rounded-lg text-xs font-bold hover:bg-[#2A1D15] transition-colors"
+                    className="px-3 py-1 bg-[#1A110A] text-[#FAF8F5] rounded-lg text-xs font-bold hover:bg-[#2A1D15] transition-colors"
                   >
                     اتصال هاتفي
                   </a>
@@ -89,7 +89,7 @@ export default function LocationContact() {
                     href="https://wa.me/201020499680"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="px-3.5 py-1.5 bg-[#25D366] text-white rounded-lg text-xs font-bold hover:bg-[#1ebd59] transition-colors flex items-center gap-1"
+                    className="px-3 py-1 bg-[#25D366] text-white rounded-lg text-xs font-bold hover:bg-[#1ebd59] transition-colors flex items-center gap-1"
                   >
                     <MessageCircle className="w-3.5 h-3.5" />
                     <span>واتساب</span>
@@ -98,16 +98,16 @@ export default function LocationContact() {
               </div>
             </div>
 
-            <div className="p-5 bg-white rounded-xl border border-[#1A110A]/15 flex items-start gap-4 shadow-xs">
-              <div className="p-3 bg-[#1A110A] text-[#C5A059] rounded-lg shrink-0 border border-[#C5A059]/30">
-                <Clock className="w-5 h-5 text-[#C5A059]" />
+            <div className="p-4 bg-white rounded-xl border border-[#1A110A]/15 flex items-start gap-3.5 shadow-xs">
+              <div className="p-2.5 bg-[#1A110A] text-[#C5A059] rounded-lg shrink-0 border border-[#C5A059]/30">
+                <Clock className="w-4 h-4 text-[#C5A059]" />
               </div>
               <div>
-                <h4 className="font-amiri text-xl font-bold text-[#1A110A]">مواعيد العمل</h4>
-                <p className="text-xs text-[#C5A059] mt-1 font-bold">
+                <h4 className="font-amiri text-lg font-bold text-[#1A110A]">مواعيد العمل</h4>
+                <p className="text-xs text-[#C5A059] mt-0.5 font-bold">
                   شغالين 24 ساعة طوال أيام الأسبوع 🕒
                 </p>
-                <p className="text-[11px] text-[#66584F] mt-1">
+                <p className="text-[11px] text-[#66584F] mt-0.5">
                   نستقبلكم ونجيب على اتصالاتكم في أي وقت.
                 </p>
               </div>
@@ -116,17 +116,17 @@ export default function LocationContact() {
           </div>
 
           {/* Contact & Feedback Form */}
-          <div className="lg:col-span-7 bg-white p-7 rounded-xl border border-[#1A110A]/15 shadow-xs font-alexandria">
-            <h4 className="font-amiri text-2xl text-[#1A110A] mb-1">
+          <div className="lg:col-span-7 bg-white p-6 rounded-xl border border-[#1A110A]/15 shadow-xs font-alexandria">
+            <h4 className="font-amiri text-xl text-[#1A110A] mb-1">
               أرسل لنا ملاحظة أو استفسار
             </h4>
-            <p className="text-xs text-[#1A110A]/70 mb-6 border-b border-dashed border-[#C5A059]/30 pb-3">
+            <p className="text-xs text-[#1A110A]/70 mb-4 border-b border-dashed border-[#C5A059]/30 pb-2.5">
               يسعدنا استقبال ملاحظاتكم وطلباتكم الخاصة عبر هذا النموذج (يتم الحفظ في قاعدة البيانات).
             </p>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-3.5">
               <div>
-                <label className="block text-xs font-bold text-[#1A110A] mb-1.5">
+                <label className="block text-xs font-bold text-[#1A110A] mb-1">
                   الاسم الكريم: *
                 </label>
                 <input
@@ -135,12 +135,12 @@ export default function LocationContact() {
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   placeholder="أدخل اسمك هنا..."
-                  className="w-full p-3 bg-[#FAF8F5] border border-[#1A110A]/20 rounded-lg text-xs focus:outline-none focus:border-[#C5A059]"
+                  className="w-full p-2.5 bg-[#FAF8F5] border border-[#1A110A]/20 rounded-lg text-xs focus:outline-none focus:border-[#C5A059]"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-[#1A110A] mb-1.5">
+                <label className="block text-xs font-bold text-[#1A110A] mb-1">
                   رقم الهاتف / الواتساب: *
                 </label>
                 <input
@@ -149,27 +149,27 @@ export default function LocationContact() {
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                   placeholder="010XXXXXXXX"
-                  className="w-full p-3 bg-[#FAF8F5] border border-[#1A110A]/20 rounded-lg text-xs font-price focus:outline-none focus:border-[#C5A059]"
+                  className="w-full p-2.5 bg-[#FAF8F5] border border-[#1A110A]/20 rounded-lg text-xs font-price focus:outline-none focus:border-[#C5A059]"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-[#1A110A] mb-1.5">
+                <label className="block text-xs font-bold text-[#1A110A] mb-1">
                   الرسالة أو طلبك الخاص: *
                 </label>
                 <textarea
                   required
-                  rows={4}
+                  rows={3}
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                   placeholder="اكتب ملاحظاتك، استفساراتك، أو تفاصيل الطلب الذي ترغب به..."
-                  className="w-full p-3 bg-[#FAF8F5] border border-[#1A110A]/20 rounded-lg text-xs focus:outline-none focus:border-[#C5A059]"
+                  className="w-full p-2.5 bg-[#FAF8F5] border border-[#1A110A]/20 rounded-lg text-xs focus:outline-none focus:border-[#C5A059]"
                 />
               </div>
 
               {statusMsg && (
                 <div
-                  className={`p-3 rounded-lg text-xs flex items-center gap-2 ${
+                  className={`p-2.5 rounded-lg text-xs flex items-center gap-2 ${
                     statusMsg.type === "success"
                       ? "bg-green-50 text-green-900 border border-green-200"
                       : "bg-red-50 text-red-900 border border-red-200"
@@ -187,9 +187,9 @@ export default function LocationContact() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-[#1A110A] hover:bg-[#2A1D15] text-[#FAF8F5] font-alexandria font-bold text-sm py-3.5 rounded-lg border border-[#C5A059]/40 transition-all shadow-xs flex items-center justify-center gap-2 disabled:opacity-50"
+                className="w-full bg-[#1A110A] hover:bg-[#2A1D15] text-[#FAF8F5] font-alexandria font-bold text-xs py-3 rounded-lg border border-[#C5A059]/40 transition-all shadow-xs flex items-center justify-center gap-2 disabled:opacity-50"
               >
-                <Send className="w-4 h-4 text-[#C5A059]" />
+                <Send className="w-3.5 h-3.5 text-[#C5A059]" />
                 <span>{loading ? "جارٍ الإرسال..." : "إرسال الرسالة الآن"}</span>
               </button>
             </form>
@@ -198,18 +198,18 @@ export default function LocationContact() {
         </div>
 
         {/* Embedded Google Maps Container */}
-        <div className="mt-12">
-          <div className="text-center mb-4">
-            <h4 className="font-amiri text-2xl font-bold text-[#1A110A]">
+        <div className="mt-8">
+          <div className="text-center mb-3">
+            <h4 className="font-amiri text-xl font-bold text-[#1A110A]">
               موقع الفرع التفاعلي على خريطة جوجل
             </h4>
-            <p className="font-alexandria text-xs text-[#1A110A]/70 mt-1">
+            <p className="font-alexandria text-xs text-[#1A110A]/70 mt-0.5">
               يمكنك تكبير الخريطة والوصول مباشرة عبر اتجاهات الملاحة إلى محل بن بدران بميت غمر.
             </p>
           </div>
 
-          <div className="border border-[#C5A059]/40 rounded-xl overflow-hidden shadow-xs bg-white p-2">
-            <div className="relative w-full h-[380px] rounded-lg overflow-hidden">
+          <div className="border border-[#C5A059]/40 rounded-xl overflow-hidden shadow-xs bg-white p-1.5">
+            <div className="relative w-full h-[320px] rounded-lg overflow-hidden">
               <iframe
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3430.056646202436!2d31.25960087527777!3d30.716807886402545!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14f7c1c05bf53d5d%3A0xa89763a2cdde0a36!2z2KjZhiDYqNiv2LHYp9mG!5e0!3m2!1sen!2seg!4v1785685705668!5m2!1sen!2seg"
                 width="100%"
