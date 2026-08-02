@@ -24,7 +24,17 @@ export async function initDb() {
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
     `;
-    console.log("Neon Postgres table initialized successfully.");
+
+    await sql`
+      CREATE TABLE IF NOT EXISTS customer_reviews (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(100) NOT NULL,
+        comment TEXT NOT NULL,
+        rating INT DEFAULT 5,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+    `;
+    console.log("Neon Postgres tables initialized successfully.");
   } catch (error) {
     console.error("Error initializing Neon database table:", error);
   }

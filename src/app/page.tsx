@@ -6,9 +6,11 @@ import Hero from "@/components/Hero";
 import AboutSection from "@/components/AboutSection";
 import MenuSection from "@/components/MenuSection";
 import BlendBuilder from "@/components/BlendBuilder";
+import ReviewsSection from "@/components/ReviewsSection";
 import LocationContact from "@/components/LocationContact";
 import Footer from "@/components/Footer";
 import CartModal, { CartItem } from "@/components/CartModal";
+import FloatingWhatsApp from "@/components/FloatingWhatsApp";
 import { MenuItem } from "@/data/menu";
 
 export default function Home() {
@@ -58,17 +60,18 @@ export default function Home() {
   const totalCartCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
 
   return (
-    <main className="min-h-screen flex flex-col justify-between selection:bg-[#6B2A22] selection:text-white">
+    <main className="min-h-screen flex flex-col justify-between selection:bg-[#3D120E] selection:text-white">
       <Header
         cartCount={totalCartCount}
         onOpenCart={() => setIsCartOpen(true)}
       />
 
-      <div className="flex-1 space-y-4">
+      <div className="flex-1">
         <Hero />
         <AboutSection />
         <MenuSection onAddToCart={handleAddToCart} />
         <BlendBuilder />
+        <ReviewsSection />
         <LocationContact />
       </div>
 
@@ -81,6 +84,8 @@ export default function Home() {
         onUpdateQuantity={handleUpdateQuantity}
         onClearCart={handleClearCart}
       />
+
+      <FloatingWhatsApp />
     </main>
   );
 }
