@@ -64,7 +64,7 @@ export default function LocationContact() {
                   مدينة ميت غمر - محافظة الدقهلية - مصر
                 </p>
                 <span className="inline-block mt-2 text-[11px] text-[#6B5B52] font-medium">
-                  (بجوار منطقة الخدمات والشارع الرئيسي)
+                  (بن بدران - الشارع الرئيسي)
                 </span>
               </div>
             </div>
@@ -195,6 +195,33 @@ export default function LocationContact() {
             </form>
           </div>
 
+        </div>
+
+        {/* Embedded Google Maps Container */}
+        <div className="mt-12">
+          <div className="text-center mb-4">
+            <h4 className="font-amiri text-2xl font-bold text-[#1E110A]">
+              موقع الفرع التفاعلي على خريطة جوجل
+            </h4>
+            <p className="font-alexandria text-xs text-[#1E110A]/70 mt-1">
+              يمكنك تكبير الخريطة والوصول مباشرة عبر اتجاهات الملاحة إلى محل بن بدران بميت غمر.
+            </p>
+          </div>
+
+          <div className="border-2 border-[#C89B3C]/40 rounded-2xl overflow-hidden shadow-lg bg-white p-2">
+            <div className="relative w-full h-[380px] rounded-xl overflow-hidden">
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3430.056646202436!2d31.25960087527777!3d30.716807886402545!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14f7c1c05bf53d5d%3A0xa89763a2cdde0a36!2z2KjZhiDYqNiv2LHYp9mG!5e0!3m2!1sen!2seg!4v1785685705668!5m2!1sen!2seg"
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                allowFullScreen={true}
+                loading="lazy"
+                referrerPolicy="strict-origin-when-cross-origin"
+                title="موقع بن بدران على خريطة جوجل"
+              />
+            </div>
+          </div>
         </div>
 
       </div>
