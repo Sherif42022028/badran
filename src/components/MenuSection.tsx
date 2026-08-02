@@ -176,11 +176,13 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
                 return (
                   <SpotlightCard
                     key={item.id}
-                    className="p-4 bg-white rounded-xl border border-[#1A110A]/15 hover:border-[#C5A059] transition-all shadow-xs flex flex-col justify-between"
+                    className={`p-4 bg-white rounded-xl border border-[#1A110A]/15 hover:border-[#C5A059] transition-all shadow-xs flex flex-col justify-between ${
+                      item.isSpecial ? "pt-7" : ""
+                    }`}
                     spotlightColor="rgba(197, 160, 89, 0.18)"
                   >
                     {item.isSpecial && (
-                      <span className="absolute -top-2.5 right-4 heritage-ribbon text-[10px] z-10">
+                      <span className="absolute top-2.5 right-3 heritage-ribbon text-[10px] z-10 shadow-2xs">
                         خلطة بدران
                       </span>
                     )}
