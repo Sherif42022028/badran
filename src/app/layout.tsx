@@ -1,11 +1,18 @@
 import type { Metadata } from "next";
-import { Lalezar, Tajawal, DM_Sans } from "next/font/google";
+import { Alexandria, Amiri, Tajawal, DM_Sans } from "next/font/google";
 import "./globals.css";
 
-const lalezar = Lalezar({
-  weight: "400",
+const alexandria = Alexandria({
+  weight: ["300", "400", "600", "700", "800"],
   subsets: ["arabic"],
-  variable: "--font-lalezar",
+  variable: "--font-alexandria",
+  display: "swap",
+});
+
+const amiri = Amiri({
+  weight: ["400", "700"],
+  subsets: ["arabic"],
+  variable: "--font-amiri",
   display: "swap",
 });
 
@@ -24,10 +31,10 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "بن بدران | Budran Coffee - أصالة القهوة العربية والفرنسية",
+  title: "بن بدران | Budran Coffee — أصالة وتوليف القهوة الفاخرة",
   description:
-    "موقع بن بدران الرسمي (ميت غمر). أجود أنواع البن العربي، البن المحوج، الخلطات الفرنسية، والتوليفات الخاصة بأعلى معايير الجودة والتحميص الطازج.",
-  keywords: ["بن بدران", "قهوة بدران", "Budran Coffee", "ميت غمر", "بن محوج", "قهوة فرنسية", "أجود أنواع البن"],
+    "موقع بن بدران الرسمي (ميت غمر). أجود أنواع البن العربي، البن المحوج، الخلطات الفرنسية، والتوليفات الملكية الخاصة بأعلى معايير الجودة والتحميص الطازج.",
+  keywords: ["بن بدران", "قهوة بدران", "Budran Coffee", "ميت غمر", "بن محوج", "قهوة فرنسية", "أجود أنواع البن", "قهوة فاخرة"],
 };
 
 export default function RootLayout({
@@ -39,9 +46,9 @@ export default function RootLayout({
     <html
       lang="ar"
       dir="rtl"
-      className={`${lalezar.variable} ${tajawal.variable} ${dmSans.variable} scroll-smooth h-full`}
+      className={`${alexandria.variable} ${amiri.variable} ${tajawal.variable} ${dmSans.variable} scroll-smooth h-full`}
     >
-      <body className="min-h-full flex flex-col font-tajawal antialiased text-[#3A2416]">
+      <body className="min-h-full flex flex-col font-alexandria antialiased bg-[#FAF7F2] text-[#1E110A]">
         {children}
       </body>
     </html>

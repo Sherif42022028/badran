@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Sparkles, Coffee, Sliders, CheckCircle, MessageSquare } from "lucide-react";
+import { Sparkles, Coffee, CheckCircle, MessageSquare } from "lucide-react";
 
 export default function BlendBuilder() {
   const [roast, setRoast] = useState<string>("وسط");
@@ -18,7 +18,6 @@ export default function BlendBuilder() {
     }
   };
 
-  // Base price calculation estimate
   const basePrices: Record<string, number> = {
     "ثمن كيلو (125جم)": 90,
     "ربع كيلو (250جم)": 175,
@@ -39,10 +38,10 @@ export default function BlendBuilder() {
     additions.length * 10;
 
   const handleWhatsAppOrder = () => {
-    const message = `أهلاً بن بدران 👋 أرغب في طلب توليفة قهوة خاصة بالمواصفات التالية:
+    const message = `أهلاً بن بدران 👋 أرغب في طلب توليفة قهوة خاصة للمزاج بالخيارات التالية:
 • درجة التحميص: ${roast}
 • مستوى التحويج: ${cardamom}
-• نوع البن الأساسي: ${origin}
+• البن الأساسي: ${origin}
 • الإضافات الخاصة: ${additions.length > 0 ? additions.join(" + ") : "بدون إضافات"}
 • الوزن المطلوب: ${weight}
 • التكلفة التقديرية: ${totalCalculated} ج.م`;
@@ -52,28 +51,28 @@ export default function BlendBuilder() {
   };
 
   return (
-    <section id="blend-builder" className="py-8 md:py-14 px-4 max-w-7xl mx-auto">
-      <div className="framed-section p-6 md:p-10">
+    <section id="blend-builder" className="py-10 md:py-16 px-4 max-w-7xl mx-auto">
+      <div className="framed-section p-8 md:p-14">
         
         {/* Section Header */}
-        <div className="text-center mb-8">
-          <span className="solid-badge text-xl mb-3">
-            <Sparkles className="w-5 h-5 text-[#C97A2B]" />
-            <span>صمّم توليفتك المخصصة بنفسك</span>
+        <div className="text-center mb-10">
+          <span className="solid-badge text-base md:text-lg mb-3">
+            <Sparkles className="w-4 h-4 text-[#C89B3C]" />
+            <span>صمّم توليفتك الفاخرة بنفسك</span>
           </span>
-          <p className="font-tajawal text-sm md:text-base text-[#3A2416]/80 max-w-2xl mx-auto mt-2">
-            حدد درجة التحميص ومستوى التحويج بالإضافات المميزة لنقوم بطحنها وتوليفها لك خصيصاً في المحل.
+          <p className="font-alexandria text-xs md:text-sm text-[#1E110A]/75 max-w-2xl mx-auto mt-3 font-light">
+            اختر درجة التحميص والنسب المفضلة مع الإضافات الملكية، لنقوم بطحنها وتوليفها لك خصيصاً في المحل.
           </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
           {/* Builder Controls */}
-          <div className="lg:col-span-8 space-y-6 font-tajawal">
+          <div className="lg:col-span-8 space-y-7 font-alexandria">
             
             {/* 1. Roast Selection */}
             <div>
-              <label className="font-lalezar text-lg text-[#3A2416] block mb-2">
+              <label className="font-amiri text-xl font-bold text-[#1E110A] block mb-3">
                 1. درجة التحميص المفضلة:
               </label>
               <div className="grid grid-cols-3 gap-3">
@@ -83,10 +82,10 @@ export default function BlendBuilder() {
                     <button
                       key={title}
                       onClick={() => setRoast(title)}
-                      className={`p-3 rounded border text-sm font-semibold transition-all ${
+                      className={`p-3.5 rounded-xl border text-xs sm:text-sm font-bold transition-all ${
                         roast === title
-                          ? "bg-[#3A2416] text-[#FFF8F6] border-[#3A2416] shadow-sm"
-                          : "bg-[#FFF8F6] text-[#3A2416] border-[#3A2416]/30 hover:bg-[#3A2416]/10"
+                          ? "bg-[#1E110A] text-[#D4AF37] border-[#C89B3C] shadow-md"
+                          : "bg-white text-[#1E110A] border-[#C89B3C]/30 hover:bg-[#1E110A]/5"
                       }`}
                     >
                       {item}
@@ -98,7 +97,7 @@ export default function BlendBuilder() {
 
             {/* 2. Cardamom & Spices */}
             <div>
-              <label className="font-lalezar text-lg text-[#3A2416] block mb-2">
+              <label className="font-amiri text-xl font-bold text-[#1E110A] block mb-3">
                 2. مستوى التحويج والحبهان:
               </label>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -106,10 +105,10 @@ export default function BlendBuilder() {
                   <button
                     key={item}
                     onClick={() => setCardamom(item)}
-                    className={`p-2.5 rounded border text-xs sm:text-sm font-semibold transition-all ${
+                    className={`p-3 rounded-xl border text-xs font-bold transition-all ${
                       cardamom === item
-                        ? "bg-[#6B2A22] text-white border-[#6B2A22] shadow-sm"
-                        : "bg-[#FFF8F6] text-[#3A2416] border-[#3A2416]/30 hover:bg-[#3A2416]/10"
+                        ? "bg-[#4A1510] text-white border-[#C89B3C]/60 shadow-md"
+                        : "bg-white text-[#1E110A] border-[#C89B3C]/30 hover:bg-[#1E110A]/5"
                     }`}
                   >
                     {item}
@@ -120,8 +119,8 @@ export default function BlendBuilder() {
 
             {/* 3. Base Coffee Origin */}
             <div>
-              <label className="font-lalezar text-lg text-[#3A2416] block mb-2">
-                3. نوع البن والخلطة الأساسية:
+              <label className="font-amiri text-xl font-bold text-[#1E110A] block mb-3">
+                3. نوع البن الأساسي:
               </label>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 {[
@@ -132,10 +131,10 @@ export default function BlendBuilder() {
                   <button
                     key={item}
                     onClick={() => setOrigin(item)}
-                    className={`p-3 rounded border text-xs sm:text-sm font-semibold transition-all ${
+                    className={`p-3.5 rounded-xl border text-xs sm:text-sm font-bold transition-all ${
                       origin === item
-                        ? "bg-[#3A2416] text-[#FFF8F6] border-[#3A2416] shadow-sm"
-                        : "bg-[#FFF8F6] text-[#3A2416] border-[#3A2416]/30 hover:bg-[#3A2416]/10"
+                        ? "bg-[#1E110A] text-[#D4AF37] border-[#C89B3C] shadow-md"
+                        : "bg-white text-[#1E110A] border-[#C89B3C]/30 hover:bg-[#1E110A]/5"
                     }`}
                   >
                     {item}
@@ -146,8 +145,8 @@ export default function BlendBuilder() {
 
             {/* 4. Special Additions */}
             <div>
-              <label className="font-lalezar text-lg text-[#3A2416] block mb-2">
-                4. الإضافات التراثية الخاصة:
+              <label className="font-amiri text-xl font-bold text-[#1E110A] block mb-3">
+                4. الإضافات الملكية الخاصة:
               </label>
               <div className="flex flex-wrap gap-3">
                 {["مستكة يوناني", "زر ورد طبيعي", "جوزة الطيب", "قرفة خشابي"].map((item) => {
@@ -156,13 +155,13 @@ export default function BlendBuilder() {
                     <button
                       key={item}
                       onClick={() => toggleAddition(item)}
-                      className={`px-4 py-2 rounded text-xs font-semibold flex items-center gap-1.5 transition-all ${
+                      className={`px-4 py-2.5 rounded-full text-xs font-bold flex items-center gap-2 transition-all ${
                         selected
-                          ? "bg-[#C97A2B] text-white border border-[#C97A2B]"
-                          : "bg-[#FFF8F6] text-[#3A2416] border border-[#3A2416]/30 hover:bg-[#3A2416]/10"
+                          ? "bg-gold-gradient text-white shadow-xs"
+                          : "bg-white text-[#1E110A] border border-[#C89B3C]/30 hover:bg-[#1E110A]/5"
                       }`}
                     >
-                      <CheckCircle className={`w-3.5 h-3.5 ${selected ? "text-white" : "opacity-40"}`} />
+                      <CheckCircle className={`w-4 h-4 ${selected ? "text-white" : "opacity-30"}`} />
                       <span>{item}</span>
                     </button>
                   );
@@ -172,7 +171,7 @@ export default function BlendBuilder() {
 
             {/* 5. Weight Selection */}
             <div>
-              <label className="font-lalezar text-lg text-[#3A2416] block mb-2">
+              <label className="font-amiri text-xl font-bold text-[#1E110A] block mb-3">
                 5. الوزن المطلوب:
               </label>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -180,10 +179,10 @@ export default function BlendBuilder() {
                   <button
                     key={w}
                     onClick={() => setWeight(w)}
-                    className={`p-2.5 rounded border text-xs font-semibold transition-all ${
+                    className={`p-3 rounded-xl border text-xs font-bold transition-all ${
                       weight === w
-                        ? "bg-[#3A2416] text-[#FFF8F6] border-[#3A2416]"
-                        : "bg-[#FFF8F6] text-[#3A2416] border-[#3A2416]/30"
+                        ? "bg-[#1E110A] text-[#D4AF37] border-[#C89B3C]"
+                        : "bg-white text-[#1E110A] border-[#C89B3C]/30"
                     }`}
                   >
                     {w}
@@ -194,48 +193,48 @@ export default function BlendBuilder() {
 
           </div>
 
-          {/* Live Order Summary Card */}
-          <div className="lg:col-span-4 bg-[#FFF8F6] p-6 rounded border-2 border-[#3A2416] shadow-md sticky top-24 font-tajawal space-y-4">
-            <h4 className="font-lalezar text-xl text-[#3A2416] border-b border-dashed border-[#3A2416]/30 pb-3 flex items-center gap-2">
-              <Coffee className="w-5 h-5 text-[#C97A2B]" />
+          {/* Live Royal Order Summary Card */}
+          <div className="lg:col-span-4 bg-[#1E110A] text-[#FAF7F2] p-6 rounded-2xl border-2 border-[#C89B3C] shadow-xl sticky top-24 font-alexandria space-y-5">
+            <h4 className="font-amiri text-2xl text-[#D4AF37] border-b border-dashed border-[#C89B3C]/30 pb-3 flex items-center gap-2">
+              <Coffee className="w-5 h-5 text-[#C89B3C]" />
               <span>ملخص التوليفة الخاصة</span>
             </h4>
 
-            <div className="space-y-2 text-xs md:text-sm text-[#3A2416]">
-              <div className="flex justify-between border-b border-dashed border-[#3A2416]/20 pb-1.5">
-                <span>التحميص:</span>
+            <div className="space-y-2.5 text-xs text-[#FAF7F2]/90">
+              <div className="flex justify-between border-b border-dashed border-[#C89B3C]/20 pb-2">
+                <span className="text-[#C89B3C]">التحميص:</span>
                 <span className="font-bold">{roast}</span>
               </div>
-              <div className="flex justify-between border-b border-dashed border-[#3A2416]/20 pb-1.5">
-                <span>التحويج:</span>
-                <span className="font-bold text-[#6B2A22]">{cardamom}</span>
+              <div className="flex justify-between border-b border-dashed border-[#C89B3C]/20 pb-2">
+                <span className="text-[#C89B3C]">التحويج:</span>
+                <span className="font-bold">{cardamom}</span>
               </div>
-              <div className="flex justify-between border-b border-dashed border-[#3A2416]/20 pb-1.5">
-                <span>الأساس:</span>
+              <div className="flex justify-between border-b border-dashed border-[#C89B3C]/20 pb-2">
+                <span className="text-[#C89B3C]">الأساس:</span>
                 <span className="font-bold">{origin}</span>
               </div>
-              <div className="flex justify-between border-b border-dashed border-[#3A2416]/20 pb-1.5">
-                <span>الإضافات:</span>
-                <span className="font-bold text-[#C97A2B]">
+              <div className="flex justify-between border-b border-dashed border-[#C89B3C]/20 pb-2">
+                <span className="text-[#C89B3C]">الإضافات:</span>
+                <span className="font-bold text-[#E6C566]">
                   {additions.length > 0 ? additions.join("، ") : "لا يوجد"}
                 </span>
               </div>
-              <div className="flex justify-between border-b border-dashed border-[#3A2416]/20 pb-1.5">
-                <span>الوزن:</span>
+              <div className="flex justify-between border-b border-dashed border-[#C89B3C]/20 pb-2">
+                <span className="text-[#C89B3C]">الوزن:</span>
                 <span className="font-bold">{weight}</span>
               </div>
             </div>
 
-            <div className="pt-3 border-t border-dashed border-[#3A2416]/40 flex items-baseline justify-between">
-              <span className="font-lalezar text-lg text-[#3A2416]">التكلفة التقديرية:</span>
-              <span className="font-price font-bold text-2xl text-[#6B2A22]">
-                {totalCalculated} <span className="text-xs text-[#3A2416]">ج.م</span>
+            <div className="pt-2 border-t border-dashed border-[#C89B3C]/40 flex items-baseline justify-between">
+              <span className="font-alexandria text-sm text-[#FAF7F2]">التكلفة التقديرية:</span>
+              <span className="font-price font-bold text-3xl text-[#D4AF37]">
+                {totalCalculated} <span className="text-xs text-[#FAF7F2]">ج.م</span>
               </span>
             </div>
 
             <button
               onClick={handleWhatsAppOrder}
-              className="w-full bg-[#25D366] hover:bg-[#1ebd59] text-white font-lalezar text-lg py-3 rounded border border-[#1ebd59] transition-all shadow-md flex items-center justify-center gap-2 mt-4"
+              className="w-full bg-[#25D366] hover:bg-[#1ebd59] text-white font-alexandria font-bold text-base py-3.5 rounded-full transition-all shadow-md flex items-center justify-center gap-2 mt-4"
             >
               <MessageSquare className="w-5 h-5" />
               <span>اطلب التوليفة عبر واتساب</span>

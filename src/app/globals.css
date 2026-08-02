@@ -2,34 +2,39 @@
 
 @layer base {
   :root {
-    --background: #F3ECDD;
-    --surface-paper: #FFF8F6;
-    --primary: #3A2416;
-    --primary-dark: #271310;
-    --secondary: #6B2A22;
-    --accent: #C97A2B;
-    --accent-hover: #E08930;
-    --muted: #5E604D;
-    --border-color: #3A2416;
-    --border-double: 3px double var(--primary);
+    --background: #FAF7F2;
+    --surface-paper: #FFFFFF;
+    --surface-card: #FAF6F0;
+    --primary: #1E110A;
+    --primary-light: #321E14;
+    --secondary: #4A1510;
+    --accent-gold: #C89B3C;
+    --accent-gold-light: #E6C566;
+    --accent-gold-dark: #A47B25;
+    --muted-text: #6B5B52;
+    --border-color: rgba(30, 17, 10, 0.15);
+    --gold-border: rgba(200, 155, 60, 0.4);
+    --border-double: 3px double rgba(200, 155, 60, 0.7);
   }
 
   body {
     background-color: var(--background);
-    background-image: radial-gradient(#3A2416 0.4px, transparent 0.4px), radial-gradient(#3A2416 0.4px, #F3ECDD 0.4px);
-    background-size: 16px 16px;
-    background-position: 0 0, 8px 8px;
-    background-blend-mode: multiply;
+    background-image: 
+      radial-gradient(circle at 50% 0%, rgba(200, 155, 60, 0.06) 0%, transparent 60%),
+      radial-gradient(circle at 0% 100%, rgba(74, 21, 16, 0.03) 0%, transparent 40%);
     color: var(--primary);
-    font-family: var(--font-tajawal), system-ui, sans-serif;
+    font-family: var(--font-alexandria), system-ui, sans-serif;
     overflow-x: hidden;
   }
 }
 
-/* Custom Heritage Utility Classes */
+/* Custom Luxury Typography Helpers */
+.font-alexandria {
+  font-family: var(--font-alexandria), sans-serif;
+}
 
-.font-lalezar {
-  font-family: var(--font-lalezar), cursive, sans-serif;
+.font-amiri {
+  font-family: var(--font-amiri), serif;
 }
 
 .font-tajawal {
@@ -40,88 +45,118 @@
   font-family: var(--font-dmsans), monospace, sans-serif;
 }
 
-/* Framed Section with Heritage Corner Decorations */
+/* Gold Metallic Text Gradient */
+.text-gold-gradient {
+  background: linear-gradient(135deg, #D4AF37 0%, #C89B3C 50%, #996F1D 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.bg-gold-gradient {
+  background: linear-gradient(135deg, #D4AF37 0%, #C89B3C 50%, #A47B25 100%);
+}
+
+.bg-gold-gradient:hover {
+  background: linear-gradient(135deg, #E6C566 0%, #D4AF37 50%, #B88B2E 100%);
+}
+
+/* Framed Section with Ultra-Prestige Gold Corners */
 .framed-section {
-  border: var(--border-double);
-  border-radius: 6px;
+  border: 1px solid rgba(200, 155, 60, 0.35);
+  outline: 3px double rgba(30, 17, 10, 0.12);
+  outline-offset: 4px;
+  border-radius: 8px;
   position: relative;
   background-color: var(--surface-paper);
-  box-shadow: inset 0 0 20px rgba(58, 36, 22, 0.04);
+  box-shadow: 0 15px 35px -10px rgba(30, 17, 10, 0.04), 0 0 1px 1px rgba(200, 155, 60, 0.15);
+  transition: all 0.3s ease;
 }
 
 .framed-section::before {
   content: "";
   position: absolute;
-  top: 4px;
-  right: 4px;
-  width: 12px;
-  height: 12px;
-  border-top: 2px solid var(--primary);
-  border-right: 2px solid var(--primary);
+  top: 6px;
+  right: 6px;
+  width: 14px;
+  height: 14px;
+  border-top: 2px solid #C89B3C;
+  border-right: 2px solid #C89B3C;
   pointer-events: none;
 }
 
 .framed-section::after {
   content: "";
   position: absolute;
-  bottom: 4px;
-  left: 4px;
-  width: 12px;
-  height: 12px;
-  border-bottom: 2px solid var(--primary);
-  border-left: 2px solid var(--primary);
+  bottom: 6px;
+  left: 6px;
+  width: 14px;
+  height: 14px;
+  border-bottom: 2px solid #C89B3C;
+  border-left: 2px solid #C89B3C;
   pointer-events: none;
 }
 
 .corner-tl {
   position: absolute;
-  top: 4px;
-  left: 4px;
-  width: 12px;
-  height: 12px;
-  border-top: 2px solid var(--primary);
-  border-left: 2px solid var(--primary);
+  top: 6px;
+  left: 6px;
+  width: 14px;
+  height: 14px;
+  border-top: 2px solid #C89B3C;
+  border-left: 2px solid #C89B3C;
   pointer-events: none;
 }
 
 .corner-br {
   position: absolute;
-  bottom: 4px;
-  right: 4px;
-  width: 12px;
-  height: 12px;
-  border-bottom: 2px solid var(--primary);
-  border-right: 2px solid var(--primary);
+  bottom: 6px;
+  right: 6px;
+  width: 14px;
+  height: 14px;
+  border-bottom: 2px solid #C89B3C;
+  border-right: 2px solid #C89B3C;
   pointer-events: none;
 }
 
 /* Solid Badges for Section Headers */
 .solid-badge {
-  background-color: var(--secondary);
-  color: #FFFFFF;
-  font-family: var(--font-lalezar), sans-serif;
-  border-radius: 4px;
-  padding: 0.4rem 1.25rem;
+  background: linear-gradient(135deg, #2C180E 0%, #1E110A 100%);
+  color: #FAF7F2;
+  font-family: var(--font-alexandria), sans-serif;
+  font-weight: 700;
+  border: 1px solid rgba(200, 155, 60, 0.4);
+  border-radius: 6px;
+  padding: 0.5rem 1.5rem;
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  box-shadow: 2px 2px 0px var(--primary);
+  gap: 0.6rem;
+  box-shadow: 0 4px 15px rgba(30, 17, 10, 0.12);
+  letter-spacing: 0.02em;
 }
 
 /* Heritage Dashed Divider */
 .dashed-divider {
-  border-bottom: 1px dashed rgba(58, 36, 22, 0.3);
+  border-bottom: 1px dashed rgba(200, 155, 60, 0.3);
 }
 
 /* Ribbon Highlight */
 .heritage-ribbon {
-  background: var(--accent);
-  color: #ffffff;
-  font-weight: bold;
-  padding: 2px 10px;
+  background: linear-gradient(135deg, #C89B3C 0%, #A47B25 100%);
+  color: #FFFFFF;
+  font-weight: 700;
+  padding: 3px 12px;
   font-size: 0.75rem;
-  border-radius: 2px;
-  box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(164, 123, 37, 0.3);
+  letter-spacing: 0.03em;
+}
+
+/* Glassmorphism Luxury Card */
+.glass-card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(200, 155, 60, 0.25);
+  box-shadow: 0 8px 30px rgba(30, 17, 10, 0.04);
 }
 
 /* Custom Scrollbar */
@@ -132,7 +167,7 @@
   background: var(--background);
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--secondary);
+  background: var(--accent-gold);
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
