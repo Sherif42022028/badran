@@ -17,8 +17,8 @@ export default function Footer() {
             />
           </div>
           <h3 className="font-amiri text-3xl text-[#D4AF37]">بن بدران (Budran Coffee)</h3>
-          <p className="font-price text-[10px] text-[#C89B3C] tracking-[0.25em] uppercase font-bold mt-1">
-            PREMIUM ARTISANAL COFFEE — SINCE LEGACY
+          <p className="font-alexandria text-xs text-[#C89B3C] font-semibold mt-1">
+            محمصة ومطحنة ميت غمر الأصيلة
           </p>
         </div>
 
@@ -28,7 +28,7 @@ export default function Footer() {
           <div className="space-y-3">
             <h4 className="font-amiri text-xl text-[#C89B3C]">عن المحل</h4>
             <p className="text-xs text-[#FAF7F2]/80 leading-relaxed max-w-sm mx-auto md:mx-0 font-light">
-              بن بدران هو عنوان الجودة والعراقة في ميت غمر. نوفر لكم أنقى أصناف البن العالمي والخلطات الملكية المحوجة بالحبهان والمستكة طازجة يومياً.
+              بن بدران هو أصل القهوة والتحويجة البلدي في ميت غمر. نوفر لكم أجود أنواع البن والخلطات المحوجة بالحبةان والمستكة طازجة يومياً.
             </p>
           </div>
 
@@ -43,17 +43,17 @@ export default function Footer() {
               </li>
               <li>
                 <a href="#about" className="hover:text-[#C89B3C] transition-colors">
-                  قصتنا والعراقة
+                  قصة المحل
                 </a>
               </li>
               <li>
                 <a href="#menu" className="hover:text-[#C89B3C] transition-colors">
-                  المنيو والأسعار
+                  أسعار المنيو
                 </a>
               </li>
               <li>
                 <a href="#blend-builder" className="hover:text-[#C89B3C] transition-colors">
-                  صمّم توليفتك
+                  ركّب خلطتك
                 </a>
               </li>
               <li>
@@ -77,7 +77,7 @@ export default function Footer() {
             </p>
             <p className="text-xs text-[#FAF7F2]/90 flex items-center justify-center md:justify-start gap-2">
               <Clock className="w-4 h-4 text-[#C89B3C]" />
-              <span>خدمة 24 ساعة طوال الأسبوع</span>
+              <span>شغالين 24 ساعة طوال أيام الأسبوع</span>
             </p>
           </div>
 
@@ -85,9 +85,9 @@ export default function Footer() {
 
         {/* Bottom Copyright */}
         <div className="pt-8 text-center text-xs text-[#FAF7F2]/60 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p>© جميع الحقوق محفوظة لـ بن بدران (Budran Coffee)</p>
+          <p>© جميع الحقوق محفوظة لـ بن بدران بميت غمر</p>
           <p className="flex items-center gap-1.5">
-            صنع بـ <Heart className="w-3.5 h-3.5 text-red-500 fill-red-500" /> لعشاق القهوة الفاخرة
+            صنع بـ <Heart className="w-3.5 h-3.5 text-red-500 fill-red-500" /> لعشاق القهوة الأصيلة
           </p>
         </div>
 

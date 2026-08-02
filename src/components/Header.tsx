@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ShoppingBag, Phone, Menu as MenuIcon, X, Sparkles } from "lucide-react";
+import { ShoppingBag, Phone, Menu as MenuIcon, X } from "lucide-react";
 
 interface HeaderProps {
   cartCount: number;
@@ -14,7 +14,7 @@ export default function Header({ cartCount, onOpenCart }: HeaderProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-40 bg-[#FAF7F2]/90 backdrop-blur-md border-b border-[#C89B3C]/30 shadow-xs transition-all duration-300">
+    <header className="sticky top-0 z-40 bg-[#FAF7F2]/95 backdrop-blur-md border-b border-[#C89B3C]/30 shadow-xs transition-all duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex items-center justify-between">
         
         {/* Brand Logo & Title */}
@@ -32,41 +32,41 @@ export default function Header({ cartCount, onOpenCart }: HeaderProps) {
             <h1 className="font-alexandria font-extrabold text-2xl text-[#1E110A] leading-none tracking-tight group-hover:text-[#C89B3C] transition-colors">
               بن بدران
             </h1>
-            <p className="font-price text-[9px] text-[#C89B3C] tracking-[0.25em] uppercase font-bold mt-1">
-              BUDRAN COFFEE
+            <p className="font-alexandria text-[10px] text-[#C89B3C] font-semibold mt-1">
+              محمصة ومطحنة ميت غمر الأصيلة
             </p>
           </div>
         </Link>
 
         {/* Desktop Navigation Links */}
-        <nav className="hidden md:flex items-center gap-8 font-alexandria text-xs font-semibold text-[#1E110A]/90">
+        <nav className="hidden md:flex items-center gap-7 font-alexandria text-xs font-bold text-[#1E110A]/90">
           <a
             href="#hero"
-            className="hover:text-[#C89B3C] transition-colors relative py-1 after:content-[''] after:absolute after:bottom-0 after:right-0 after:w-0 after:h-[2px] after:bg-[#C89B3C] hover:after:w-full hover:after:left-0 after:transition-all"
+            className="hover:text-[#C89B3C] transition-colors relative py-1"
           >
             الرئيسية
           </a>
           <a
             href="#about"
-            className="hover:text-[#C89B3C] transition-colors relative py-1 after:content-[''] after:absolute after:bottom-0 after:right-0 after:w-0 after:h-[2px] after:bg-[#C89B3C] hover:after:w-full hover:after:left-0 after:transition-all"
+            className="hover:text-[#C89B3C] transition-colors relative py-1"
           >
-            قصتنا والعراقة
+            عن المحل
           </a>
           <a
             href="#menu"
-            className="hover:text-[#C89B3C] transition-colors relative py-1 after:content-[''] after:absolute after:bottom-0 after:right-0 after:w-0 after:h-[2px] after:bg-[#C89B3C] hover:after:w-full hover:after:left-0 after:transition-all"
+            className="hover:text-[#C89B3C] transition-colors relative py-1"
           >
-            المنيو والأسعار
+            أسعار المنيو
           </a>
           <a
             href="#blend-builder"
-            className="hover:text-[#C89B3C] transition-colors relative py-1 after:content-[''] after:absolute after:bottom-0 after:right-0 after:w-0 after:h-[2px] after:bg-[#C89B3C] hover:after:w-full hover:after:left-0 after:transition-all"
+            className="hover:text-[#C89B3C] transition-colors relative py-1"
           >
-            صمّم توليفتك
+            ركّب خلطتك
           </a>
           <a
             href="#contact"
-            className="hover:text-[#C89B3C] transition-colors relative py-1 after:content-[''] after:absolute after:bottom-0 after:right-0 after:w-0 after:h-[2px] after:bg-[#C89B3C] hover:after:w-full hover:after:left-0 after:transition-all"
+            className="hover:text-[#C89B3C] transition-colors relative py-1"
           >
             موقعنا وتواصلنا
           </a>
@@ -76,10 +76,10 @@ export default function Header({ cartCount, onOpenCart }: HeaderProps) {
         <div className="flex items-center gap-3">
           <a
             href="tel:01020499680"
-            className="hidden sm:inline-flex items-center gap-2 border border-[#C89B3C]/50 px-3.5 py-1.5 rounded-full text-xs font-semibold text-[#1E110A] hover:bg-[#1E110A] hover:text-[#FAF7F2] hover:border-[#1E110A] transition-all shadow-xs"
+            className="hidden sm:inline-flex items-center gap-2 border border-[#C89B3C]/50 px-3.5 py-1.5 rounded-full text-xs font-bold text-[#1E110A] hover:bg-[#1E110A] hover:text-[#FAF7F2] transition-all shadow-xs"
           >
             <Phone className="w-3.5 h-3.5 text-[#C89B3C]" />
-            <span className="font-price font-bold text-xs tracking-wider">01020499680</span>
+            <span className="font-price text-xs">01020499680</span>
           </a>
 
           <button
@@ -88,7 +88,7 @@ export default function Header({ cartCount, onOpenCart }: HeaderProps) {
             aria-label="فتح سلة الطلبات"
           >
             <ShoppingBag className="w-4 h-4 text-white" />
-            <span className="hidden sm:inline">السلة</span>
+            <span className="hidden sm:inline">سلة طلباتك</span>
             {cartCount > 0 && (
               <span className="bg-[#1E110A] text-[#D4AF37] font-price text-xs rounded-full px-2 py-0.5 font-bold">
                 {cartCount}
@@ -122,21 +122,21 @@ export default function Header({ cartCount, onOpenCart }: HeaderProps) {
             onClick={() => setMobileMenuOpen(false)}
             className="block py-2 text-[#1E110A] font-semibold border-b border-dashed border-[#C89B3C]/20"
           >
-            قصتنا والعراقة
+            عن المحل
           </a>
           <a
             href="#menu"
             onClick={() => setMobileMenuOpen(false)}
             className="block py-2 text-[#1E110A] font-semibold border-b border-dashed border-[#C89B3C]/20"
           >
-            المنيو والأسعار
+            أسعار المنيو
           </a>
           <a
             href="#blend-builder"
             onClick={() => setMobileMenuOpen(false)}
             className="block py-2 text-[#1E110A] font-semibold border-b border-dashed border-[#C89B3C]/20"
           >
-            صمّم توليفتك
+            ركّب خلطتك
           </a>
           <a
             href="#contact"
@@ -150,7 +150,7 @@ export default function Header({ cartCount, onOpenCart }: HeaderProps) {
             className="w-full mt-3 inline-flex items-center justify-center gap-2 bg-[#1E110A] text-[#FAF7F2] py-2.5 rounded-full text-xs font-price font-bold border border-[#C89B3C]/50"
           >
             <Phone className="w-4 h-4 text-[#C89B3C]" />
-            <span>01020499680 (اتصل الآن)</span>
+            <span>01020499680 (اتصل بنا مباشرة)</span>
           </a>
         </div>
       )}

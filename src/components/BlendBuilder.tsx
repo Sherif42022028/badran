@@ -38,12 +38,12 @@ export default function BlendBuilder() {
     additions.length * 10;
 
   const handleWhatsAppOrder = () => {
-    const message = `أهلاً بن بدران 👋 أرغب في طلب توليفة قهوة خاصة للمزاج بالخيارات التالية:
-• درجة التحميص: ${roast}
-• مستوى التحويج: ${cardamom}
-• البن الأساسي: ${origin}
-• الإضافات الخاصة: ${additions.length > 0 ? additions.join(" + ") : "بدون إضافات"}
-• الوزن المطلوب: ${weight}
+    const message = `أهلاً بن بدران 👋 أرغب في طلب خلطة قهوة خاصة بالخيارات التالية:
+• التحميص: ${roast}
+• التحويج: ${cardamom}
+• نوع البن: ${origin}
+• الإضافات: ${additions.length > 0 ? additions.join(" + ") : "بدون إضافات"}
+• الوزن: ${weight}
 • التكلفة التقديرية: ${totalCalculated} ج.م`;
 
     const encoded = encodeURIComponent(message);
@@ -58,10 +58,10 @@ export default function BlendBuilder() {
         <div className="text-center mb-10">
           <span className="solid-badge text-base md:text-lg mb-3">
             <Sparkles className="w-4 h-4 text-[#C89B3C]" />
-            <span>صمّم توليفتك الفاخرة بنفسك</span>
+            <span>ازاي بتحب قهوتك؟ ركّب خلطتك بنفسك</span>
           </span>
           <p className="font-alexandria text-xs md:text-sm text-[#1E110A]/75 max-w-2xl mx-auto mt-3 font-light">
-            اختر درجة التحميص والنسب المفضلة مع الإضافات الملكية، لنقوم بطحنها وتوليفها لك خصيصاً في المحل.
+            اختار درجة التحميص ونسبة الحبهان والإضافات اللي تظبط مزاجك، ونجهزها ونطحنها لك خصيصاً في المحل.
           </p>
         </div>
 
@@ -73,25 +73,22 @@ export default function BlendBuilder() {
             {/* 1. Roast Selection */}
             <div>
               <label className="font-amiri text-xl font-bold text-[#1E110A] block mb-3">
-                1. درجة التحميص المفضلة:
+                1. درجة التحميص:
               </label>
               <div className="grid grid-cols-3 gap-3">
-                {["فاتح (Light)", "وسط (Medium)", "غامق (Dark)"].map((item) => {
-                  const title = item.split(" ")[0];
-                  return (
-                    <button
-                      key={title}
-                      onClick={() => setRoast(title)}
-                      className={`p-3.5 rounded-xl border text-xs sm:text-sm font-bold transition-all ${
-                        roast === title
-                          ? "bg-[#1E110A] text-[#D4AF37] border-[#C89B3C] shadow-md"
-                          : "bg-white text-[#1E110A] border-[#C89B3C]/30 hover:bg-[#1E110A]/5"
-                      }`}
-                    >
-                      {item}
-                    </button>
-                  );
-                })}
+                {["فاتح", "وسط", "غامق"].map((title) => (
+                  <button
+                    key={title}
+                    onClick={() => setRoast(title)}
+                    className={`p-3.5 rounded-xl border text-xs sm:text-sm font-bold transition-all ${
+                      roast === title
+                        ? "bg-[#1E110A] text-[#D4AF37] border-[#C89B3C] shadow-md"
+                        : "bg-white text-[#1E110A] border-[#C89B3C]/30 hover:bg-[#1E110A]/5"
+                    }`}
+                  >
+                    {title}
+                  </button>
+                ))}
               </div>
             </div>
 
@@ -126,7 +123,7 @@ export default function BlendBuilder() {
                 {[
                   "خلطة كولومبي وحبشي",
                   "بن يمني أصيل 100%",
-                  "توليفة بن بدران الملكية",
+                  "توليفة بن بدران الخاصة",
                 ].map((item) => (
                   <button
                     key={item}
@@ -146,7 +143,7 @@ export default function BlendBuilder() {
             {/* 4. Special Additions */}
             <div>
               <label className="font-amiri text-xl font-bold text-[#1E110A] block mb-3">
-                4. الإضافات الملكية الخاصة:
+                4. الإضافات الخاصة:
               </label>
               <div className="flex flex-wrap gap-3">
                 {["مستكة يوناني", "زر ورد طبيعي", "جوزة الطيب", "قرفة خشابي"].map((item) => {
@@ -193,11 +190,11 @@ export default function BlendBuilder() {
 
           </div>
 
-          {/* Live Royal Order Summary Card */}
+          {/* Live Order Summary Card */}
           <div className="lg:col-span-4 bg-[#1E110A] text-[#FAF7F2] p-6 rounded-2xl border-2 border-[#C89B3C] shadow-xl sticky top-24 font-alexandria space-y-5">
             <h4 className="font-amiri text-2xl text-[#D4AF37] border-b border-dashed border-[#C89B3C]/30 pb-3 flex items-center gap-2">
               <Coffee className="w-5 h-5 text-[#C89B3C]" />
-              <span>ملخص التوليفة الخاصة</span>
+              <span>ملخص خلطتك الخاصة</span>
             </h4>
 
             <div className="space-y-2.5 text-xs text-[#FAF7F2]/90">
@@ -226,7 +223,7 @@ export default function BlendBuilder() {
             </div>
 
             <div className="pt-2 border-t border-dashed border-[#C89B3C]/40 flex items-baseline justify-between">
-              <span className="font-alexandria text-sm text-[#FAF7F2]">التكلفة التقديرية:</span>
+              <span className="font-alexandria text-sm text-[#FAF7F2]">السعر التقديري:</span>
               <span className="font-price font-bold text-3xl text-[#D4AF37]">
                 {totalCalculated} <span className="text-xs text-[#FAF7F2]">ج.م</span>
               </span>
@@ -237,7 +234,7 @@ export default function BlendBuilder() {
               className="w-full bg-[#25D366] hover:bg-[#1ebd59] text-white font-alexandria font-bold text-base py-3.5 rounded-full transition-all shadow-md flex items-center justify-center gap-2 mt-4"
             >
               <MessageSquare className="w-5 h-5" />
-              <span>اطلب التوليفة عبر واتساب</span>
+              <span>اطلب الخلطة عبر الواتساب</span>
             </button>
           </div>
 
