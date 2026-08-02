@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Alexandria, Amiri, Tajawal, DM_Sans } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 
 const alexandria = Alexandria({
@@ -68,6 +69,11 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col font-alexandria antialiased bg-[#FAF7F2] text-[#1E110A]">
         {children}
+        <Script
+          src="https://rodlliai.vercel.app/widget.js"
+          data-merchant="badran"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   );
