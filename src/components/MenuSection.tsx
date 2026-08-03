@@ -119,7 +119,7 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
                 onClick={() => setLightboxIndex(0)}
                 className="bg-[#C5A059] hover:bg-[#B08B46] text-white px-4 py-1.5 rounded-lg font-alexandria text-xs font-bold shrink-0 transition-all"
               >
-                تصفح المنيو المطبوع 🖼️
+                تصفح المنيو المطبوع
               </button>
             </div>
 

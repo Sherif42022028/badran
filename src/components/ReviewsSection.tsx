@@ -121,9 +121,9 @@ export default function ReviewsSection() {
                   onChange={(e) => setRating(Number(e.target.value))}
                   className="w-full p-2.5 bg-white border border-[#1A110A]/20 rounded-lg text-xs"
                 >
-                  <option value={5}>⭐⭐⭐⭐⭐ (ممتاز جداً - 5 نجوم)</option>
-                  <option value={4}>⭐⭐⭐⭐ (جيد جداً - 4 نجوم)</option>
-                  <option value={3}>⭐⭐⭐ (جيد - 3 نجوم)</option>
+                  <option value={5}>ممتاز جداً (5/5)</option>
+                  <option value={4}>جيد جداً (4/5)</option>
+                  <option value={3}>جيد (3/5)</option>
                 </select>
               </div>
             </div>
@@ -196,7 +196,7 @@ export default function ReviewsSection() {
 
               <div className="pt-2 mt-3 border-t border-dashed border-[#1A110A]/10 text-[10px] text-[#66584F] flex justify-between">
                 <span>زبون بن بدران الأصلي</span>
-                <span>ميت غمر 📍</span>
+                <span>ميت غمر</span>
               </div>
             </div>
           ))}

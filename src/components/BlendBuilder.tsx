@@ -40,7 +40,7 @@ export default function BlendBuilder() {
 
   const handleWhatsAppOrder = () => {
     trackContactClick('whatsapp');
-    const message = `أهلاً بن بدران 👋 أرغب في طلب خلطة قهوة خاصة بالخيارات التالية:
+    const message = `أهلاً بن بدران، أرغب في طلب خلطة قهوة خاصة بالخيارات التالية:
 • التحميص: ${roast}
 • التحويج: ${cardamom}
 • نوع البن: ${origin}

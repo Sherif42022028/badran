@@ -82,7 +82,7 @@ export default function Header({ cartCount, onOpenCart }: HeaderProps) {
             className="hidden sm:inline-flex items-center gap-2 border border-[#1A110B]/20 px-3.5 py-1.5 rounded-lg text-xs font-bold text-[#1A110B] hover:border-[#1A110B] hover:bg-[#1A110B] hover:text-[#FAF8F5] transition-all"
           >
             <Phone className="w-3.5 h-3.5 text-[#C5A059]" />
-            <span className="font-price text-xs">📞 اتصل الآن ({PHONE_DISPLAY})</span>
+            <span className="font-price text-xs">اتصل الآن ({PHONE_DISPLAY})</span>
           </a>
 
           <button
@@ -154,7 +154,7 @@ export default function Header({ cartCount, onOpenCart }: HeaderProps) {
             className="w-full mt-3 inline-flex items-center justify-center gap-2 bg-[#1A110B] text-[#FAF8F5] py-2.5 rounded-lg text-xs font-price font-bold border border-[#C5A059]/40"
           >
             <Phone className="w-4 h-4 text-[#C5A059]" />
-            <span>📞 اتصل الآن ({PHONE_DISPLAY})</span>
+            <span>اتصل الآن ({PHONE_DISPLAY})</span>
           </a>
         </div>
       )}

@@ -15,7 +15,7 @@ export default function FloatingWhatsApp() {
           className="flex-1 bg-[#C5A059] hover:bg-[#B08B46] text-white py-2.5 px-3 rounded-lg text-xs font-alexandria font-bold flex items-center justify-center gap-1.5 shadow-xs transition-all active:scale-95"
         >
           <Phone className="w-4 h-4" />
-          <span>📞 اتصل الآن</span>
+          <span>اتصل الآن</span>
         </a>
         <a
           href={WHATSAPP_LINK}
@@ -25,7 +25,7 @@ export default function FloatingWhatsApp() {
           className="flex-1 bg-[#25D366] hover:bg-[#1ebd59] text-white py-2.5 px-3 rounded-lg text-xs font-alexandria font-bold flex items-center justify-center gap-1.5 shadow-xs transition-all active:scale-95"
         >
           <MessageCircle className="w-4 h-4" />
-          <span>💬 واتساب</span>
+          <span>واتساب</span>
         </a>
       </div>
 
@@ -38,7 +38,7 @@ export default function FloatingWhatsApp() {
           aria-label="اتصل الآن"
         >
           <Phone className="w-4 h-4 text-[#C5A059]" />
-          <span>📞 اتصل الآن</span>
+          <span>اتصل الآن</span>
         </a>
         <a
           href={WHATSAPP_LINK}
@@ -49,7 +49,7 @@ export default function FloatingWhatsApp() {
           aria-label="تواصل عبر الواتساب"
         >
           <MessageCircle className="w-5 h-5 text-white" />
-          <span>💬 طلب سريع عبر الواتساب</span>
+          <span>طلب سريع عبر الواتساب</span>
         </a>
       </div>
     </>

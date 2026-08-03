@@ -23,7 +23,7 @@ export default function AboutSection() {
             <TiltedCard
               imageSrc="/محل.jpg"
               altText="محل بن بدران في ميت غمر"
-              captionText="محل بن بدران بميت غمر 📍"
+              captionText="محل بن بدران بميت غمر"
               containerHeight="260px"
               containerWidth="100%"
               imageHeight="100%"
@@ -35,7 +35,7 @@ export default function AboutSection() {
 
             {/* Local Ribbon */}
             <div className="absolute -top-3 -right-3 heritage-ribbon text-[10px] font-alexandria font-bold shadow-md z-10">
-              ميت غمر 📍
+              ميت غمر
             </div>
           </div>
 

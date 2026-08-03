@@ -56,7 +56,7 @@ export default function Hero() {
               className="w-full sm:w-auto bg-[#1A110B] hover:bg-[#2A1D15] text-[#FAF8F5] font-alexandria font-bold text-xs md:text-sm px-6 py-2.5 rounded-lg border border-[#C5A059]/40 transition-all shadow-xs flex items-center justify-center gap-2 group"
             >
               <Phone className="w-4 h-4 text-[#C5A059]" />
-              <span>📞 اتصل الآن ({PHONE_DISPLAY})</span>
+              <span>اتصل الآن ({PHONE_DISPLAY})</span>
             </a>
           </Magnet>
 
@@ -69,7 +69,7 @@ export default function Hero() {
               className="w-full sm:w-auto bg-[#25D366] hover:bg-[#1ebd59] text-white font-alexandria font-bold text-xs md:text-sm px-6 py-2.5 rounded-lg transition-all shadow-xs flex items-center justify-center gap-2 active:scale-95"
             >
               <MessageCircle className="w-4 h-4 text-white" />
-              <span>💬 تواصل عبر الواتساب</span>
+              <span>تواصل عبر الواتساب</span>
             </a>
           </Magnet>
 

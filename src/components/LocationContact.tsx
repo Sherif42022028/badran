@@ -94,7 +94,7 @@ export default function LocationContact() {
                     onClick={() => trackContactClick('call')}
                     className="px-3.5 py-1.5 bg-[#1A110A] text-[#FAF8F5] rounded-lg text-xs font-bold hover:bg-[#2A1D15] transition-colors flex items-center gap-1.5"
                   >
-                    <span>📞 اتصل الآن</span>
+                    <span>اتصل الآن</span>
                   </a>
                   <a
                     href={WHATSAPP_LINK}
@@ -117,7 +117,7 @@ export default function LocationContact() {
               <div>
                 <h4 className="font-amiri text-lg font-bold text-[#1A110A]">مواعيد العمل</h4>
                 <p className="text-xs text-[#C5A059] mt-0.5 font-bold">
-                  شغالين 24 ساعة طوال أيام الأسبوع 🕒
+                  شغالين 24 ساعة طوال أيام الأسبوع
                 </p>
                 <p className="text-[11px] text-[#66584F] mt-0.5">
                   نستقبلكم ونجيب على اتصالاتكم في أي وقت.

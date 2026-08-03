@@ -49,7 +49,7 @@ export default function CartModal({
           .join("\n")
       : "";
 
-    const message = `أهلاً بن بدران 👋 أرغب في إتمام الطلب التالي:
+    const message = `أهلاً بن بدران، أرغب في إتمام الطلب التالي:
 
 *تفاصيل المنتجات:*
 ${itemsText}
