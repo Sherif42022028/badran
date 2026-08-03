@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { MapPin, Phone, Clock, Send, MessageCircle, CheckCircle2, AlertCircle, Navigation } from "lucide-react";
 import { trackContactClick } from "@/lib/analytics";
+import { GOOGLE_MAPS_URL, PHONE_DISPLAY, PHONE_TEL_LINK, WHATSAPP_LINK } from "@/lib/constants";
 
 export default function LocationContact() {
   const [formData, setFormData] = useState({ name: "", phone: "", message: "" });
@@ -66,7 +67,7 @@ export default function LocationContact() {
                 </p>
                 <div className="mt-2.5">
                   <a
-                    href="https://www.google.com/maps/place/%D8%A8%D9%8BD8%A8%D8%AF%D8%B1%D8%A7%D9%86/@30.7168033,31.2621758,17z/data=!4m6!3m5!1s0x14f7c1c05bf53d5d:0xa89763a2cdde0a36!8m2!3d30.7168033!4d31.2621758"
+                    href={GOOGLE_MAPS_URL}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-[#C5A059] text-white rounded-lg text-xs font-bold hover:bg-[#B08B46] transition-all shadow-xs"
@@ -85,18 +86,18 @@ export default function LocationContact() {
               <div>
                 <h4 className="font-amiri text-lg font-bold text-[#1A110A]">أرقام الهاتف والطلب المباشر</h4>
                 <p className="font-price font-bold text-lg text-[#C5A059] mt-0.5">
-                  01020499680
+                  {PHONE_DISPLAY}
                 </p>
                 <div className="flex gap-2 mt-2">
                   <a
-                    href="tel:+201020499680"
+                    href={PHONE_TEL_LINK}
                     onClick={() => trackContactClick('call')}
                     className="px-3.5 py-1.5 bg-[#1A110A] text-[#FAF8F5] rounded-lg text-xs font-bold hover:bg-[#2A1D15] transition-colors flex items-center gap-1.5"
                   >
                     <span>📞 اتصل الآن</span>
                   </a>
                   <a
-                    href="https://wa.me/201020499680?text=عايز%20أعرف%20المنيو"
+                    href={WHATSAPP_LINK}
                     onClick={() => trackContactClick('whatsapp')}
                     target="_blank"
                     rel="noopener noreferrer"

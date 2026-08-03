@@ -5,6 +5,7 @@ import { Coffee, Award, Clock, MapPin, Sparkles, Phone, MessageCircle } from "lu
 import ShinyText from "@/components/reactbits/ShinyText";
 import Magnet from "@/components/reactbits/Magnet";
 import { trackContactClick } from "@/lib/analytics";
+import { PHONE_DISPLAY, PHONE_TEL_LINK, WHATSAPP_LINK } from "@/lib/constants";
 
 export default function Hero() {
   return (
@@ -50,18 +51,18 @@ export default function Hero() {
         <div className="flex flex-col sm:flex-row justify-center items-center gap-3 mb-6">
           <Magnet padding={40} magnetStrength={3}>
             <a
-              href="tel:+201020499680"
+              href={PHONE_TEL_LINK}
               onClick={() => trackContactClick('call')}
               className="w-full sm:w-auto bg-[#1A110B] hover:bg-[#2A1D15] text-[#FAF8F5] font-alexandria font-bold text-xs md:text-sm px-6 py-2.5 rounded-lg border border-[#C5A059]/40 transition-all shadow-xs flex items-center justify-center gap-2 group"
             >
               <Phone className="w-4 h-4 text-[#C5A059]" />
-              <span>📞 اتصل الآن (01020499680)</span>
+              <span>📞 اتصل الآن ({PHONE_DISPLAY})</span>
             </a>
           </Magnet>
 
           <Magnet padding={40} magnetStrength={3}>
             <a
-              href="https://wa.me/201020499680?text=عايز%20أعرف%20المنيو"
+              href={WHATSAPP_LINK}
               onClick={() => trackContactClick('whatsapp')}
               target="_blank"
               rel="noopener noreferrer"

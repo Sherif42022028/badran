@@ -2,6 +2,7 @@
 
 import { Phone, MessageCircle } from "lucide-react";
 import { trackContactClick } from "@/lib/analytics";
+import { PHONE_TEL_LINK, WHATSAPP_LINK } from "@/lib/constants";
 
 export default function FloatingWhatsApp() {
   return (
@@ -9,7 +10,7 @@ export default function FloatingWhatsApp() {
       {/* Mobile Sticky Bar (Always visible at bottom without scroll) */}
       <div className="fixed bottom-0 left-0 right-0 z-50 bg-[#1A110B]/95 backdrop-blur-md border-t border-[#C5A059]/40 p-2.5 sm:hidden flex items-center gap-2 shadow-2xl">
         <a
-          href="tel:+201020499680"
+          href={PHONE_TEL_LINK}
           onClick={() => trackContactClick('call')}
           className="flex-1 bg-[#C5A059] hover:bg-[#B08B46] text-white py-2.5 px-3 rounded-lg text-xs font-alexandria font-bold flex items-center justify-center gap-1.5 shadow-xs transition-all active:scale-95"
         >
@@ -17,7 +18,7 @@ export default function FloatingWhatsApp() {
           <span>📞 اتصل الآن</span>
         </a>
         <a
-          href="https://wa.me/201020499680?text=عايز%20أعرف%20المنيو"
+          href={WHATSAPP_LINK}
           onClick={() => trackContactClick('whatsapp')}
           target="_blank"
           rel="noopener noreferrer"
@@ -31,7 +32,7 @@ export default function FloatingWhatsApp() {
       {/* Desktop Floating Quick Contact Actions */}
       <div className="hidden sm:flex fixed bottom-6 left-6 z-40 flex-col gap-2.5">
         <a
-          href="tel:+201020499680"
+          href={PHONE_TEL_LINK}
           onClick={() => trackContactClick('call')}
           className="bg-[#1A110B] hover:bg-[#2A1D15] text-[#FAF8F5] px-4 py-3 rounded-full shadow-lg transition-all duration-300 hover:scale-105 active:scale-95 flex items-center gap-2 font-alexandria text-xs font-bold border border-[#C5A059]/50 group"
           aria-label="اتصل الآن"
@@ -40,7 +41,7 @@ export default function FloatingWhatsApp() {
           <span>📞 اتصل الآن</span>
         </a>
         <a
-          href="https://wa.me/201020499680?text=عايز%20أعرف%20المنيو"
+          href={WHATSAPP_LINK}
           onClick={() => trackContactClick('whatsapp')}
           target="_blank"
           rel="noopener noreferrer"

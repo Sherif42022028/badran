@@ -32,6 +32,7 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://budran.vercel.app"),
   title: "بن بدران | Budran Coffee — أصالة وتوليف القهوة الفاخرة بميت غمر",
   description:
     "موقع بن بدران الرسمي (ميت غمر). أجود أنواع البن العربي، البن المحوج بالحبهان والمستكة، الخلطات الفرنسية، والتوليفات الخاصة بأعلى معايير التحميص الطازج.",
@@ -56,6 +57,34 @@ export const metadata: Metadata = {
   },
 };
 
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "CafeOrCoffeeShop",
+  "name": "Budran Coffee",
+  "alternateName": "بن بدران",
+  "telephone": "+201020499680",
+  "email": "budrancafe@gmail.com",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "P786+PVF, Madinet Mit Ghamr (Include Daqados)",
+    "addressLocality": "Mit Ghamr",
+    "addressRegion": "Dakahlia Governorate",
+    "postalCode": "7511463",
+    "addressCountry": "EG"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 30.7168033,
+    "longitude": 31.2621758
+  },
+  "openingHours": "Mo-Su 00:00-23:59",
+  "image": "https://budran.vercel.app/logo.jpg",
+  "sameAs": [
+    "https://www.facebook.com/budran.coffe",
+    "https://www.instagram.com/budrancoffe1"
+  ]
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -67,6 +96,12 @@ export default function RootLayout({
       dir="rtl"
       className={`${alexandria.variable} ${amiri.variable} ${tajawal.variable} ${dmSans.variable} scroll-smooth h-full`}
     >
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
       <body className="min-h-full flex flex-col font-alexandria antialiased bg-[#FAF7F2] text-[#1E110A]">
         {children}
         {/* Google Analytics 4 */}
@@ -82,11 +117,6 @@ export default function RootLayout({
             gtag('config', '${process.env.NEXT_PUBLIC_GA_ID || 'G-XXXXXXXXXX'}');
           `}
         </Script>
-        <Script
-          src="https://rodlliai.vercel.app/widget.js"
-          data-merchant="budran"
-          strategy="afterInteractive"
-        />
       </body>
     </html>
   );
