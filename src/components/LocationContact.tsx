@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { MapPin, Phone, Clock, Send, MessageCircle, CheckCircle2, AlertCircle } from "lucide-react";
+import { MapPin, Phone, Clock, Send, MessageCircle, CheckCircle2, AlertCircle, Navigation } from "lucide-react";
+import { trackContactClick } from "@/lib/analytics";
 
 export default function LocationContact() {
   const [formData, setFormData] = useState({ name: "", phone: "", message: "" });
@@ -59,13 +60,21 @@ export default function LocationContact() {
                 <MapPin className="w-4 h-4 text-[#C5A059]" />
               </div>
               <div>
-                <h4 className="font-amiri text-lg font-bold text-[#1A110A]">عنوان الفرع الرئيسي</h4>
-                <p className="text-xs text-[#1A110A]/85 mt-0.5 leading-relaxed">
-                  مدينة ميت غمر - محافظة الدقهلية - مصر
+                <h4 className="font-amiri text-lg font-bold text-[#1A110A]">العنوان الدقيق (Google Maps)</h4>
+                <p className="text-xs text-[#1A110A]/90 mt-1 font-mono leading-relaxed bg-[#FAF8F5] p-2 rounded border border-[#1A110A]/10 dir-ltr text-right">
+                  P786+PVF, Madinet Mit Ghamr (Include Daqados), Mit Ghamr, Dakahlia Governorate 7511463
                 </p>
-                <span className="inline-block mt-1 text-[11px] text-[#66584F] font-medium">
-                  (بن بدران - الشارع الرئيسي)
-                </span>
+                <div className="mt-2.5">
+                  <a
+                    href="https://www.google.com/maps/place/%D8%A8%D9%8BD8%A8%D8%AF%D8%B1%D8%A7%D9%86/@30.7168033,31.2621758,17z/data=!4m6!3m5!1s0x14f7c1c05bf53d5d:0xa89763a2cdde0a36!8m2!3d30.7168033!4d31.2621758"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-[#C5A059] text-white rounded-lg text-xs font-bold hover:bg-[#B08B46] transition-all shadow-xs"
+                  >
+                    <Navigation className="w-3.5 h-3.5" />
+                    <span>احصل على الاتجاهات</span>
+                  </a>
+                </div>
               </div>
             </div>
 
@@ -80,16 +89,18 @@ export default function LocationContact() {
                 </p>
                 <div className="flex gap-2 mt-2">
                   <a
-                    href="tel:01020499680"
-                    className="px-3 py-1 bg-[#1A110A] text-[#FAF8F5] rounded-lg text-xs font-bold hover:bg-[#2A1D15] transition-colors"
+                    href="tel:+201020499680"
+                    onClick={() => trackContactClick('call')}
+                    className="px-3.5 py-1.5 bg-[#1A110A] text-[#FAF8F5] rounded-lg text-xs font-bold hover:bg-[#2A1D15] transition-colors flex items-center gap-1.5"
                   >
-                    اتصال هاتفي
+                    <span>📞 اتصل الآن</span>
                   </a>
                   <a
-                    href="https://wa.me/201020499680"
+                    href="https://wa.me/201020499680?text=عايز%20أعرف%20المنيو"
+                    onClick={() => trackContactClick('whatsapp')}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="px-3 py-1 bg-[#25D366] text-white rounded-lg text-xs font-bold hover:bg-[#1ebd59] transition-colors flex items-center gap-1"
+                    className="px-3.5 py-1.5 bg-[#25D366] text-white rounded-lg text-xs font-bold hover:bg-[#1ebd59] transition-colors flex items-center gap-1.5"
                   >
                     <MessageCircle className="w-3.5 h-3.5" />
                     <span>واتساب</span>
@@ -121,7 +132,7 @@ export default function LocationContact() {
               أرسل لنا ملاحظة أو استفسار
             </h4>
             <p className="text-xs text-[#1A110A]/70 mb-4 border-b border-dashed border-[#C5A059]/30 pb-2.5">
-              يسعدنا استقبال ملاحظاتكم وطلباتكم الخاصة عبر هذا النموذج (يتم الحفظ في قاعدة البيانات).
+              يسعدنا استقبال ملاحظاتكم وطلباتكم الخاصة عبر هذا النموذج.
             </p>
 
             <form onSubmit={handleSubmit} className="space-y-3.5">
@@ -208,17 +219,19 @@ export default function LocationContact() {
             </p>
           </div>
 
+          {/* TODO: أضف رابط Google Business Profile هنا بعد ما يتم المطالبة بالملف */}
+
           <div className="border border-[#C5A059]/40 rounded-xl overflow-hidden shadow-xs bg-white p-1.5">
             <div className="relative w-full h-[320px] rounded-lg overflow-hidden">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3430.056646202436!2d31.25960087527777!3d30.716807886402545!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14f7c1c05bf53d5d%3A0xa89763a2cdde0a36!2z2KjZhiDYqNiv2LHYp9mG!5e0!3m2!1sen!2seg!4v1785685705668!5m2!1sen!2seg"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3430.056646202436!2d31.2621758!3d30.7168033!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14f7c1c05bf53d5d%3A0xa89763a2cdde0a36!2z2KjZhiDYqNiv2LHYp9mG!5e0!3m2!1sen!2seg!4v1785685705668!5m2!1sen!2seg"
                 width="100%"
                 height="100%"
                 style={{ border: 0 }}
                 allowFullScreen={true}
                 loading="lazy"
                 referrerPolicy="strict-origin-when-cross-origin"
-                title="موقع بن بدران على خريطة جوجل"
+                title="موقع بن بدران (Budran Coffee) على خريطة جوجل"
               />
             </div>
           </div>

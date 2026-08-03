@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { X, Plus, Minus, MessageSquare, ShoppingBag } from "lucide-react";
 import { MenuItem } from "@/data/menu";
+import { trackContactClick } from "@/lib/analytics";
 
 export interface CartItem {
   item: MenuItem;
@@ -36,6 +37,7 @@ export default function CartModal({
   );
 
   const handleCheckoutWhatsApp = () => {
+    trackContactClick('whatsapp');
     let itemsText = cartItems
       ? cartItems
           .map(

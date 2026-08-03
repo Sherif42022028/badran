@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ShoppingBag, Phone, Menu as MenuIcon, X } from "lucide-react";
+import { trackContactClick } from "@/lib/analytics";
 
 interface HeaderProps {
   cartCount: number;
@@ -75,11 +76,12 @@ export default function Header({ cartCount, onOpenCart }: HeaderProps) {
         {/* Action Buttons */}
         <div className="flex items-center gap-3">
           <a
-            href="tel:01020499680"
+            href="tel:+201020499680"
+            onClick={() => trackContactClick("call")}
             className="hidden sm:inline-flex items-center gap-2 border border-[#1A110B]/20 px-3.5 py-1.5 rounded-lg text-xs font-bold text-[#1A110B] hover:border-[#1A110B] hover:bg-[#1A110B] hover:text-[#FAF8F5] transition-all"
           >
             <Phone className="w-3.5 h-3.5 text-[#C5A059]" />
-            <span className="font-price text-xs">01020499680</span>
+            <span className="font-price text-xs">📞 اتصل الآن (01020499680)</span>
           </a>
 
           <button
@@ -146,11 +148,12 @@ export default function Header({ cartCount, onOpenCart }: HeaderProps) {
             موقعنا وتواصلنا
           </a>
           <a
-            href="tel:01020499680"
+            href="tel:+201020499680"
+            onClick={() => trackContactClick("call")}
             className="w-full mt-3 inline-flex items-center justify-center gap-2 bg-[#1A110B] text-[#FAF8F5] py-2.5 rounded-lg text-xs font-price font-bold border border-[#C5A059]/40"
           >
             <Phone className="w-4 h-4 text-[#C5A059]" />
-            <span>01020499680 (اتصل بنا مباشرة)</span>
+            <span>📞 اتصل الآن (01020499680)</span>
           </a>
         </div>
       )}

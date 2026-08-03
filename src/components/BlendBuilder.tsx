@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Sparkles, Coffee, CheckCircle, MessageSquare } from "lucide-react";
+import { trackContactClick } from "@/lib/analytics";
 
 export default function BlendBuilder() {
   const [roast, setRoast] = useState<string>("وسط");
@@ -38,6 +39,7 @@ export default function BlendBuilder() {
     additions.length * 10;
 
   const handleWhatsAppOrder = () => {
+    trackContactClick('whatsapp');
     const message = `أهلاً بن بدران 👋 أرغب في طلب خلطة قهوة خاصة بالخيارات التالية:
 • التحميص: ${roast}
 • التحويج: ${cardamom}

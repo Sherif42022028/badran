@@ -1,9 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import { Coffee, Award, Clock, MapPin, Sparkles } from "lucide-react";
+import { Coffee, Award, Clock, MapPin, Sparkles, Phone, MessageCircle } from "lucide-react";
 import ShinyText from "@/components/reactbits/ShinyText";
 import Magnet from "@/components/reactbits/Magnet";
+import { trackContactClick } from "@/lib/analytics";
 
 export default function Hero() {
   return (
@@ -26,7 +27,7 @@ export default function Hero() {
         {/* Local Authentic Badge */}
         <div className="inline-block mb-3">
           <span className="solid-badge text-[11px] md:text-xs font-bold tracking-wide py-1 px-3">
-            <span>بن بدران — محمصة ومطحنة ميت غمر</span>
+            <span>بن بدران — Budran Coffee بميت غمر</span>
           </span>
         </div>
 
@@ -49,21 +50,35 @@ export default function Hero() {
         <div className="flex flex-col sm:flex-row justify-center items-center gap-3 mb-6">
           <Magnet padding={40} magnetStrength={3}>
             <a
-              href="#menu"
+              href="tel:+201020499680"
+              onClick={() => trackContactClick('call')}
               className="w-full sm:w-auto bg-[#1A110B] hover:bg-[#2A1D15] text-[#FAF8F5] font-alexandria font-bold text-xs md:text-sm px-6 py-2.5 rounded-lg border border-[#C5A059]/40 transition-all shadow-xs flex items-center justify-center gap-2 group"
             >
-              <Coffee className="w-4 h-4 text-[#C5A059]" />
-              <span>تصفح الأسعار والمنيو</span>
+              <Phone className="w-4 h-4 text-[#C5A059]" />
+              <span>📞 اتصل الآن (01020499680)</span>
             </a>
           </Magnet>
 
           <Magnet padding={40} magnetStrength={3}>
             <a
-              href="#blend-builder"
+              href="https://wa.me/201020499680?text=عايز%20أعرف%20المنيو"
+              onClick={() => trackContactClick('whatsapp')}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full sm:w-auto bg-[#25D366] hover:bg-[#1ebd59] text-white font-alexandria font-bold text-xs md:text-sm px-6 py-2.5 rounded-lg transition-all shadow-xs flex items-center justify-center gap-2 active:scale-95"
+            >
+              <MessageCircle className="w-4 h-4 text-white" />
+              <span>💬 تواصل عبر الواتساب</span>
+            </a>
+          </Magnet>
+
+          <Magnet padding={40} magnetStrength={3}>
+            <a
+              href="#menu"
               className="w-full sm:w-auto bg-[#C5A059] hover:bg-[#B08B46] text-white font-alexandria font-bold text-xs md:text-sm px-6 py-2.5 rounded-lg transition-all shadow-xs flex items-center justify-center gap-2 active:scale-95"
             >
-              <Sparkles className="w-4 h-4 text-white" />
-              <span>ركّب خلطتك بنفسك</span>
+              <Coffee className="w-4 h-4 text-white" />
+              <span>تصفح المنيو والأسعار</span>
             </a>
           </Magnet>
         </div>
@@ -82,7 +97,7 @@ export default function Hero() {
 
           <div className="flex items-center justify-center gap-2 p-2.5 bg-[#F7F4EF] rounded-lg border border-[#1A110B]/10">
             <MapPin className="w-3.5 h-3.5 text-[#C5A059] shrink-0" />
-            <span className="font-semibold">الفرع الرئيسي: الشارع الرئيسي بميت غمر</span>
+            <span className="font-semibold">P786+PVF, مدينة ميت غمر</span>
           </div>
         </div>
 

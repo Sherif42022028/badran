@@ -67,13 +67,15 @@ export default function Footer() {
           {/* Col 3 */}
           <div className="space-y-3">
             <h4 className="font-amiri text-xl text-[#C5A059]">تواصل معنا</h4>
-            <p className="text-xs text-[#FAF8F5]/90 flex items-center justify-center md:justify-start gap-2">
-              <MapPin className="w-4 h-4 text-[#C5A059]" />
-              <span>ميت غمر - محافظة الدقهلية - مصر</span>
+            <p className="text-xs text-[#FAF8F5]/90 flex items-start justify-center md:justify-start gap-2">
+              <MapPin className="w-4 h-4 text-[#C5A059] shrink-0 mt-0.5" />
+              <span>P786+PVF, Madinet Mit Ghamr (Include Daqados), Mit Ghamr, Dakahlia Governorate 7511463</span>
             </p>
             <p className="text-xs text-[#FAF8F5]/90 flex items-center justify-center md:justify-start gap-2">
               <Phone className="w-4 h-4 text-[#C5A059]" />
-              <span className="font-price font-bold">01020499680</span>
+              <a href="tel:+201020499680" className="font-price font-bold hover:text-[#C5A059] transition-colors dir-ltr">
+                +20 102 049 9680
+              </a>
             </p>
             <p className="text-xs text-[#FAF8F5]/90 flex items-center justify-center md:justify-start gap-2">
               <Clock className="w-4 h-4 text-[#C5A059]" />
