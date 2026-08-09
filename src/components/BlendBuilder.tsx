@@ -1,8 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { Sparkles, Coffee, CheckCircle, MessageSquare } from "lucide-react";
+import { Sparkles, Coffee, CheckCircle, MessageSquare, User, Phone, FileText } from "lucide-react";
 import { trackContactClick } from "@/lib/analytics";
+import { generateOrderId } from "@/lib/orderId";
+import { WHATSAPP_NUMBER } from "@/config/whatsapp";
+import { buildWhatsAppLink } from "@/lib/whatsapp/buildWhatsAppLink";
+import { generateBlendWhatsAppMessage, CustomBlendOrder } from "@/lib/whatsapp/generateWhatsAppMessage";
+import OrderPreviewModal from "@/components/OrderPreviewModal";
+import { CheckoutOrder } from "@/types/Order";
 
 export default function BlendBuilder() {
   const [roast, setRoast] = useState<string>("وسط");
@@ -10,6 +16,13 @@ export default function BlendBuilder() {
   const [origin, setOrigin] = useState<string>("خلطة كولومبي وحبشي");
   const [additions, setAdditions] = useState<string[]>(["مستكة يوناني"]);
   const [weight, setWeight] = useState<string>("ربع كيلو (250جم)");
+  const [customerName, setCustomerName] = useState<string>("");
+  const [customerPhone, setCustomerPhone] = useState<string>("");
+  const [notes, setNotes] = useState<string>("");
+
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  const [builtMessage, setBuiltMessage] = useState("");
+  const [checkoutOrderObj, setCheckoutOrderObj] = useState<CheckoutOrder | null>(null);
 
   const toggleAddition = (item: string) => {
     if (additions.includes(item)) {
@@ -38,24 +51,95 @@ export default function BlendBuilder() {
     (cardamomAddons[cardamom] || 0) +
     additions.length * 10;
 
-  const handleWhatsAppOrder = () => {
-    trackContactClick('whatsapp');
-    const message = `أهلاً بن بدران، أرغب في طلب خلطة قهوة خاصة بالخيارات التالية:
-• التحميص: ${roast}
-• التحويج: ${cardamom}
-• نوع البن: ${origin}
-• الإضافات: ${additions.length > 0 ? additions.join(" + ") : "بدون إضافات"}
-• الوزن: ${weight}
-• التكلفة التقديرية: ${totalCalculated} ج.م`;
+  const handleOpenPreview = () => {
+    trackContactClick("whatsapp");
 
-    const encoded = encodeURIComponent(message);
-    window.open(`https://wa.me/201020499680?text=${encoded}`, "_blank");
+    const orderId = generateOrderId("BD");
+
+    const blendOrder: CustomBlendOrder = {
+      orderId,
+      customerName,
+      customerPhone,
+      roast,
+      cardamom,
+      origin,
+      additions,
+      weight,
+      totalPrice: totalCalculated,
+      notes,
+    };
+
+    const message = generateBlendWhatsAppMessage(blendOrder);
+
+    const summaryOrderObj: CheckoutOrder = {
+      orderId,
+      customer: {
+        name: customerName.trim() || "عميل بن بدران",
+        phone: customerPhone.trim() || "01020499680",
+      },
+      orderType: "Pickup",
+      items: [
+        {
+          name: `خلطة بن خاصة (${origin})`,
+          quantity: 1,
+          options: {
+            size: weight,
+            sugar: cardamom,
+            extras: [`التحميص: ${roast}`, ...additions],
+          },
+        },
+      ],
+      subtotal: totalCalculated,
+      total: totalCalculated,
+      paymentMethod: "Cash",
+      additionalNote: notes || undefined,
+      currency: "ج.م",
+    };
+
+    setBuiltMessage(message);
+    setCheckoutOrderObj(summaryOrderObj);
+    setIsPreviewOpen(true);
+  };
+
+  const handleSendViaWhatsApp = () => {
+    if (!builtMessage) return;
+
+    try {
+      const targetPhone = WHATSAPP_NUMBER || "201020499680";
+      const link = buildWhatsAppLink(targetPhone, builtMessage);
+
+      if (typeof window !== "undefined") {
+        try {
+          const lastOrder = {
+            orderId: checkoutOrderObj?.orderId,
+            type: "Custom Blend",
+            roast,
+            cardamom,
+            origin,
+            additions,
+            weight,
+            totalPrice: totalCalculated,
+            customerName,
+            customerPhone,
+            notes,
+            timestamp: new Date().toISOString(),
+          };
+          localStorage.setItem("badran_last_order", JSON.stringify(lastOrder));
+        } catch (e) {
+          console.warn("Failed to save to localStorage", e);
+        }
+      }
+
+      window.open(link, "_blank", "noopener,noreferrer");
+      setIsPreviewOpen(false);
+    } catch (err: any) {
+      alert(err?.message || "حدث خطأ أثناء إنشاء رابط الطلب عبر الواتساب");
+    }
   };
 
   return (
     <section id="blend-builder" className="py-4 md:py-8 px-4 max-w-7xl mx-auto">
       <div className="framed-section p-5 sm:p-8 md:p-10">
-        
         {/* Section Header */}
         <div className="text-center mb-6">
           <span className="solid-badge text-xs md:text-sm mb-2 py-1 px-3">
@@ -68,10 +152,8 @@ export default function BlendBuilder() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          
           {/* Builder Controls */}
           <div className="lg:col-span-8 space-y-6 font-alexandria">
-            
             {/* 1. Roast Selection */}
             <div>
               <label className="font-amiri text-lg font-bold text-[#1A110A] block mb-2">
@@ -81,6 +163,7 @@ export default function BlendBuilder() {
                 {["فاتح", "وسط", "غامق"].map((title) => (
                   <button
                     key={title}
+                    type="button"
                     onClick={() => setRoast(title)}
                     className={`p-3 rounded-lg border text-xs font-bold transition-all ${
                       roast === title
@@ -103,6 +186,7 @@ export default function BlendBuilder() {
                 {["سادة", "محوج خفيف", "محوج وسط", "محوج رويال سوبر"].map((item) => (
                   <button
                     key={item}
+                    type="button"
                     onClick={() => setCardamom(item)}
                     className={`p-2.5 rounded-lg border text-xs font-bold transition-all ${
                       cardamom === item
@@ -129,6 +213,7 @@ export default function BlendBuilder() {
                 ].map((item) => (
                   <button
                     key={item}
+                    type="button"
                     onClick={() => setOrigin(item)}
                     className={`p-3 rounded-lg border text-xs font-bold transition-all ${
                       origin === item
@@ -153,6 +238,7 @@ export default function BlendBuilder() {
                   return (
                     <button
                       key={item}
+                      type="button"
                       onClick={() => toggleAddition(item)}
                       className={`px-3.5 py-2 rounded-lg text-xs font-bold flex items-center gap-2 transition-all ${
                         selected
@@ -177,6 +263,7 @@ export default function BlendBuilder() {
                 {["ثمن كيلو (125جم)", "ربع كيلو (250جم)", "نصف كيلو (500جم)", "كيلو كامل"].map((w) => (
                   <button
                     key={w}
+                    type="button"
                     onClick={() => setWeight(w)}
                     className={`p-2.5 rounded-lg border text-xs font-bold transition-all ${
                       weight === w
@@ -190,6 +277,44 @@ export default function BlendBuilder() {
               </div>
             </div>
 
+            {/* 6. Customer Information (Optional) */}
+            <div className="pt-3 border-t border-dashed border-[#C5A059]/30 space-y-3">
+              <label className="font-amiri text-lg font-bold text-[#1A110A] block">
+                6. بيانتك للتأكيد (اختياري):
+              </label>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="relative">
+                  <User className="w-4 h-4 text-[#C5A059] absolute top-3 right-3" />
+                  <input
+                    type="text"
+                    value={customerName}
+                    onChange={(e) => setCustomerName(e.target.value)}
+                    placeholder="الاسم الكريم..."
+                    className="w-full py-2.5 pr-9 pl-3 bg-[#FAF8F5] border border-[#1A110A]/15 rounded-lg text-xs focus:outline-none focus:border-[#C5A059]"
+                  />
+                </div>
+                <div className="relative">
+                  <Phone className="w-4 h-4 text-[#C5A059] absolute top-3 right-3" />
+                  <input
+                    type="tel"
+                    value={customerPhone}
+                    onChange={(e) => setCustomerPhone(e.target.value)}
+                    placeholder="رقم الهاتف..."
+                    className="w-full py-2.5 pr-9 pl-3 bg-[#FAF8F5] border border-[#1A110A]/15 rounded-lg text-xs font-price focus:outline-none focus:border-[#C5A059]"
+                  />
+                </div>
+              </div>
+              <div className="relative">
+                <FileText className="w-4 h-4 text-[#C5A059] absolute top-3 right-3" />
+                <input
+                  type="text"
+                  value={notes}
+                  onChange={(e) => setNotes(e.target.value)}
+                  placeholder="أي ملاحظات إضافية للطحن أو التغليف..."
+                  className="w-full py-2.5 pr-9 pl-3 bg-[#FAF8F5] border border-[#1A110A]/15 rounded-lg text-xs focus:outline-none focus:border-[#C5A059]"
+                />
+              </div>
+            </div>
           </div>
 
           {/* Live Order Summary Card */}
@@ -232,17 +357,26 @@ export default function BlendBuilder() {
             </div>
 
             <button
-              onClick={handleWhatsAppOrder}
-              className="w-full bg-[#25D366] hover:bg-[#1ebd59] text-white font-alexandria font-bold text-sm py-3 rounded-lg transition-all shadow-xs flex items-center justify-center gap-2 mt-3"
+              type="button"
+              onClick={handleOpenPreview}
+              className="w-full bg-[#25D366] hover:bg-[#1ebd59] text-white font-alexandria font-bold text-sm py-3 rounded-lg transition-all shadow-xs flex items-center justify-center gap-2 mt-3 cursor-pointer"
             >
               <MessageSquare className="w-4 h-4" />
               <span>اطلب الخلطة عبر الواتساب</span>
             </button>
           </div>
-
         </div>
-
       </div>
+
+      {checkoutOrderObj && (
+        <OrderPreviewModal
+          isOpen={isPreviewOpen}
+          message={builtMessage}
+          order={checkoutOrderObj}
+          onClose={() => setIsPreviewOpen(false)}
+          onSend={handleSendViaWhatsApp}
+        />
+      )}
     </section>
   );
 }
