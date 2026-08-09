@@ -32,15 +32,17 @@ export default function Hero() {
           </span>
         </div>
 
-        {/* Main Headline with Metallic Gold Shimmer */}
-        <h2 className="font-amiri text-3xl sm:text-4xl md:text-5xl font-bold text-[#1A110B] mb-3 leading-snug tracking-wide">
+        {/* Main Headline with Luxury Calligraphy Font */}
+        <h2 className="font-calligraphy font-bold text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-[#1A110B] mb-4 leading-relaxed tracking-normal">
           <ShinyText
             text="بن بدران.. أصل القهوة والتحويجة البلدي في ميت غمر"
+            className="font-calligraphy font-bold"
             color="#1A110B"
             shineColor="#C5A059"
             speed={3}
           />
         </h2>
+
 
         {/* Description Paragraph */}
         <p className="font-tajawal text-sm md:text-base text-[#1A110A]/85 max-w-2xl mx-auto mb-6 leading-relaxed font-normal">
