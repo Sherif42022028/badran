@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Lalezar&family=Tajawal:wght@400;500;700&family=DM+Sans:wght@400;500;700&display=swap');
 @import "tailwindcss";
 
 @layer base {
@@ -22,30 +21,29 @@
       radial-gradient(circle at 50% 0%, rgba(197, 160, 89, 0.05) 0%, transparent 60%),
       radial-gradient(circle at 100% 100%, rgba(61, 18, 14, 0.02) 0%, transparent 40%);
     color: var(--primary);
-    font-family: 'Tajawal', var(--font-tajawal), system-ui, sans-serif;
+    font-family: var(--font-alexandria), system-ui, sans-serif;
     overflow-x: hidden;
-  }
-
-  h1, h2, h3, h4, h5, h6 {
-    font-family: 'Lalezar', var(--font-lalezar), sans-serif;
-    font-weight: 400;
   }
 }
 
-/* Custom Editorial Typography Helpers */
-.font-lalezar {
-  font-family: 'Lalezar', var(--font-lalezar), sans-serif;
+/* Custom Editorial Luxury Typography Helpers */
+.font-alexandria {
+  font-family: var(--font-alexandria), sans-serif;
+}
+
+.font-amiri {
+  font-family: var(--font-amiri), serif;
 }
 
 .font-tajawal {
-  font-family: 'Tajawal', var(--font-tajawal), sans-serif;
+  font-family: var(--font-tajawal), sans-serif;
 }
 
 .font-price {
-  font-family: 'DM Sans', var(--font-dmsans), monospace, sans-serif;
+  font-family: var(--font-dmsans), monospace, sans-serif;
 }
 
-/* Matte Brass Accent Colors */
+/* Matte Brass Accent Colors (No Artificial Gradients) */
 .text-brass {
   color: #C5A059;
 }
@@ -59,7 +57,7 @@
   background-color: #B08B46;
 }
 
-/* Framed Section - Fine Architectural Editorial Double Borders & Whitespace */
+/* Framed Section - Fine Architectural Editorial Double Borders */
 .framed-section {
   border: 1px solid rgba(197, 160, 89, 0.3);
   outline: 1px solid rgba(26, 17, 11, 0.15);
@@ -107,8 +105,8 @@
 .solid-badge {
   background-color: #1A110B;
   color: #FAF8F5;
-  font-family: 'Lalezar', var(--font-lalezar), sans-serif;
-  font-weight: 400;
+  font-family: var(--font-alexandria), sans-serif;
+  font-weight: 700;
   border: 1px solid rgba(197, 160, 89, 0.4);
   border-radius: 8px;
   padding: 0.5rem 1.25rem;
@@ -127,10 +125,9 @@
 .heritage-ribbon {
   background-color: #C5A059;
   color: #FFFFFF;
-  font-family: 'Lalezar', var(--font-lalezar), sans-serif;
-  font-weight: 400;
+  font-weight: 700;
   padding: 3px 10px;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   border-radius: 4px;
   letter-spacing: 0.02em;
 }

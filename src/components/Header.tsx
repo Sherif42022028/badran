@@ -31,7 +31,8 @@ export default function Header({ cartCount, onOpenCart }: HeaderProps) {
             />
           </div>
           <div>
-            <h1 className="font-lalezar text-2xl text-[#1A110B] leading-none tracking-wide">
+            <h1 className="font-amiri text-2xl font-bold text-[#1A110B] leading-none tracking-wide">
+
               بن بدران
             </h1>
             <p className="font-tajawal text-[11px] text-[#C5A059] font-bold mt-1">

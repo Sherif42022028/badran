@@ -34,7 +34,7 @@ export default function Footer() {
               className="object-contain"
             />
           </div>
-          <h3 className="font-lalezar text-3xl text-[#C5A059]">بن بدران (Budran Coffee)</h3>
+          <h3 className="font-amiri text-3xl font-bold text-[#C5A059]">بن بدران (Budran Coffee)</h3>
           <p className="font-tajawal text-sm text-[#C5A059] font-bold mt-1">
             محمصة ومطحنة ميت غمر الأصيلة
           </p>
@@ -44,7 +44,7 @@ export default function Footer() {
           
           {/* Col 1 */}
           <div className="space-y-3">
-            <h4 className="font-lalezar text-xl text-[#C5A059]">عن المحل</h4>
+            <h4 className="font-amiri text-xl font-bold text-[#C5A059]">عن المحل</h4>
             <p className="text-xs md:text-sm text-[#FAF8F5]/85 leading-relaxed max-w-sm mx-auto md:mx-0 font-normal">
               بن بدران هو أصل القهوة والتحويجة البلدي في ميت غمر. نوفر لكم أجود أنواع البن والخلطات المحوجة بالحبةان والمستكة طازجة يومياً.
             </p>
@@ -75,7 +75,7 @@ export default function Footer() {
 
           {/* Col 2 */}
           <div className="space-y-3">
-            <h4 className="font-lalezar text-xl text-[#C5A059]">روابط سريعة</h4>
+            <h4 className="font-amiri text-xl font-bold text-[#C5A059]">روابط سريعة</h4>
             <ul className="text-xs space-y-2 text-[#FAF8F5]/90">
               <li>
                 <a href="#hero" className="hover:text-[#C5A059] transition-colors">
@@ -107,7 +107,7 @@ export default function Footer() {
 
           {/* Col 3 */}
           <div className="space-y-3">
-            <h4 className="font-lalezar text-xl text-[#C5A059]">تواصل معنا</h4>
+            <h4 className="font-amiri text-xl font-bold text-[#C5A059]">تواصل معنا</h4>
             <p className="text-xs text-[#FAF8F5]/90 flex items-start justify-center md:justify-start gap-2">
               <MapPin className="w-4 h-4 text-[#C5A059] shrink-0 mt-0.5" />
               <span>{EXACT_ADDRESS_EN}</span>

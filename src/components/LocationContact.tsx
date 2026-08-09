@@ -61,7 +61,7 @@ export default function LocationContact() {
                 <MapPin className="w-4 h-4 text-[#C5A059]" />
               </div>
               <div>
-                <h4 className="font-lalezar text-lg text-[#1A110A]">العنوان الدقيق (Google Maps)</h4>
+                <h4 className="font-amiri text-lg font-bold text-[#1A110A]">العنوان الدقيق (Google Maps)</h4>
                 <p className="text-xs text-[#1A110A]/90 mt-1 font-mono leading-relaxed bg-[#FAF8F5] p-2 rounded border border-[#1A110A]/10 dir-ltr text-right">
                   P786+PVF, Madinet Mit Ghamr (Include Daqados), Mit Ghamr, Dakahlia Governorate 7511463
                 </p>
@@ -84,7 +84,7 @@ export default function LocationContact() {
                 <Phone className="w-4 h-4 text-[#C5A059]" />
               </div>
               <div>
-                <h4 className="font-lalezar text-lg text-[#1A110A]">أرقام الهاتف والطلب المباشر</h4>
+                <h4 className="font-amiri text-lg font-bold text-[#1A110A]">أرقام الهاتف والطلب المباشر</h4>
                 <p className="font-price font-bold text-lg text-[#C5A059] mt-0.5">
                   {PHONE_DISPLAY}
                 </p>
@@ -115,7 +115,7 @@ export default function LocationContact() {
                 <Clock className="w-4 h-4 text-[#C5A059]" />
               </div>
               <div>
-                <h4 className="font-lalezar text-lg text-[#1A110A]">مواعيد العمل</h4>
+                <h4 className="font-amiri text-lg font-bold text-[#1A110A]">مواعيد العمل</h4>
                 <p className="text-xs text-[#C5A059] mt-0.5 font-bold">
                   شغالين 24 ساعة طوال أيام الأسبوع
                 </p>

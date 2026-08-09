@@ -84,7 +84,8 @@ export default function DemoWhatsAppCheckoutPage() {
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#C5A059]/15 text-[#C5A059] font-bold text-xs mb-3 border border-[#C5A059]/30">
             <Coffee className="w-4 h-4" /> Badran Coffee • Interactive Demo
           </div>
-          <h1 className="text-3xl sm:text-4xl font-bold font-lalezar text-[#1A110B]">
+          <h1 className="text-3xl sm:text-4xl font-bold font-amiri text-[#1A110B]">
+
             WhatsApp Checkout Demo
           </h1>
           <p className="text-sm text-[#66584F] max-w-xl mx-auto mt-2 font-tajawal">
