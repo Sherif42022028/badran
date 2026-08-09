@@ -1,19 +1,12 @@
 import type { Metadata } from "next";
-import { Alexandria, Amiri, Tajawal, DM_Sans } from "next/font/google";
+import { Lalezar, Tajawal, DM_Sans } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 
-const alexandria = Alexandria({
-  weight: ["300", "400", "600", "700", "800"],
+const lalezar = Lalezar({
+  weight: ["400"],
   subsets: ["arabic"],
-  variable: "--font-alexandria",
-  display: "swap",
-});
-
-const amiri = Amiri({
-  weight: ["400", "700"],
-  subsets: ["arabic"],
-  variable: "--font-amiri",
+  variable: "--font-lalezar",
   display: "swap",
 });
 
@@ -94,7 +87,7 @@ export default function RootLayout({
     <html
       lang="ar"
       dir="rtl"
-      className={`${alexandria.variable} ${amiri.variable} ${tajawal.variable} ${dmSans.variable} scroll-smooth h-full`}
+      className={`${lalezar.variable} ${tajawal.variable} ${dmSans.variable} scroll-smooth h-full`}
     >
       <head>
         <script
@@ -102,7 +95,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className="min-h-full flex flex-col font-alexandria antialiased bg-[#FAF7F2] text-[#1E110A]">
+      <body className="min-h-full flex flex-col font-tajawal antialiased bg-[#FAF7F2] text-[#1E110A]">
         {children}
         {/* Google Analytics 4 */}
         <Script

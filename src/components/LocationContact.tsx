@@ -47,21 +47,21 @@ export default function LocationContact() {
             <span>موقع الفرع ووسائل التواصل</span>
           </span>
           <p className="font-alexandria text-xs md:text-sm text-[#1A110A]/75 max-w-2xl mx-auto mt-2 font-light">
-            يسعدنا تشريفكم في فرعنا بميت غمر أو التواصل السريع للطلبات والاستفسارات الخاصة.
+            يسعدنا تشريفكم في فرعنا بميت غمر أو التواصل السريع للطلبات والاستفسارات.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
           
           {/* Branch Details Cards */}
-          <div className="lg:col-span-5 space-y-3 font-alexandria">
+          <div className="lg:col-span-5 space-y-3 font-tajawal">
             
             <div className="p-4 bg-white rounded-xl border border-[#1A110A]/15 flex items-start gap-3.5 shadow-xs">
               <div className="p-2.5 bg-[#1A110A] text-[#C5A059] rounded-lg shrink-0 border border-[#C5A059]/30">
                 <MapPin className="w-4 h-4 text-[#C5A059]" />
               </div>
               <div>
-                <h4 className="font-amiri text-lg font-bold text-[#1A110A]">العنوان الدقيق (Google Maps)</h4>
+                <h4 className="font-lalezar text-lg text-[#1A110A]">العنوان الدقيق (Google Maps)</h4>
                 <p className="text-xs text-[#1A110A]/90 mt-1 font-mono leading-relaxed bg-[#FAF8F5] p-2 rounded border border-[#1A110A]/10 dir-ltr text-right">
                   P786+PVF, Madinet Mit Ghamr (Include Daqados), Mit Ghamr, Dakahlia Governorate 7511463
                 </p>
@@ -84,7 +84,7 @@ export default function LocationContact() {
                 <Phone className="w-4 h-4 text-[#C5A059]" />
               </div>
               <div>
-                <h4 className="font-amiri text-lg font-bold text-[#1A110A]">أرقام الهاتف والطلب المباشر</h4>
+                <h4 className="font-lalezar text-lg text-[#1A110A]">أرقام الهاتف والطلب المباشر</h4>
                 <p className="font-price font-bold text-lg text-[#C5A059] mt-0.5">
                   {PHONE_DISPLAY}
                 </p>
@@ -115,7 +115,7 @@ export default function LocationContact() {
                 <Clock className="w-4 h-4 text-[#C5A059]" />
               </div>
               <div>
-                <h4 className="font-amiri text-lg font-bold text-[#1A110A]">مواعيد العمل</h4>
+                <h4 className="font-lalezar text-lg text-[#1A110A]">مواعيد العمل</h4>
                 <p className="text-xs text-[#C5A059] mt-0.5 font-bold">
                   شغالين 24 ساعة طوال أيام الأسبوع
                 </p>

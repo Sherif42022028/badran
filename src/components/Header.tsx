@@ -31,17 +31,17 @@ export default function Header({ cartCount, onOpenCart }: HeaderProps) {
             />
           </div>
           <div>
-            <h1 className="font-alexandria font-extrabold text-xl text-[#1A110B] leading-none tracking-tight">
+            <h1 className="font-lalezar text-2xl text-[#1A110B] leading-none tracking-wide">
               بن بدران
             </h1>
-            <p className="font-alexandria text-[10px] text-[#C5A059] font-bold mt-1">
+            <p className="font-tajawal text-[11px] text-[#C5A059] font-bold mt-1">
               محمصة ومطحنة ميت غمر
             </p>
           </div>
         </Link>
 
         {/* Desktop Navigation Links */}
-        <nav className="hidden md:flex items-center gap-8 font-alexandria text-xs font-bold text-[#1A110B]/85">
+        <nav className="hidden md:flex items-center gap-8 font-tajawal text-sm font-bold text-[#1A110B]/85">
           <a
             href="#hero"
             className="hover:text-[#C5A059] transition-colors py-1"

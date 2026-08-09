@@ -27,13 +27,13 @@ export default function Hero() {
 
         {/* Local Authentic Badge */}
         <div className="inline-block mb-3">
-          <span className="solid-badge text-[11px] md:text-xs font-bold tracking-wide py-1 px-3">
+          <span className="solid-badge text-sm md:text-base py-1 px-4 font-lalezar">
             <span>بن بدران — Budran Coffee بميت غمر</span>
           </span>
         </div>
 
         {/* Main Headline with Metallic Gold Shimmer */}
-        <h2 className="font-amiri text-3xl sm:text-4xl md:text-5xl font-bold text-[#1A110B] mb-3 leading-snug">
+        <h2 className="font-lalezar text-3xl sm:text-4xl md:text-5xl text-[#1A110B] mb-3 leading-snug tracking-wide">
           <ShinyText
             text="بن بدران.. أصل القهوة والتحويجة البلدي في ميت غمر"
             color="#1A110B"
@@ -43,19 +43,29 @@ export default function Hero() {
         </h2>
 
         {/* Description Paragraph */}
-        <p className="font-alexandria text-xs sm:text-sm md:text-base text-[#1A110A]/80 max-w-2xl mx-auto mb-5 leading-relaxed font-light">
+        <p className="font-tajawal text-sm md:text-base text-[#1A110A]/85 max-w-2xl mx-auto mb-6 leading-relaxed font-normal">
           بن نقي 100%، طحن وتحمير طازة قدام عينك في المحل يومياً، مع أجود أنواع الحبهان الهندي الأخضر والمستكة اليوناني الأصلي، وخلطات فرنسية بنكهات البندق والشوكولاتة بالفانيليا.
         </p>
 
         {/* CTA Buttons with Magnetic Pull */}
-        <div className="flex flex-col sm:flex-row justify-center items-center gap-3 mb-6">
+        <div className="flex flex-col sm:flex-row justify-center items-center gap-3.5 mb-6 font-tajawal">
+          <Magnet padding={40} magnetStrength={3}>
+            <a
+              href="#menu"
+              className="w-full sm:w-auto bg-[#1A110B] hover:bg-[#2A1D15] text-[#FAF8F5] font-lalezar text-base px-8 py-3 rounded-lg border border-[#C5A059]/40 transition-all shadow-sm flex items-center justify-center gap-2 group"
+            >
+              <Coffee className="w-5 h-5 text-[#C5A059]" />
+              <span>شوف المنيو والأسعار</span>
+            </a>
+          </Magnet>
+
           <Magnet padding={40} magnetStrength={3}>
             <a
               href={PHONE_TEL_LINK}
               onClick={() => trackContactClick('call')}
-              className="w-full sm:w-auto bg-[#1A110B] hover:bg-[#2A1D15] text-[#FAF8F5] font-alexandria font-bold text-xs md:text-sm px-6 py-2.5 rounded-lg border border-[#C5A059]/40 transition-all shadow-xs flex items-center justify-center gap-2 group"
+              className="w-full sm:w-auto bg-[#C5A059] hover:bg-[#B08B46] text-white font-lalezar text-base px-6 py-3 rounded-lg transition-all shadow-sm flex items-center justify-center gap-2 active:scale-95"
             >
-              <Phone className="w-4 h-4 text-[#C5A059]" />
+              <Phone className="w-5 h-5 text-white" />
               <span>اتصل الآن ({PHONE_DISPLAY})</span>
             </a>
           </Magnet>
@@ -66,20 +76,10 @@ export default function Hero() {
               onClick={() => trackContactClick('whatsapp')}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full sm:w-auto bg-[#25D366] hover:bg-[#1ebd59] text-white font-alexandria font-bold text-xs md:text-sm px-6 py-2.5 rounded-lg transition-all shadow-xs flex items-center justify-center gap-2 active:scale-95"
+              className="w-full sm:w-auto bg-[#25D366] hover:bg-[#1ebd59] text-white font-lalezar text-base px-6 py-3 rounded-lg transition-all shadow-sm flex items-center justify-center gap-2 active:scale-95"
             >
-              <MessageCircle className="w-4 h-4 text-white" />
+              <MessageCircle className="w-5 h-5 text-white" />
               <span>تواصل عبر الواتساب</span>
-            </a>
-          </Magnet>
-
-          <Magnet padding={40} magnetStrength={3}>
-            <a
-              href="#menu"
-              className="w-full sm:w-auto bg-[#C5A059] hover:bg-[#B08B46] text-white font-alexandria font-bold text-xs md:text-sm px-6 py-2.5 rounded-lg transition-all shadow-xs flex items-center justify-center gap-2 active:scale-95"
-            >
-              <Coffee className="w-4 h-4 text-white" />
-              <span>تصفح المنيو والأسعار</span>
             </a>
           </Magnet>
         </div>
