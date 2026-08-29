@@ -492,34 +492,64 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
                             </div>
                           )}
 
-                          {/* Tier 4: Weight & Packaging Pills */}
+                          {/* Tier 4: Weight & Packaging Pills + Optional Custom Grams */}
                           {product.tier === 4 && product.variants && (
-                            <div className="my-2 p-2 bg-[#F7F4EF] rounded-lg border border-[#1A110A]/10">
-                              <span className="text-[11px] font-bold font-alexandria text-[#1A110A]/80 block mb-1">
-                                اختر الوزن أو العبوة:
-                              </span>
-                              <div className="flex flex-wrap gap-1">
-                                {product.variants.map((v) => {
-                                  const isSelected =
-                                    (currentSelection.variantId ||
-                                      product.variants?.[0].id) === v.id;
-                                  return (
-                                    <button
-                                      key={v.id}
-                                      onClick={() =>
-                                        handleVariantSelect(product, v.id, v.label)
-                                      }
-                                      className={`px-2.5 py-1 rounded text-xs font-alexandria font-semibold transition-all ${
-                                        isSelected
-                                          ? "bg-[#1A110A] text-[#FAF8F5]"
-                                          : "bg-white text-[#1A110A] hover:bg-[#1A110A]/10 border border-[#1A110A]/10"
-                                      }`}
-                                    >
-                                      {v.label} ({v.price} ج.م)
-                                    </button>
-                                  );
-                                })}
+                            <div className="my-2 p-2 bg-[#F7F4EF] rounded-lg border border-[#1A110A]/10 space-y-2">
+                              <div>
+                                <span className="text-[11px] font-bold font-alexandria text-[#1A110A]/80 block mb-1">
+                                  اختر العبوة أو الوزن:
+                                </span>
+                                <div className="flex flex-wrap gap-1">
+                                  {product.variants.map((v) => {
+                                    const isSelected =
+                                      (currentSelection.variantId ||
+                                        product.variants?.[0].id) === v.id;
+                                    return (
+                                      <button
+                                        key={v.id}
+                                        onClick={() =>
+                                          handleVariantSelect(product, v.id, v.label)
+                                        }
+                                        className={`px-2.5 py-1 rounded text-xs font-alexandria font-semibold transition-all ${
+                                          isSelected
+                                            ? "bg-[#1A110A] text-[#FAF8F5]"
+                                            : "bg-white text-[#1A110A] hover:bg-[#1A110A]/10 border border-[#1A110A]/10"
+                                        }`}
+                                      >
+                                        {v.label} ({v.price} ج.م)
+                                      </button>
+                                    );
+                                  })}
+                                </div>
                               </div>
+
+                              {/* Custom grams for bulk items */}
+                              {isProductEligibleForGrams(product) && (
+                                <div className="pt-1.5 border-t border-dashed border-[#1A110A]/10 flex items-center justify-between gap-2">
+                                  <span className="text-[11px] font-bold font-alexandria text-[#1A110A] flex items-center gap-1">
+                                    <Scale className="w-3 h-3 text-[#C5A059]" />
+                                    <span>أو اكتب الجرامات:</span>
+                                  </span>
+                                  <div className="inline-flex items-center gap-1 bg-white border border-[#1A110A]/20 rounded px-1.5 py-0.5">
+                                    <input
+                                      type="number"
+                                      min="25"
+                                      max="5000"
+                                      step="25"
+                                      placeholder="جرام"
+                                      value={currentSelection.customGrams || 250}
+                                      onChange={(e) =>
+                                        handleGramsSelect(
+                                          product,
+                                          Math.max(25, Number(e.target.value) || 25)
+                                        )
+                                      }
+                                      className="w-12 text-center text-[11px] font-price font-bold text-[#1A110A] focus:outline-none"
+                                    />
+                                    <span className="text-[10px] text-[#1A110A]/60">جم</span>
+                                  </div>
+                                </div>
+                              )}
                             </div>
                           )}
 
