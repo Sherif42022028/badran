@@ -39,7 +39,7 @@ interface MenuSectionProps {
 
 export default function MenuSection({ onAddToCart }: MenuSectionProps) {
   const [activeTab, setActiveTab] = useState<"digital" | "printed">("digital");
-  const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [selectedCategory, setSelectedCategory] = useState<string>("basics");
   const [searchQuery, setSearchQuery] = useState<string>("");
 
   // Lightbox index state (0 to 6) or null
@@ -152,11 +152,11 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
 
   // Filtered categories to display
   const categoriesToDisplay = useMemo(() => {
-    if (selectedCategory === "all") {
+    if (searchQuery.trim()) {
       return CATEGORIES_LIST;
     }
     return CATEGORIES_LIST.filter((c) => c.id === selectedCategory);
-  }, [selectedCategory]);
+  }, [selectedCategory, searchQuery]);
 
   return (
     <section id="menu" className="py-6 md:py-10 px-3 sm:px-4 max-w-7xl mx-auto">
@@ -226,17 +226,6 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
             {/* Category Navigation Pills */}
             <div className="overflow-x-auto pb-1 scrollbar-thin">
               <div className="flex flex-wrap sm:flex-nowrap items-center gap-1.5 min-w-max">
-                <button
-                  onClick={() => setSelectedCategory("all")}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-bold font-alexandria transition-all ${
-                    selectedCategory === "all"
-                      ? "bg-[#1A110B] text-white shadow-xs"
-                      : "bg-[#F7F4EF] text-[#1A110B] hover:bg-[#1A110B]/10 border border-[#1A110B]/10"
-                  }`}
-                >
-                  عرض جميع السكاشن
-                </button>
-
                 {CATEGORIES_LIST.map((cat) => (
                   <button
                     key={cat.id}
