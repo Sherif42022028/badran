@@ -90,8 +90,13 @@ export function generateCartWhatsAppMessage(
   lines.push("☕ *تفاصيل المنتجات:*");
 
   cartItems.forEach((ci, idx) => {
-    lines.push(`${idx + 1}) *${ci.item.name}* (${ci.selectedPrice.unit}) × ${ci.quantity}`);
-    lines.push(`   - السعر: ${ci.selectedPrice.price * ci.quantity} ج.م`);
+    const name = ci.name || ci.item?.name || "صنف";
+    const variant = ci.selectedVariant || ci.selectedPrice?.unit || "";
+    const price = ci.unitPrice ?? ci.selectedPrice?.price ?? 0;
+    const lineTotal = price * ci.quantity;
+    const variantDisplay = variant ? ` (${variant})` : "";
+    lines.push(`${idx + 1}) *${name}*${variantDisplay} × ${ci.quantity}`);
+    lines.push(`   - السعر: ${lineTotal} ج.م`);
   });
 
   lines.push("");
@@ -106,7 +111,7 @@ export function generateCartWhatsAppMessage(
 
   lines.push("");
   lines.push(MESSAGE_DIVIDER);
-  lines.push("يرجى تأكيد تجهيز الطلب والاستلام! 🤎");
+  lines.push("قهوة تستحقها كل يوم ☕🤎");
 
   return lines.join("\n");
 }

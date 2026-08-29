@@ -11,6 +11,7 @@ import LocationContact from "@/components/LocationContact";
 import Footer from "@/components/Footer";
 import CartModal, { CartItem } from "@/components/CartModal";
 import FloatingWhatsApp from "@/components/FloatingWhatsApp";
+import { Product } from "@/types/products";
 import { MenuItem } from "@/data/menu";
 
 export default function Home() {
@@ -18,14 +19,17 @@ export default function Home() {
   const [isCartOpen, setIsCartOpen] = useState<boolean>(false);
 
   const handleAddToCart = (
-    item: MenuItem,
-    selectedPrice: { unit: string; price: number }
+    item: Product | MenuItem,
+    selectedPriceOrVariant: { unit?: string; label?: string; price: number }
   ) => {
+    const itemName = item.name;
+    const variantLabel =
+      selectedPriceOrVariant.label || selectedPriceOrVariant.unit || "سعر موحد";
+    const unitPrice = selectedPriceOrVariant.price;
+    const cartLineId = `${item.id}-${variantLabel.replace(/[\s|]+/g, "_")}`;
+
     setCartItems((prev) => {
-      const existingIndex = prev.findIndex(
-        (ci) =>
-          ci.item.id === item.id && ci.selectedPrice.unit === selectedPrice.unit
-      );
+      const existingIndex = prev.findIndex((ci) => ci.id === cartLineId);
 
       if (existingIndex > -1) {
         const updated = [...prev];
@@ -33,17 +37,28 @@ export default function Home() {
         return updated;
       }
 
-      return [...prev, { item, selectedPrice, quantity: 1 }];
+      const newCartItem: CartItem = {
+        id: cartLineId,
+        name: itemName,
+        category: item.category,
+        selectedVariant: variantLabel,
+        unitPrice,
+        quantity: 1,
+        item,
+        selectedPrice: { unit: variantLabel, price: unitPrice },
+      };
+
+      return [...prev, newCartItem];
     });
 
     setIsCartOpen(true);
   };
 
-  const handleUpdateQuantity = (id: string, unit: string, delta: number) => {
+  const handleUpdateQuantity = (id: string, delta: number) => {
     setCartItems((prev) =>
       prev
         .map((ci) => {
-          if (ci.item.id === id && ci.selectedPrice.unit === unit) {
+          if (ci.id === id) {
             const newQty = ci.quantity + delta;
             return newQty > 0 ? { ...ci, quantity: newQty } : null;
           }
@@ -60,7 +75,7 @@ export default function Home() {
   const totalCartCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
 
   return (
-    <main className="min-h-screen flex flex-col justify-between selection:bg-[#3D120E] selection:text-white">
+    <main className="min-h-screen flex flex-col justify-between selection:bg-[#5C2A26] selection:text-white">
       <Header
         cartCount={totalCartCount}
         onOpenCart={() => setIsCartOpen(true)}
