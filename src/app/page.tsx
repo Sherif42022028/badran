@@ -12,6 +12,7 @@ import Footer from "@/components/Footer";
 import CartModal, { CartItem } from "@/components/CartModal";
 import FloatingWhatsApp from "@/components/FloatingWhatsApp";
 import OffersModal from "@/components/OffersModal";
+import CoffeeTipsModal from "@/components/CoffeeTipsModal";
 import { Product } from "@/types/products";
 import { MenuItem } from "@/data/menu";
 
@@ -101,6 +102,7 @@ export default function Home() {
         onClearCart={handleClearCart}
       />
 
+      <CoffeeTipsModal />
       <OffersModal />
       <FloatingWhatsApp />
     </main>
