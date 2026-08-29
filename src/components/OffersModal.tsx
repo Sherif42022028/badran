@@ -70,28 +70,28 @@ export default function OffersModal({ initialOffers }: OffersModalProps) {
 
   return (
     <>
-      {/* ================= 1. FLOATING ACTION BUTTON ================= */}
-      <div className="fixed bottom-24 right-5 sm:bottom-8 sm:right-24 z-40">
+      {/* ================= 1. FLOATING ACTION BUTTON (ORANGE) ================= */}
+      <div className="fixed bottom-24 left-6 z-40">
         <button
           onClick={() => setIsOpen(true)}
-          className="group relative flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-r from-[#F78320] to-[#E65100] text-white shadow-xl hover:scale-105 active:scale-95 transition-all duration-300 border-2 border-white cursor-pointer"
+          className="group relative flex items-center justify-center w-13 h-13 sm:w-14 sm:h-14 rounded-full bg-gradient-to-r from-[#F78320] to-[#E65100] text-white shadow-xl hover:scale-105 active:scale-95 transition-all duration-300 border-2 border-white cursor-pointer"
           aria-label="عرض العروض الحالية"
           title="عروض بن بدران الحصرية"
         >
           {/* Subtle pulse ring animation */}
-          <span className="absolute -inset-1.5 rounded-full bg-[#F78320]/40 animate-ping pointer-events-none opacity-75" />
+          <span className="absolute -inset-1 rounded-full bg-[#F78320]/40 animate-ping pointer-events-none opacity-75" />
 
           <div className="relative flex items-center justify-center">
-            <Percent className="w-7 h-7 text-white font-bold animate-bounce" />
+            <Percent className="w-6 h-6 sm:w-7 sm:h-7 text-white font-bold animate-bounce" />
           </div>
 
           {/* Active Offers Count Badge */}
-          <span className="absolute -top-1 -right-1 bg-[#1A110B] text-[#C5A059] border border-[#C5A059] text-[11px] font-bold font-price w-5 h-5 rounded-full flex items-center justify-center shadow-md">
+          <span className="absolute -top-1 -right-1 bg-[#1A110B] text-[#F78320] border border-[#F78320] text-[11px] font-bold font-price w-5 h-5 rounded-full flex items-center justify-center shadow-md">
             {offers.length}
           </span>
 
           {/* Tooltip on hover */}
-          <span className="absolute right-16 px-3 py-1 bg-[#1A110B] text-white text-xs font-alexandria font-semibold rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none border border-[#C5A059]/40">
+          <span className="absolute left-16 px-3 py-1 bg-[#1A110B] text-white text-xs font-alexandria font-semibold rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none border border-[#F78320]/40">
             العروض الحالية ({offers.length})
           </span>
         </button>

@@ -51,10 +51,10 @@ export default function CoffeeTipsModal() {
   return (
     <>
       {/* ================= 1. FLOATING ACTION BUTTON (GOLD) ================= */}
-      <div className="fixed bottom-8 left-5 sm:bottom-8 sm:left-8 z-40">
+      <div className="fixed bottom-6 left-6 z-40">
         <button
           onClick={handleOpen}
-          className="group relative flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-br from-[#C9A45F] to-[#9E7A32] text-white shadow-xl hover:scale-105 active:scale-95 transition-all duration-300 border-2 border-white cursor-pointer"
+          className="group relative flex items-center justify-center w-13 h-13 sm:w-14 sm:h-14 rounded-full bg-gradient-to-br from-[#C9A45F] to-[#9E7A32] text-white shadow-xl hover:scale-105 active:scale-95 transition-all duration-300 border-2 border-white cursor-pointer"
           aria-label="نصائح عن القهوة"
           title="نصيحة قهوة من بدران"
         >
