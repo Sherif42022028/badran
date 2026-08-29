@@ -11,6 +11,7 @@ import LocationContact from "@/components/LocationContact";
 import Footer from "@/components/Footer";
 import CartModal, { CartItem } from "@/components/CartModal";
 import FloatingWhatsApp from "@/components/FloatingWhatsApp";
+import OffersModal from "@/components/OffersModal";
 import { Product } from "@/types/products";
 import { MenuItem } from "@/data/menu";
 
@@ -100,6 +101,7 @@ export default function Home() {
         onClearCart={handleClearCart}
       />
 
+      <OffersModal />
       <FloatingWhatsApp />
     </main>
   );
