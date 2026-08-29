@@ -87,6 +87,17 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
     }));
   };
 
+  const handleGramsSelect = (product: Product, customGrams: number) => {
+    const current = getProductSelection(product);
+    setProductOptions((prev) => ({
+      ...prev,
+      [product.id]: {
+        ...current,
+        customGrams,
+      },
+    }));
+  };
+
   const handleMatrixSelect = (
     product: Product,
     optionKey: "matrixOption1" | "matrixOption2",
@@ -335,36 +346,96 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
 
                           {/* ================= DYNAMIC VARIANT CONTROLS ================= */}
 
-                          {/* Tier 2: Preparation Toggle (ساده / محوج) */}
+                          {/* Tier 2: Preparation Toggle (ساده / محوج) + Grams Selection */}
                           {product.tier === 2 && product.variants && (
-                            <div className="my-2 p-2 bg-[#F7F4EF] rounded-lg border border-[#1A110A]/10 flex items-center justify-between gap-2">
-                              <span className="text-[11px] font-bold font-alexandria text-[#1A110A]">
-                                اختر التحضير:
-                              </span>
-                              <div className="flex items-center gap-1.5">
-                                {product.variants.map((v) => {
-                                  const isSelected =
-                                    (currentSelection.variantId ||
-                                      product.variants?.[0].id) === v.id;
-                                  return (
-                                    <button
-                                      key={v.id}
-                                      onClick={() =>
-                                        handleVariantSelect(product, v.id, v.label)
+                            <div className="my-2 space-y-2">
+                              {/* Preparation Toggle */}
+                              <div className="p-2 bg-[#F7F4EF] rounded-lg border border-[#1A110A]/10 flex items-center justify-between gap-2">
+                                <span className="text-[11px] font-bold font-alexandria text-[#1A110A]">
+                                  نوع التحضير:
+                                </span>
+                                <div className="flex items-center gap-1.5">
+                                  {product.variants.map((v) => {
+                                    const isSelected =
+                                      (currentSelection.variantId ||
+                                        product.variants?.[0].id) === v.id;
+                                    return (
+                                      <button
+                                        key={v.id}
+                                        onClick={() =>
+                                          handleVariantSelect(product, v.id, v.label)
+                                        }
+                                        className={`px-3 py-1 rounded-md text-xs font-alexandria font-bold transition-all flex items-center gap-1 ${
+                                          isSelected
+                                            ? "bg-[#1A110A] text-[#FAF8F5] shadow-xs"
+                                            : "bg-white text-[#1A110A] border border-[#1A110A]/15 hover:bg-[#1A110A]/5"
+                                        }`}
+                                      >
+                                        {isSelected && (
+                                          <Check className="w-3 h-3 text-[#C5A059]" />
+                                        )}
+                                        <span>{v.label}</span>
+                                      </button>
+                                    );
+                                  })}
+                                </div>
+                              </div>
+
+                              {/* Grams / Weight Selection */}
+                              <div className="p-2 bg-[#F7F4EF] rounded-lg border border-[#1A110A]/10 space-y-1.5">
+                                <div className="flex items-center justify-between">
+                                  <span className="text-[11px] font-bold font-alexandria text-[#1A110A]/80">
+                                    تحديد الوزن بالجرام:
+                                  </span>
+                                  <span className="text-[10px] font-bold font-price text-[#C5A059] bg-[#1A110A] px-2 py-0.5 rounded">
+                                    {currentSelection.customGrams || 250} جم
+                                  </span>
+                                </div>
+
+                                <div className="flex flex-wrap items-center gap-1">
+                                  {[
+                                    { label: "ثمن (125جم)", g: 125 },
+                                    { label: "ربع (250جم)", g: 250 },
+                                    { label: "نصف (500جم)", g: 500 },
+                                    { label: "كيلو (1000جم)", g: 1000 },
+                                  ].map((w) => {
+                                    const isSelected =
+                                      (currentSelection.customGrams || 250) === w.g;
+                                    return (
+                                      <button
+                                        key={w.g}
+                                        onClick={() => handleGramsSelect(product, w.g)}
+                                        className={`px-2 py-0.5 rounded text-[11px] font-alexandria font-semibold transition-all ${
+                                          isSelected
+                                            ? "bg-[#1A110A] text-[#FAF8F5]"
+                                            : "bg-white text-[#1A110A] hover:bg-[#1A110A]/10 border border-[#1A110A]/10"
+                                        }`}
+                                      >
+                                        {w.label}
+                                      </button>
+                                    );
+                                  })}
+
+                                  {/* Custom input */}
+                                  <div className="inline-flex items-center gap-1 bg-white border border-[#1A110A]/20 rounded px-1.5 py-0.5">
+                                    <input
+                                      type="number"
+                                      min="50"
+                                      max="5000"
+                                      step="25"
+                                      placeholder="جرام"
+                                      value={currentSelection.customGrams || 250}
+                                      onChange={(e) =>
+                                        handleGramsSelect(
+                                          product,
+                                          Math.max(25, Number(e.target.value) || 25)
+                                        )
                                       }
-                                      className={`px-3 py-1 rounded-md text-xs font-alexandria font-bold transition-all flex items-center gap-1 ${
-                                        isSelected
-                                          ? "bg-[#1A110A] text-[#FAF8F5] shadow-xs"
-                                          : "bg-white text-[#1A110A] border border-[#1A110A]/15 hover:bg-[#1A110A]/5"
-                                      }`}
-                                    >
-                                      {isSelected && (
-                                        <Check className="w-3 h-3 text-[#C5A059]" />
-                                      )}
-                                      <span>{v.label}</span>
-                                    </button>
-                                  );
-                                })}
+                                      className="w-12 text-center text-[11px] font-price font-bold text-[#1A110A] focus:outline-none"
+                                    />
+                                    <span className="text-[10px] text-[#1A110A]/60">جم</span>
+                                  </div>
+                                </div>
                               </div>
                             </div>
                           )}
