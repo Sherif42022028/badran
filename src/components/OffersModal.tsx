@@ -134,19 +134,19 @@ export default function OffersModal({ initialOffers }: OffersModalProps) {
 
             {/* Modal Body: Carousel Slide */}
             <div className="p-4 sm:p-5 space-y-4">
-              {/* Offer Image (Uniform 4:3 Ratio) */}
-              <div className="relative aspect-[4/3] w-full rounded-xl overflow-hidden border border-[#1A110B]/15 shadow-inner bg-[#1A110B]">
+              {/* Offer Poster Image */}
+              <div className="relative aspect-[4/5] sm:aspect-[1/1] max-h-[48vh] w-full rounded-xl overflow-hidden border border-[#1A110B]/15 shadow-inner bg-[#1A110B]">
                 <Image
                   src={currentOffer.image}
                   alt={currentOffer.title}
                   fill
-                  className="object-cover"
+                  className="object-contain"
                   priority
                 />
 
                 {/* Offer Badge Overlay */}
                 {currentOffer.badge && (
-                  <span className="absolute top-3 right-3 bg-[#F78320] text-white font-alexandria font-bold text-xs px-3 py-1 rounded-full shadow-md flex items-center gap-1 border border-white/40">
+                  <span className="absolute top-3 right-3 bg-[#F78320] text-white font-alexandria font-bold text-xs px-3 py-1 rounded-full shadow-md flex items-center gap-1 border border-white/40 z-10">
                     <Tag className="w-3 h-3" />
                     <span>{currentOffer.badge}</span>
                   </span>
@@ -157,14 +157,14 @@ export default function OffersModal({ initialOffers }: OffersModalProps) {
                   <>
                     <button
                       onClick={handlePrev}
-                      className="absolute right-2 top-1/2 -translate-y-1/2 bg-[#1A110B]/80 hover:bg-[#F78320] text-white p-2 rounded-full border border-[#C5A059]/40 shadow-md transition-all active:scale-95"
+                      className="absolute right-2 top-1/2 -translate-y-1/2 bg-[#1A110B]/80 hover:bg-[#F78320] text-white p-2 rounded-full border border-[#C5A059]/40 shadow-md transition-all active:scale-95 z-20"
                       title="العرض السابق"
                     >
                       <ChevronRight className="w-5 h-5" />
                     </button>
                     <button
                       onClick={handleNext}
-                      className="absolute left-2 top-1/2 -translate-y-1/2 bg-[#1A110B]/80 hover:bg-[#F78320] text-white p-2 rounded-full border border-[#C5A059]/40 shadow-md transition-all active:scale-95"
+                      className="absolute left-2 top-1/2 -translate-y-1/2 bg-[#1A110B]/80 hover:bg-[#F78320] text-white p-2 rounded-full border border-[#C5A059]/40 shadow-md transition-all active:scale-95 z-20"
                       title="العرض التالي"
                     >
                       <ChevronLeft className="w-5 h-5" />
