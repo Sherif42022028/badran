@@ -1,21 +1,65 @@
 import { Product, SelectedProductOptions } from "@/types/products";
 
 /**
+ * Checks if a product is eligible for custom grams selection.
+ */
+export function isProductEligibleForGrams(product: Product): boolean {
+  if (
+    product.category === "arabicas" ||
+    product.category === "brazilian" ||
+    product.category === "indian" ||
+    product.category === "blends" ||
+    product.category === "french"
+  ) {
+    return true;
+  }
+
+  if (product.tier === 2) {
+    return true;
+  }
+
+  if (product.unitLabel?.includes("كيلو") || product.unitLabel?.includes("ك")) {
+    return true;
+  }
+
+  if (product.category === "spices" && product.basePrice && product.basePrice >= 50) {
+    return true;
+  }
+
+  return false;
+}
+
+/**
  * Calculates the exact price and label for a product based on user selections.
- * Supports custom grams calculation for coffee products sold by the kilo.
+ * Supports custom grams calculation for all items sold by weight/kilo.
  */
 export function calculateProductPrice(
   product: Product,
   options: SelectedProductOptions = {}
 ): { price: number; label: string } {
+  const customGrams = options.customGrams;
+
+  // Format gram label helper
+  const formatGramLabel = (grams: number) => {
+    return grams === 125
+      ? "ثمن ك (125جم)"
+      : grams === 250
+      ? "ربع ك (250جم)"
+      : grams === 500
+      ? "نصف ك (500جم)"
+      : grams === 1000
+      ? "كيلو كامل"
+      : `${grams} جم`;
+  };
+
   // Tier 1: Fixed price
-  if (product.tier === 1 || product.variantType === 'none') {
+  if (product.tier === 1 || product.variantType === "none") {
     const base = product.basePrice || 0;
-    if (options.customGrams && product.unitLabel?.includes("كيلو")) {
-      const calculated = Math.round((base * options.customGrams) / 1000);
+    if (customGrams && isProductEligibleForGrams(product)) {
+      const calculated = Math.round((base * customGrams) / 1000);
       return {
         price: Math.max(calculated, 5),
-        label: `${options.customGrams} جم`,
+        label: `${formatGramLabel(customGrams)}`,
       };
     }
     return {
@@ -31,24 +75,13 @@ export function calculateProductPrice(
       chosenVariant = product.variants[0];
     }
 
-    if (options.customGrams && options.customGrams > 0) {
+    if (customGrams && customGrams > 0) {
       const kiloPrice = chosenVariant.price;
-      const calculated = Math.round((kiloPrice * options.customGrams) / 1000);
+      const calculated = Math.round((kiloPrice * customGrams) / 1000);
       const cleanLabel = chosenVariant.label.replace(/\s*\(\d+\s*ج\.م\)/, "");
-      const gramsDisplay =
-        options.customGrams === 125
-          ? "ثمن ك (125جم)"
-          : options.customGrams === 250
-          ? "ربع ك (250جم)"
-          : options.customGrams === 500
-          ? "نصف ك (500جم)"
-          : options.customGrams === 1000
-          ? "كيلو كامل"
-          : `${options.customGrams} جم`;
-
       return {
         price: Math.max(calculated, 10),
-        label: `${cleanLabel} - ${gramsDisplay}`,
+        label: `${cleanLabel} - ${formatGramLabel(customGrams)}`,
       };
     }
 
@@ -58,7 +91,31 @@ export function calculateProductPrice(
     };
   }
 
-  // Tier 3, 4: Standard variants (sizes, weights)
+  // Tier 4: Weight & Packaging Variants
+  if (product.tier === 4 && product.variants && product.variants.length > 0) {
+    let chosenVariant = product.variants.find((v) => v.id === options.variantId);
+    if (!chosenVariant) {
+      chosenVariant = product.variants[0];
+    }
+
+    // If customGrams is selected and this variant or product is sold by kilo
+    if (customGrams && isProductEligibleForGrams(product) && chosenVariant.label.includes("كيلو")) {
+      const kiloPrice = chosenVariant.price;
+      const calculated = Math.round((kiloPrice * customGrams) / 1000);
+      const cleanLabel = chosenVariant.label.replace(/\s*\(\d+\s*ج\.م\)/, "").replace(/\s*\(كيلو\)/, "");
+      return {
+        price: Math.max(calculated, 10),
+        label: `${cleanLabel} - ${formatGramLabel(customGrams)}`,
+      };
+    }
+
+    return {
+      price: chosenVariant.price,
+      label: chosenVariant.label,
+    };
+  }
+
+  // Tier 3: Size Variants
   if (product.variants && product.variants.length > 0) {
     let chosenVariant = product.variants.find((v) => v.id === options.variantId);
     if (!chosenVariant) {
@@ -103,11 +160,16 @@ export function calculateProductPrice(
  * Returns default selected options for a product on first render.
  */
 export function getDefaultProductOptions(product: Product): SelectedProductOptions {
-  if (product.tier === 2 && product.variants && product.variants.length > 0) {
+  if (isProductEligibleForGrams(product)) {
+    if (product.variants && product.variants.length > 0) {
+      return {
+        variantId: product.variants[0].id,
+        variantLabel: product.variants[0].label,
+        customGrams: 250, // default 250g (ربع كيلو)
+      };
+    }
     return {
-      variantId: product.variants[0].id,
-      variantLabel: product.variants[0].label,
-      customGrams: 250, // default to 250g (ربع كيلو) for coffee beans
+      customGrams: 250,
     };
   }
 

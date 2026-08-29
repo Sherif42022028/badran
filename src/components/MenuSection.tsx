@@ -8,7 +8,7 @@ import {
   PRINTED_MENU_PAGES,
 } from "@/data/products";
 import { Product, SelectedProductOptions } from "@/types/products";
-import { calculateProductPrice } from "@/lib/pricing";
+import { calculateProductPrice, isProductEligibleForGrams } from "@/lib/pricing";
 import {
   Search,
   ShoppingBag,
@@ -27,6 +27,9 @@ import {
   Globe,
   Sun,
   Check,
+  Scale,
+  Plus,
+  Minus,
 } from "lucide-react";
 import SpotlightCard from "@/components/reactbits/SpotlightCard";
 
@@ -335,6 +338,65 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
 
                           {/* ================= DYNAMIC VARIANT CONTROLS ================= */}
 
+                          {/* Tier 1 with Grams Selection (Items sold by weight/kilo) */}
+                          {product.tier === 1 && isProductEligibleForGrams(product) && (
+                            <div className="my-2 p-2 bg-[#F7F4EF] rounded-lg border border-[#1A110A]/10 space-y-1.5">
+                              <div className="flex items-center justify-between">
+                                <span className="text-[11px] font-bold font-alexandria text-[#1A110A] flex items-center gap-1.5">
+                                  <Scale className="w-3.5 h-3.5 text-[#C5A059]" />
+                                  <span>تحديد الوزن بالجرام:</span>
+                                </span>
+                                <span className="text-[10px] font-bold font-price text-[#C5A059] bg-[#1A110A] px-2 py-0.5 rounded">
+                                  {currentSelection.customGrams || 250} جم
+                                </span>
+                              </div>
+
+                              <div className="flex flex-wrap items-center gap-1">
+                                {[
+                                  { label: "ثمن (125جم)", g: 125 },
+                                  { label: "ربع (250جم)", g: 250 },
+                                  { label: "نصف (500جم)", g: 500 },
+                                  { label: "كيلو (1000جم)", g: 1000 },
+                                ].map((w) => {
+                                  const isSelected =
+                                    (currentSelection.customGrams || 250) === w.g;
+                                  return (
+                                    <button
+                                      key={w.g}
+                                      onClick={() => handleGramsSelect(product, w.g)}
+                                      className={`px-2 py-0.5 rounded text-[11px] font-alexandria font-semibold transition-all ${
+                                        isSelected
+                                          ? "bg-[#1A110A] text-[#FAF8F5]"
+                                          : "bg-white text-[#1A110A] hover:bg-[#1A110A]/10 border border-[#1A110A]/10"
+                                      }`}
+                                    >
+                                      {w.label}
+                                    </button>
+                                  );
+                                })}
+
+                                <div className="inline-flex items-center gap-1 bg-white border border-[#1A110A]/20 rounded px-1.5 py-0.5">
+                                  <input
+                                    type="number"
+                                    min="25"
+                                    max="5000"
+                                    step="25"
+                                    placeholder="جرام"
+                                    value={currentSelection.customGrams || 250}
+                                    onChange={(e) =>
+                                      handleGramsSelect(
+                                        product,
+                                        Math.max(25, Number(e.target.value) || 25)
+                                      )
+                                    }
+                                    className="w-12 text-center text-[11px] font-price font-bold text-[#1A110A] focus:outline-none"
+                                  />
+                                  <span className="text-[10px] text-[#1A110A]/60">جم</span>
+                                </div>
+                              </div>
+                            </div>
+                          )}
+
                           {/* Tier 2: Preparation Toggle (ساده / محوج) + Grams Selection */}
                           {product.tier === 2 && product.variants && (
                             <div className="my-2 space-y-2">
@@ -370,11 +432,12 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
                                 </div>
                               </div>
 
-                              {/* Grams / Weight Selection */}
+                              {/* Grams / Weight Selection Scale with Stepper and Range Slider */}
                               <div className="p-2 bg-[#F7F4EF] rounded-lg border border-[#1A110A]/10 space-y-1.5">
                                 <div className="flex items-center justify-between">
-                                  <span className="text-[11px] font-bold font-alexandria text-[#1A110A]/80">
-                                    تحديد الوزن بالجرام:
+                                  <span className="text-[11px] font-bold font-alexandria text-[#1A110A] flex items-center gap-1.5">
+                                    <Scale className="w-3.5 h-3.5 text-[#C5A059]" />
+                                    <span>تحديد الوزن بالجرام:</span>
                                   </span>
                                   <span className="text-[10px] font-bold font-price text-[#C5A059] bg-[#1A110A] px-2 py-0.5 rounded">
                                     {currentSelection.customGrams || 250} جم
@@ -409,7 +472,7 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
                                   <div className="inline-flex items-center gap-1 bg-white border border-[#1A110A]/20 rounded px-1.5 py-0.5">
                                     <input
                                       type="number"
-                                      min="50"
+                                      min="25"
                                       max="5000"
                                       step="25"
                                       placeholder="جرام"
