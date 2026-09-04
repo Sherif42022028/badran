@@ -46,7 +46,7 @@ export default function Footer() {
           <div className="space-y-3">
             <h4 className="font-amiri text-xl font-bold text-[#C5A059]">عن المحل</h4>
             <p className="text-xs md:text-sm text-[#FAF8F5]/85 leading-relaxed max-w-sm mx-auto md:mx-0 font-normal">
-              بن بدران هو أصل القهوة والتحويجة البلدي في ميت غمر. نوفر لكم أجود أنواع البن والخلطات المحوجة بالحبةان والمستكة طازجة يومياً.
+              بن بدران هو أصل القهوة والتحويجة البلدي في ميت غمر. نوفر لكم أجود أنواع البن والخلطات المحوجة بالحبهان والمستكة طازجة يومياً.
             </p>
             {/* Social Media Links */}
             <div className="pt-2 flex items-center justify-center md:justify-start gap-3">

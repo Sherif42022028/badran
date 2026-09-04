@@ -19,7 +19,7 @@ export default function BlendBuilder() {
   // Custom Grams State
   const [isCustomGrams, setIsCustomGrams] = useState<boolean>(false);
   const [customGrams, setCustomGrams] = useState<number>(250);
-  const [presetWeight, setPresetWeight] = useState<string>("ربع كيلو (250جم)");
+  const [presetWeight, setPresetWeight] = useState<string>("ربع كيلو — 250 جم");
 
   const [customerName, setCustomerName] = useState<string>("");
   const [customerPhone, setCustomerPhone] = useState<string>("");
@@ -57,11 +57,11 @@ export default function BlendBuilder() {
   // Active weight in grams
   const effectiveGrams = isCustomGrams
     ? customGrams
-    : presetWeight === "ثمن كيلو (125جم)"
+    : presetWeight === "ثمن كيلو — 125 جم"
     ? 125
-    : presetWeight === "ربع كيلو (250جم)"
+    : presetWeight === "ربع كيلو — 250 جم"
     ? 250
-    : presetWeight === "نصف كيلو (500جم)"
+    : presetWeight === "نصف كيلو — 500 جم"
     ? 500
     : 1000;
 
@@ -312,10 +312,10 @@ export default function BlendBuilder() {
               {/* Quick Presets */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                 {[
-                  { label: "ثمن كيلو (125جم)", g: 125 },
-                  { label: "ربع كيلو (250جم)", g: 250 },
-                  { label: "نصف كيلو (500جم)", g: 500 },
-                  { label: "كيلو كامل (1000جم)", g: 1000 },
+                  { label: "ثمن كيلو — 125 جم", g: 125 },
+                  { label: "ربع كيلو — 250 جم", g: 250 },
+                  { label: "نصف كيلو — 500 جم", g: 500 },
+                  { label: "كيلو كامل — 1000 جم", g: 1000 },
                 ].map((w) => {
                   const isSelected = !isCustomGrams && presetWeight === w.label;
                   return (

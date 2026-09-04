@@ -46,7 +46,7 @@ export default function Hero() {
 
         {/* Description Paragraph */}
         <p className="font-tajawal text-sm md:text-base text-[#1A110A]/85 max-w-2xl mx-auto mb-6 leading-relaxed font-normal">
-          بن نقي 100%، طحن وتحمير طازة قدام عينك في المحل يومياً، مع أجود أنواع الحبهان الهندي الأخضر والمستكة اليوناني الأصلي، وخلطات فرنسية بنكهات البندق والشوكولاتة بالفانيليا.
+          بن نقي 100%، طحن وتحميص طازة قدام عينك في المحل يومياً، مع أجود أنواع الحبهان الهندي الأخضر والمستكة اليوناني الأصلي، وخلطات فرنسية بنكهات البندق والشوكولاتة بالفانيليا.
         </p>
 
         {/* CTA Buttons with Magnetic Pull */}
@@ -90,7 +90,7 @@ export default function Hero() {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-4 border-t border-dashed border-[#C5A059]/30 max-w-3xl mx-auto text-center font-alexandria text-[11px] md:text-xs text-[#1A110B]">
           <div className="flex items-center justify-center gap-2 p-2.5 bg-[#F7F4EF] rounded-lg border border-[#1A110B]/10">
             <Award className="w-3.5 h-3.5 text-[#C5A059] shrink-0" />
-            <span className="font-semibold">بن نقي 100% وتحمير طازة يومياً</span>
+            <span className="font-semibold">بن نقي 100% وتحميص طازة يومياً</span>
           </div>
 
           <div className="flex items-center justify-center gap-2 p-2.5 bg-[#F7F4EF] rounded-lg border border-[#1A110B]/10">
