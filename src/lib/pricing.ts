@@ -42,13 +42,13 @@ export function calculateProductPrice(
   // Format gram label helper
   const formatGramLabel = (grams: number) => {
     return grams === 125
-      ? "ثمن ك (125جم)"
+      ? "ثمن كيلو (125 جم)"
       : grams === 250
-      ? "ربع ك (250جم)"
+      ? "ربع كيلو (250 جم)"
       : grams === 500
-      ? "نصف ك (500جم)"
+      ? "نصف كيلو (500 جم)"
       : grams === 1000
-      ? "كيلو كامل"
+      ? "كيلو كامل (1000 جم)"
       : `${grams} جم`;
   };
 
@@ -250,12 +250,12 @@ export function getQuickWeightPresets(
 
 /**
  * Generates a clean Arabic live summary line for the product card action footer
- * Example: "بن محوج — وسط — 250 جم — 140 ج.م"
+ * Example: "بن محوج — وسط — ربع كيلو (250 جم)"
+ * Note: Price is omitted here to prevent redundancy with the button price.
  */
 export function formatProductSelectionSummary(
   product: Product,
-  options: SelectedProductOptions,
-  calculatedPrice: number
+  options: SelectedProductOptions
 ): string {
   const parts: string[] = [product.name];
 
@@ -268,19 +268,36 @@ export function formatProductSelectionSummary(
     if (chosen) parts.push(chosen.label);
     if (options.customGrams) {
       const g = options.customGrams;
-      const gLabel = g === 125 ? "ثمن ك (125جم)" : g === 250 ? "ربع ك (250جم)" : g === 500 ? "نصف ك (500جم)" : g === 1000 ? "كيلو" : `${g} جم`;
+      const gLabel =
+        g === 125
+          ? "ثمن كيلو (125 جم)"
+          : g === 250
+          ? "ربع كيلو (250 جم)"
+          : g === 500
+          ? "نصف كيلو (500 جم)"
+          : g === 1000
+          ? "كيلو كامل (1000 جم)"
+          : `${g} جم`;
       parts.push(gLabel);
     }
   } else if (isProductEligibleForGrams(product) && options.customGrams) {
     const g = options.customGrams;
-    const gLabel = g === 125 ? "ثمن ك (125جم)" : g === 250 ? "ربع ك (250جم)" : g === 500 ? "نصف ك (500جم)" : g === 1000 ? "كيلو" : `${g} جم`;
+    const gLabel =
+      g === 125
+        ? "ثمن كيلو (125 جم)"
+        : g === 250
+        ? "ربع كيلو (250 جم)"
+        : g === 500
+        ? "نصف كيلو (500 جم)"
+        : g === 1000
+        ? "كيلو كامل (1000 جم)"
+        : `${g} جم`;
     parts.push(gLabel);
   } else if (product.variants && product.variants.length > 0) {
     const chosen = product.variants.find((v) => v.id === options.variantId) || product.variants[0];
     if (chosen) parts.push(chosen.label);
   }
 
-  parts.push(`${calculatedPrice} ج.م`);
   return parts.join(" — ");
 }
 

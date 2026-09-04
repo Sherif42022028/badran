@@ -315,10 +315,10 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
       return [
         {
           id: "popular",
-          name: "الأكثر طلباً ومبيعاً",
-          shortName: "الأكثر طلباً",
+          name: "ترشيحات واختيارات بدران",
+          shortName: "ترشيحات بدران",
           iconName: "Sparkles",
-          description: "أصناف بن بدران الأكثر شهرة وطلباً من زبائننا الكرام",
+          description: "أصناف بن بدران المختارة بعناية والأعلى ترشيحاً لزبائننا الكرام",
           pageNumber: 3,
           items: filteredProducts,
         },
@@ -402,12 +402,12 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
       {activeTab === "digital" && (
         <div className="space-y-6 md:space-y-8 animate-fadeIn">
           {/* ================= 2. BROWSING CONTROLS CONTAINER ================= */}
-          <div className="bg-white rounded-2xl border border-[#C5A059]/40 p-4 sm:p-5 shadow-xs space-y-4">
-            {/* Level 1: Quick Search Box */}
+          <div className="bg-white rounded-2xl border border-[#C5A059]/40 p-4 sm:p-5 shadow-xs space-y-3.5">
+            {/* Search Bar */}
             <div className="relative w-full">
               <input
                 type="text"
-                placeholder="ابحث بالاسم أو التحميص أو الإضافة (مثال: ساده، محوج، كافيه، حبهان...)"
+                placeholder="ابحث عن أي نوع بن أو صنف (مثال: ساده، محوج، كافيه، حبهان...)"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-9 pr-10 py-2.5 bg-[#FAF8F5] text-[#1A110B] placeholder-[#1A110B]/50 border border-[#1A110B]/15 rounded-xl text-xs sm:text-sm font-alexandria focus:outline-none focus:border-[#C5A059] focus:ring-2 focus:ring-[#C5A059]/20 transition-all"
@@ -416,7 +416,7 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
               {searchQuery && (
                 <button
                   onClick={() => setSearchQuery("")}
-                  className="absolute left-3 top-3 p-0.5 text-gray-400 hover:text-[#1A110B] rounded-full transition-colors"
+                  className="absolute left-3 top-3 p-0.5 text-gray-400 hover:text-[#1A110B] rounded-full transition-colors cursor-pointer"
                   aria-label="مسح البحث"
                 >
                   <X className="w-4 h-4" />
@@ -424,16 +424,12 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
               )}
             </div>
 
-            {/* Level 2: Categories Navigation Index (فهرس الأقسام الرئيسي) */}
-            <div className="space-y-1.5">
-              <div className="flex items-center justify-between text-xs font-bold font-alexandria text-[#1A110B]">
-                <div className="flex items-center gap-1.5">
-                  <Sparkles className="w-4 h-4 text-[#C5A059]" />
-                  <span>فهرس الأقسام الرئيسية:</span>
-                </div>
+            {/* الصف الأول: الأقسام الرئيسية فقط */}
+            <div className="pt-2 border-t border-dashed border-[#1A110B]/10 space-y-1.5">
+              <div className="flex items-center gap-1.5 text-xs font-bold font-alexandria text-[#1A110B]">
+                <Sparkles className="w-3.5 h-3.5 text-[#C5A059]" />
+                <span>القسم:</span>
               </div>
-
-              {/* Horizontally scrollable category pills on mobile */}
               <div className="overflow-x-auto pb-1.5 pt-0.5 scrollbar-thin">
                 <div className="flex items-center gap-1.5 min-w-max">
                   {/* All button */}
@@ -448,7 +444,7 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
                     <span>كل الأقسام</span>
                   </button>
 
-                  {/* Popular button */}
+                  {/* Badran's Recommendations */}
                   <button
                     onClick={() => setSelectedCategory("popular")}
                     className={`px-3 py-1.5 rounded-lg text-xs font-bold font-alexandria flex items-center gap-1.5 transition-all cursor-pointer ${
@@ -458,7 +454,7 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
                     }`}
                   >
                     <Sparkles className="w-3.5 h-3.5 text-[#C5A059] group-hover:text-white" />
-                    <span>الأكثر طلباً</span>
+                    <span>ترشيحات بدران</span>
                   </button>
 
                   {/* 9 Categories in order */}
@@ -474,11 +470,7 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
                             : "bg-[#FAF8F5] text-[#1A110B] hover:bg-[#1A110B]/10 border border-[#1A110B]/10"
                         }`}
                       >
-                        <span
-                          className={
-                            isSelected ? "text-[#C5A059]" : "text-[#C5A059]"
-                          }
-                        >
+                        <span className="text-[#C5A059]">
                           {getCategoryIcon(cat.iconName)}
                         </span>
                         <span>{cat.shortName}</span>
@@ -489,43 +481,46 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
               </div>
             </div>
 
-            {/* Level 3: Quick Attribute Filters (فلاتر المواصفات الفرعية - مفصولة بصرياً) */}
-            <div className="pt-2 border-t border-dashed border-[#1A110B]/10 flex flex-wrap items-center gap-1.5">
-              <span className="text-[11px] font-alexandria font-semibold text-[#1A110B]/70 ml-1 flex items-center gap-1">
+            {/* الصف الثاني: الفلاتر السريعة */}
+            <div className="pt-2 border-t border-dashed border-[#1A110B]/10 space-y-1.5">
+              <div className="flex items-center gap-1.5 text-xs font-bold font-alexandria text-[#1A110B]">
                 <SlidersHorizontal className="w-3.5 h-3.5 text-[#C5A059]" />
-                <span>فلاتر سريعة:</span>
-              </span>
-
-              {[
-                { id: "all", label: "الكل" },
-                { id: "light", label: "تحميص فاتح" },
-                { id: "med", label: "تحميص وسط" },
-                { id: "dark", label: "تحميص غامق" },
-                { id: "mohawaj", label: "محوج ومميز" },
-                { id: "sada", label: "بن ساده" },
-                { id: "quarter", label: "ربع كيلو (250جم)" },
-                { id: "half", label: "نصف كيلو (500جم)" },
-              ].map((opt) => {
-                const isSel = quickFilter === opt.id;
-                return (
-                  <button
-                    key={opt.id}
-                    onClick={() =>
-                      setQuickFilter(opt.id as QuickFilterOption)
-                    }
-                    className={`px-2.5 py-1 rounded-md text-[11px] font-alexandria font-semibold transition-all cursor-pointer ${
-                      isSel
-                        ? "bg-[#C5A059] text-white font-bold shadow-2xs"
-                        : "bg-[#F7F4EF] text-[#1A110B] hover:bg-[#1A110B]/10 border border-[#1A110B]/10"
-                    }`}
-                  >
-                    {opt.label}
-                  </button>
-                );
-              })}
+                <span>فلترة حسب:</span>
+              </div>
+              <div className="overflow-x-auto pb-1 pt-0.5 scrollbar-thin">
+                <div className="flex items-center gap-1.5 min-w-max">
+                  {[
+                    { id: "all", label: "الكل" },
+                    { id: "light", label: "تحميص فاتح" },
+                    { id: "med", label: "تحميص وسط" },
+                    { id: "dark", label: "تحميص غامق" },
+                    { id: "mohawaj", label: "محوج ومميز" },
+                    { id: "sada", label: "بن ساده" },
+                    { id: "quarter", label: "ربع كيلو (250 جم)" },
+                    { id: "half", label: "نصف كيلو (500 جم)" },
+                  ].map((opt) => {
+                    const isSel = quickFilter === opt.id;
+                    return (
+                      <button
+                        key={opt.id}
+                        onClick={() =>
+                          setQuickFilter(opt.id as QuickFilterOption)
+                        }
+                        className={`px-2.5 py-1 rounded-md text-[11px] font-alexandria font-semibold transition-all cursor-pointer ${
+                          isSel
+                            ? "bg-[#C5A059] text-white font-bold shadow-2xs"
+                            : "bg-[#F7F4EF] text-[#1A110B] hover:bg-[#1A110B]/10 border border-[#1A110B]/10"
+                        }`}
+                      >
+                        {opt.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
             </div>
 
-            {/* Level 4 & 5: Sort Options, Results Count & Reset Filters */}
+            {/* الصف الثالث: الترتيب وعدد النتائج */}
             <div className="pt-2 border-t border-dashed border-[#1A110B]/10 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-xs font-alexandria">
               <div className="flex items-center gap-2">
                 <span className="text-gray-500 font-medium">
@@ -548,17 +543,17 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
               </div>
 
               {/* Sorting options */}
-              <div className="flex items-center gap-1.5 self-end sm:self-auto">
-                <span className="text-[#1A110B]/70 font-semibold flex items-center gap-1">
+              <div className="flex items-center gap-2 self-start sm:self-auto">
+                <span className="text-[#1A110B]/80 font-bold flex items-center gap-1">
                   <ArrowUpDown className="w-3.5 h-3.5 text-[#C5A059]" />
-                  <span>الترتيب:</span>
+                  <span>ترتيب النتائج:</span>
                 </span>
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value as SortOption)}
                   className="bg-[#FAF8F5] text-[#1A110B] border border-[#1A110B]/15 rounded-lg py-1 px-2 text-xs font-alexandria font-semibold focus:outline-none focus:border-[#C5A059] cursor-pointer"
                 >
-                  <option value="popular">الأكثر طلباً ومبيعاً</option>
+                  <option value="popular">ترشيحات بدران أولاً</option>
                   <option value="price-asc">الأقل سعراً أولاً</option>
                   <option value="price-desc">الأعلى سعراً أولاً</option>
                   <option value="alpha">أبجدياً (أ - ي)</option>
@@ -608,8 +603,7 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
                       : [];
                     const summaryText = formatProductSelectionSummary(
                       product,
-                      currentSelection,
-                      currentPrice
+                      currentSelection
                     );
                     const isCustomWeightOpen =
                       customWeightExpanded[product.id] || false;
@@ -641,7 +635,7 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
                           )}
 
                           {/* ================= PART 4: DYNAMIC PRICE & REFERENCE ================= */}
-                          <div className="flex items-end justify-between border-b border-dashed border-[#C5A059]/30 pb-3 my-3">
+                          <div className="flex items-baseline justify-between border-b border-dashed border-[#C5A059]/30 pb-2.5 my-2.5">
                             <div>
                               <div className="font-price font-bold text-2xl text-[#C5A059] leading-none">
                                 {currentPrice}{" "}
@@ -655,13 +649,11 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
                             </div>
 
                             {baseKilo && (
-                              <div className="text-left bg-[#FAF8F5] px-2.5 py-1 rounded-lg border border-[#1A110A]/10">
-                                <span className="text-[10px] text-[#1A110A]/60 font-alexandria block">
-                                  {baseKilo.label}:
-                                </span>
-                                <span className="font-price font-bold text-xs text-[#1A110A]">
+                              <div className="text-left text-xs text-[#1A110A]/55 font-alexandria">
+                                <span>{baseKilo.label}: </span>
+                                <strong className="font-price text-sm text-[#1A110A]/75">
                                   {baseKilo.price} ج.م
-                                </span>
+                                </strong>
                               </div>
                             )}
                           </div>
@@ -916,20 +908,23 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
                                             preset.grams
                                           )
                                         }
-                                        className={`p-1.5 rounded-lg text-center transition-all cursor-pointer border ${
+                                        className={`p-2 rounded-xl text-center transition-all cursor-pointer border ${
                                           isSelected
-                                            ? "bg-[#1A110B] text-white border-[#C5A059] shadow-xs"
+                                            ? "bg-[#1A110B] text-white border-[#C5A059] shadow-xs ring-1 ring-[#C5A059]"
                                             : "bg-white text-[#1A110A] border-[#1A110A]/15 hover:bg-[#1A110A]/5"
                                         }`}
                                       >
-                                        <span className="block text-[11px] font-alexandria font-bold">
+                                        <span className="block text-xs font-alexandria font-bold leading-tight">
                                           {preset.title}
                                         </span>
+                                        <span className="block text-[10px] font-alexandria text-[#C5A059] font-semibold mt-0.5">
+                                          {preset.shortLabel}
+                                        </span>
                                         <span
-                                          className={`block font-price text-[11px] font-bold mt-0.5 ${
+                                          className={`block font-price text-xs font-bold mt-1 ${
                                             isSelected
-                                              ? "text-[#C5A059]"
-                                              : "text-[#1A110A]/70"
+                                              ? "text-white"
+                                              : "text-[#1A110A]/80"
                                           }`}
                                         >
                                           {preset.price} ج.م
