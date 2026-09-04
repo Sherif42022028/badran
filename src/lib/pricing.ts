@@ -157,6 +157,134 @@ export function calculateProductPrice(
 }
 
 /**
+ * Returns the reference kilo price or base unit price for reference display (e.g. "سعر الكيلو: 480 ج.م")
+ */
+export function getBaseKiloPrice(
+  product: Product,
+  options?: SelectedProductOptions
+): { price: number; label: string } | null {
+  if (product.matrix) {
+    const opt1 = options?.matrixOption1 || product.matrix.option1Values[0];
+    const kiloKey = `${opt1}|كيلو`;
+    if (product.matrix.prices[kiloKey]) {
+      return {
+        price: product.matrix.prices[kiloKey],
+        label: "سعر الكيلو",
+      };
+    }
+    // Fallback to first price in matrix
+    const firstVal = Object.values(product.matrix.prices)[0] || 0;
+    return {
+      price: firstVal,
+      label: "سعر الأساس",
+    };
+  }
+
+  if (product.tier === 2 && product.variants && product.variants.length > 0) {
+    const chosen = product.variants.find((v) => v.id === options?.variantId) || product.variants[0];
+    return {
+      price: chosen.price,
+      label: "سعر الكيلو",
+    };
+  }
+
+  if (product.tier === 1 && product.basePrice) {
+    return {
+      price: product.basePrice,
+      label: product.unitLabel ? `سعر ${product.unitLabel}` : "سعر الكيلو",
+    };
+  }
+
+  if (product.tier === 4 && product.variants && product.variants.length > 0) {
+    const kiloVariant = product.variants.find(
+      (v) => v.label.includes("كيلو") || v.label.includes("1000")
+    );
+    if (kiloVariant) {
+      return {
+        price: kiloVariant.price,
+        label: "سعر الكيلو",
+      };
+    }
+  }
+
+  return null;
+}
+
+/**
+ * Returns calculated prices for standard weight presets (125g, 250g, 500g, 1000g).
+ */
+export function getQuickWeightPresets(
+  product: Product,
+  options?: SelectedProductOptions
+): Array<{ grams: number; title: string; shortLabel: string; price: number }> {
+  const presets = [
+    { grams: 125, title: "ثمن كيلو", shortLabel: "125 جم" },
+    { grams: 250, title: "ربع كيلو", shortLabel: "250 جم" },
+    { grams: 500, title: "نصف كيلو", shortLabel: "500 جم" },
+    { grams: 1000, title: "كيلو كامل", shortLabel: "1000 جم" },
+  ];
+
+  // Base kilo price source
+  let kiloPrice = 0;
+  if (product.tier === 1) {
+    kiloPrice = product.basePrice || 0;
+  } else if (product.tier === 2 && product.variants && product.variants.length > 0) {
+    const chosen = product.variants.find((v) => v.id === options?.variantId) || product.variants[0];
+    kiloPrice = chosen.price;
+  } else if (product.tier === 4 && product.variants && product.variants.length > 0) {
+    const kiloVariant = product.variants.find(
+      (v) => v.label.includes("كيلو") || v.label.includes("1000")
+    );
+    if (kiloVariant) {
+      kiloPrice = kiloVariant.price;
+    } else {
+      kiloPrice = product.variants[0].price;
+    }
+  }
+
+  return presets.map((p) => ({
+    ...p,
+    price: Math.max(Math.round((kiloPrice * p.grams) / 1000), 5),
+  }));
+}
+
+/**
+ * Generates a clean Arabic live summary line for the product card action footer
+ * Example: "بن محوج — وسط — 250 جم — 140 ج.م"
+ */
+export function formatProductSelectionSummary(
+  product: Product,
+  options: SelectedProductOptions,
+  calculatedPrice: number
+): string {
+  const parts: string[] = [product.name];
+
+  if (product.matrix) {
+    const roast = options.matrixOption1 || product.matrix.option1Values[0];
+    const pack = options.matrixOption2 || product.matrix.option2Values[0];
+    parts.push(roast, pack);
+  } else if (product.tier === 2) {
+    const chosen = product.variants?.find((v) => v.id === options.variantId) || product.variants?.[0];
+    if (chosen) parts.push(chosen.label);
+    if (options.customGrams) {
+      const g = options.customGrams;
+      const gLabel = g === 125 ? "ثمن ك (125جم)" : g === 250 ? "ربع ك (250جم)" : g === 500 ? "نصف ك (500جم)" : g === 1000 ? "كيلو" : `${g} جم`;
+      parts.push(gLabel);
+    }
+  } else if (isProductEligibleForGrams(product) && options.customGrams) {
+    const g = options.customGrams;
+    const gLabel = g === 125 ? "ثمن ك (125جم)" : g === 250 ? "ربع ك (250جم)" : g === 500 ? "نصف ك (500جم)" : g === 1000 ? "كيلو" : `${g} جم`;
+    parts.push(gLabel);
+  } else if (product.variants && product.variants.length > 0) {
+    const chosen = product.variants.find((v) => v.id === options.variantId) || product.variants[0];
+    if (chosen) parts.push(chosen.label);
+  }
+
+  parts.push(`${calculatedPrice} ج.م`);
+  return parts.join(" — ");
+}
+
+/**
  * Returns default selected options for a product on first render.
  */
 export function getDefaultProductOptions(product: Product): SelectedProductOptions {
