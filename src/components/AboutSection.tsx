@@ -24,12 +24,12 @@ export default function AboutSection() {
               imageSrc="/محل.jpg"
               altText="محل بن بدران في ميت غمر"
               captionText="محل بن بدران بميت غمر"
-              containerHeight="260px"
+              containerHeight="280px"
               containerWidth="100%"
               imageHeight="100%"
               imageWidth="100%"
-              scaleOnHover={1.04}
-              rotateAmplitude={12}
+              scaleOnHover={1.03}
+              rotateAmplitude={8}
               showTooltip={true}
             />
 

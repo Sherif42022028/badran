@@ -51,7 +51,7 @@ export default function Hero() {
 
         {/* CTA Buttons with Magnetic Pull */}
         <div className="flex flex-col sm:flex-row justify-center items-center gap-3.5 mb-6 font-tajawal">
-          <Magnet padding={40} magnetStrength={3}>
+          <Magnet padding={40} magnetStrength={3} wrapperClassName="w-full sm:w-auto">
             <a
               href="#menu"
               className="w-full sm:w-auto bg-[#1A110B] hover:bg-[#2A1D15] text-[#FAF8F5] font-alexandria font-bold text-base px-8 py-3 rounded-lg border border-[#C5A059]/40 transition-all shadow-sm flex items-center justify-center gap-2 group"
@@ -61,7 +61,7 @@ export default function Hero() {
             </a>
           </Magnet>
 
-          <Magnet padding={40} magnetStrength={3}>
+          <Magnet padding={40} magnetStrength={3} wrapperClassName="w-full sm:w-auto">
             <a
               href={PHONE_TEL_LINK}
               onClick={() => trackContactClick('call')}
@@ -72,7 +72,7 @@ export default function Hero() {
             </a>
           </Magnet>
 
-          <Magnet padding={40} magnetStrength={3}>
+          <Magnet padding={40} magnetStrength={3} wrapperClassName="w-full sm:w-auto">
             <a
               href={WHATSAPP_LINK}
               onClick={() => trackContactClick('whatsapp')}
