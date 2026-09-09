@@ -24,7 +24,7 @@ export function generateBlendWhatsAppMessage(order: CustomBlendOrder): string {
   const lines: string[] = [];
 
   lines.push("مرحبا *بن بدران* ☕");
-  lines.push(`أريد طلب خلطة خاصة بي *(${order.blendName || "توليفتك على زوقك"})*:`);
+  lines.push(`أريد طلب خلطة خاصة بي *(${order.blendName || "توليفتك على مزاجك"})*:`);
   lines.push("");
   lines.push(MESSAGE_DIVIDER);
 

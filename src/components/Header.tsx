@@ -59,7 +59,7 @@ export default function Header({ cartCount, onOpenCart }: HeaderProps) {
             href="#blend-builder"
             className="hover:text-[#C5A059] transition-colors py-1"
           >
-            توليفتك على زوقك
+            توليفتك على مزاجك
           </a>
           <a
             href="#menu"
@@ -133,7 +133,7 @@ export default function Header({ cartCount, onOpenCart }: HeaderProps) {
             onClick={() => setMobileMenuOpen(false)}
             className="block py-2 text-[#1A110B] font-semibold border-b border-dashed border-[#1A110B]/10"
           >
-            توليفتك على زوقك
+            توليفتك على مزاجك
           </a>
           <a
             href="#menu"

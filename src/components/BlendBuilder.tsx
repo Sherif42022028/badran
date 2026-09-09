@@ -10,12 +10,12 @@ import {
   Scale,
   Search,
   ShoppingBag,
-  Sliders,
   Check,
   RotateCcw,
   MessageSquare,
-  Info,
-  Tag,
+  Trash2,
+  SlidersHorizontal,
+  Flame,
 } from "lucide-react";
 import {
   BLEND_COFFEE_BEANS,
@@ -78,7 +78,7 @@ export default function BlendBuilder({
   );
   const [addedAlert, setAddedAlert] = useState(false);
 
-  // Toggle bean selection (0g <-> 100g)
+  // Toggle bean selection (Add with default 100g or remove)
   const handleToggleBean = (bean: BlendBeanOrigin) => {
     setSelectedGrams((prev) => {
       const next = { ...prev };
@@ -91,7 +91,16 @@ export default function BlendBuilder({
     });
   };
 
-  // Change grams for a bean directly or via slider
+  // Remove a bean from the recipe
+  const handleRemoveBean = (beanId: string) => {
+    setSelectedGrams((prev) => {
+      const next = { ...prev };
+      delete next[beanId];
+      return next;
+    });
+  };
+
+  // Change grams for a bean directly
   const handleGramsChange = (beanId: string, value: number) => {
     if (isNaN(value) || value <= 0) {
       setSelectedGrams((prev) => {
@@ -101,7 +110,7 @@ export default function BlendBuilder({
       });
       return;
     }
-    const valid = Math.max(1, Math.min(2000, value));
+    const valid = Math.max(1, Math.min(3000, value));
     setSelectedGrams((prev) => ({
       ...prev,
       [beanId]: valid,
@@ -126,7 +135,7 @@ export default function BlendBuilder({
       }
       return {
         ...prev,
-        [beanId]: Math.min(2000, nextVal),
+        [beanId]: Math.min(3000, nextVal),
       };
     });
   };
@@ -175,28 +184,24 @@ export default function BlendBuilder({
     }
   };
 
-  // Filter beans
+  // Filter beans for catalog
   const filteredBeans = useMemo(() => {
     const q = searchQuery.toLowerCase().trim();
-    return BLEND_COFFEE_BEANS.filter((b) => {
-      if (activeCategory !== "all" && b.category !== activeCategory) {
-        return false;
-      }
-      if (q) {
-        const matchName = b.name.toLowerCase().includes(q);
-        const matchDesc = b.description.toLowerCase().includes(q);
-        const matchRole = b.blendRole.toLowerCase().includes(q);
-        const matchFlavor = b.flavorNotes.some((fn) =>
-          fn.toLowerCase().includes(q)
-        );
-        return matchName || matchDesc || matchRole || matchFlavor;
-      }
-      return true;
+    return BLEND_COFFEE_BEANS.filter((bean) => {
+      const matchCat =
+        activeCategory === "all" || bean.category === activeCategory;
+      const matchQuery =
+        !q ||
+        bean.name.toLowerCase().includes(q) ||
+        bean.blendRole.toLowerCase().includes(q) ||
+        bean.categoryLabel.toLowerCase().includes(q) ||
+        bean.description.toLowerCase().includes(q);
+      return matchCat && matchQuery;
     });
   }, [activeCategory, searchQuery]);
 
-  // Selected components list for calculations
-  const selectedComponentsList: SelectedBlendComponent[] = useMemo(() => {
+  // Selected components list
+  const selectedComponentsList = useMemo(() => {
     return Object.entries(selectedGrams)
       .map(([beanId, grams]) => {
         const bean = BLEND_COFFEE_BEANS.find((b) => b.id === beanId);
@@ -205,7 +210,7 @@ export default function BlendBuilder({
       .filter(Boolean) as SelectedBlendComponent[];
   }, [selectedGrams]);
 
-  // Dynamic price calculation (cardamom omitted)
+  // Dynamic price calculation
   const blendResult = useMemo(() => {
     return calculateCustomBlend(
       selectedComponentsList,
@@ -225,14 +230,16 @@ export default function BlendBuilder({
 
     const finalBlendName =
       blendName.trim() ||
-      `توليفة خاصة (${selectedComponentsList.map((c) => c.bean.name.replace("بن ", "")).join(" + ")})`;
+      `توليفة على مزاجك (${selectedComponentsList
+        .map((c) => c.bean.name.replace("بن ", ""))
+        .join(" + ")})`;
 
     const customBlendProduct: Product = {
       id: `custom-blend-${Date.now()}`,
       name: finalBlendName,
       category: "custom_blend",
       description: blendResult.summaryRecipe,
-      badge: "توليفة على زوقك",
+      badge: "توليفة على مزاجك",
       tier: 1,
       variantType: "none",
       basePrice: blendResult.totalPrice,
@@ -269,7 +276,7 @@ export default function BlendBuilder({
     trackContactClick("whatsapp");
 
     const orderId = generateOrderId("BD");
-    const finalBlendName = blendName.trim() || "توليفتك على زوقك الخاصة";
+    const finalBlendName = blendName.trim() || "توليفتك على مزاجك الخاصة";
 
     const activeAdditions = Object.entries(additionGrams)
       .filter(([_, g]) => g > 0)
@@ -335,7 +342,7 @@ export default function BlendBuilder({
           const lastOrder = {
             orderId: checkoutOrderObj?.orderId,
             type: "Custom Blend",
-            blendName: blendName.trim() || "توليفتك الخاصة",
+            blendName: blendName.trim() || "توليفتك على مزاجك",
             recipe: blendResult.summaryRecipe,
             grind,
             additions: Object.entries(additionGrams)
@@ -372,40 +379,47 @@ export default function BlendBuilder({
     <section
       id="blend-builder"
       className={`max-w-7xl mx-auto ${
-        isEmbedded ? "py-2" : "py-6 md:py-12 px-3 sm:px-5"
+        isEmbedded ? "py-2" : "py-8 md:py-16 px-3 sm:px-6"
       }`}
     >
-      <div className="framed-section p-4 sm:p-6 md:p-8 bg-white shadow-xs rounded-3xl">
+      <div className="bg-[#FAF8F5] border border-[#C5A059]/30 shadow-md rounded-3xl p-4 sm:p-7 md:p-10 relative overflow-hidden">
+        {/* Subtle background luxury glow */}
+        <div className="absolute top-0 right-0 w-96 h-96 bg-[#C5A059]/5 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#5C2A26]/5 rounded-full blur-3xl pointer-events-none" />
+
         {/* ================= SECTION HEADER ================= */}
-        <div className="text-center mb-8 border-b border-dashed border-[#C5A059]/30 pb-6">
-          <span className="solid-badge text-xs md:text-sm mb-2.5 py-1 px-4 inline-flex items-center gap-1.5 font-alexandria shadow-xs">
+        <div className="text-center mb-8 sm:mb-12 border-b border-[#C5A059]/20 pb-6 relative z-10">
+          <div className="inline-flex items-center gap-2 bg-[#1A110B] text-[#C5A059] px-4 py-1.5 rounded-full text-xs sm:text-sm font-alexandria font-bold shadow-xs mb-3 border border-[#C5A059]/40">
             <Sparkles className="w-4 h-4 text-[#C5A059]" />
-            <span>صمم خلطتك بالجرام على زوقك</span>
-          </span>
-          <h2 className="font-amiri text-2xl sm:text-3xl md:text-4xl font-bold text-[#1A110B] mt-2">
-            توليفتك على زوقك — ركّب خلطة بن خاصة بك بالجرام
+            <span>توليفتك على مزاجك</span>
+          </div>
+
+          <h2 className="font-amiri text-2xl sm:text-4xl md:text-5xl font-bold text-[#1A110B] leading-tight">
+            ركّب خلطة قهوتك الخاصة بالجرام
           </h2>
-          <p className="font-alexandria text-xs sm:text-sm text-[#1A110A]/75 max-w-2xl mx-auto mt-2 font-light leading-relaxed">
-            اختار الحبوب المخصصة للتوليف، حدد الجرامات بدقة بواسطة العداد، واضبط درجة الطحن والإضافات المفضلة.
+
+          <p className="font-alexandria text-xs sm:text-sm text-[#1A110A]/75 max-w-2xl mx-auto mt-2.5 font-light leading-relaxed">
+            اختر أنواع البن المفضلة، حدد وزن كل نوع بالجرام بدقة متناهية، واضبط درجة الطحن والإضافات السرية لتصنع فنجان قهوة بمزاجك الخاص.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          {/* ================= LEFT / MAIN: STEPS (8 COLS) ================= */}
-          <div className="lg:col-span-7 xl:col-span-8 space-y-8 font-alexandria">
-            {/* ================= STEP 1: BEAN SELECTION & GRAMS ================= */}
-            <div className="space-y-4">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start relative z-10">
+          {/* ================= LEFT / MAIN BUILDER (7-8 COLS) ================= */}
+          <div className="lg:col-span-7 xl:col-span-8 space-y-10 font-alexandria">
+
+            {/* ----------------- STEP 1: ACTIVE BLEND FORMULA (وصفة الخلطة الحالية) ----------------- */}
+            <div className="bg-white border-2 border-[#C5A059]/50 rounded-2xl p-4 sm:p-6 shadow-xs space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#1A110A]/10 pb-3">
                 <div className="flex items-center gap-2.5">
                   <span className="w-7 h-7 rounded-full bg-[#1A110B] text-[#C5A059] font-price font-bold text-sm flex items-center justify-center shadow-xs">
                     1
                   </span>
                   <div>
-                    <h3 className="font-amiri text-xl font-bold text-[#1A110A]">
-                      اختار أنواع البن وحدد وزن كل نوع بالجرام:
+                    <h3 className="font-amiri text-lg sm:text-xl font-bold text-[#1A110A]">
+                      مكونات خلطتك الحالية وأوزانها:
                     </h3>
                     <span className="text-[11px] text-[#1A110A]/60">
-                      كل نوع مخصص لوظيفة معينة بالتوليفة (قاعدة، وش، عطرية...)
+                      حدد كم جرام من كل نوع بن اخترته
                     </span>
                   </div>
                 </div>
@@ -414,7 +428,7 @@ export default function BlendBuilder({
                   <button
                     type="button"
                     onClick={resetBlend}
-                    className="text-xs text-red-600 hover:text-red-700 flex items-center gap-1 cursor-pointer font-bold self-start sm:self-auto bg-red-50 hover:bg-red-100/70 border border-red-200 px-2.5 py-1 rounded-lg transition-all"
+                    className="text-xs text-red-600 hover:text-red-700 flex items-center gap-1 cursor-pointer font-bold self-start sm:self-auto bg-red-50 hover:bg-red-100/80 border border-red-200 px-2.5 py-1 rounded-lg transition-all"
                   >
                     <RotateCcw className="w-3.5 h-3.5" />
                     <span>تفريغ التوليفة</span>
@@ -422,193 +436,286 @@ export default function BlendBuilder({
                 )}
               </div>
 
-              {/* Category Pills & Search */}
-              <div className="space-y-2.5 bg-[#FAF8F5] p-3 rounded-2xl border border-[#1A110A]/10">
-                <div className="flex flex-wrap gap-1.5">
-                  {BLEND_ORIGIN_CATEGORIES.map((cat) => (
-                    <button
-                      key={cat.id}
-                      type="button"
-                      onClick={() => setActiveCategory(cat.id)}
-                      className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer border ${
-                        activeCategory === cat.id
-                          ? "bg-[#1A110B] text-[#FAF8F5] border-[#C5A059] shadow-xs ring-1 ring-[#C5A059]"
-                          : "bg-white text-[#1A110A] border-[#1A110A]/15 hover:bg-[#FAF8F5]"
-                      }`}
-                    >
-                      {cat.label}
-                    </button>
-                  ))}
-                </div>
+              {/* Active Blend Ratio Bar (Visual Formula) */}
+              {blendResult.totalGrams > 0 ? (
+                <div className="space-y-2 pt-1">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="font-bold text-[#1A110A]/80">
+                      نسب التوليفة في الفنجان:
+                    </span>
+                    <span className="font-price font-bold text-[#C5A059] bg-[#1A110B] px-2.5 py-0.5 rounded-md text-xs">
+                      إجمالي الوزن: {blendResult.totalGrams} جم
+                    </span>
+                  </div>
 
-                <div className="relative">
-                  <Search className="w-4 h-4 text-[#1A110A]/40 absolute top-2.5 right-3 pointer-events-none" />
-                  <input
-                    type="text"
-                    placeholder="ابحث عن نوع بن أو وظيفة معينة (مثال: سانتوس، وش كثيف، هراري، يمني...)"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full py-2 pr-9 pl-3 bg-white border border-[#1A110A]/15 rounded-xl text-xs text-[#1A110A] focus:outline-none focus:border-[#C5A059]"
-                  />
-                </div>
-              </div>
+                  {/* Multi-color Segmented Bar */}
+                  <div className="h-3 w-full rounded-full overflow-hidden flex bg-gray-100 shadow-inner">
+                    {blendResult.componentsRatio.map((comp) => (
+                      <div
+                        key={comp.bean.id}
+                        style={{
+                          width: `${comp.percentage}%`,
+                          backgroundColor: comp.bean.color,
+                        }}
+                        title={`${comp.bean.name}: ${comp.grams}جم (${comp.percentage}%)`}
+                        className="h-full transition-all duration-300"
+                      />
+                    ))}
+                  </div>
 
-              {/* Clean Engineered Bean Cards Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 max-h-[500px] overflow-y-auto p-1 pr-1.5 scrollbar-thin">
-                {filteredBeans.map((bean) => {
-                  const isSelected =
-                    selectedGrams[bean.id] !== undefined &&
-                    selectedGrams[bean.id] > 0;
-                  const grams = selectedGrams[bean.id] || 0;
-                  const percentage =
-                    blendResult.totalGrams > 0 && isSelected
-                      ? Math.round((grams / blendResult.totalGrams) * 100)
-                      : 0;
-                  const subtotal = Math.round((bean.kiloPrice * grams) / 1000);
-
-                  return (
-                    <div
-                      key={bean.id}
-                      className={`p-3.5 rounded-2xl border transition-all relative flex flex-col justify-between ${
-                        isSelected
-                          ? "bg-[#FAF8F5] border-[#C5A059] ring-1 ring-[#C5A059] shadow-xs"
-                          : "bg-white border-[#1A110A]/15 hover:border-[#C5A059]/60"
-                      }`}
-                    >
-                      {/* Top Row: Name, Checkbox, Role & Price */}
-                      <div>
-                        <div className="flex items-start justify-between gap-2">
-                          <div className="flex items-start gap-2">
-                            <input
-                              type="checkbox"
-                              checked={isSelected}
-                              onChange={() => handleToggleBean(bean)}
-                              id={`bean-${bean.id}`}
-                              className="mt-1 w-4 h-4 rounded accent-[#C5A059] cursor-pointer shrink-0"
+                  {/* Active Beans Stepper Rows */}
+                  <div className="space-y-3 pt-2">
+                    {blendResult.componentsRatio.map((comp) => (
+                      <div
+                        key={comp.bean.id}
+                        className="p-3 sm:p-4 rounded-xl border border-[#C5A059]/30 bg-[#FAF8F5] flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition-all hover:border-[#C5A059]"
+                      >
+                        {/* Info Left */}
+                        <div className="space-y-1">
+                          <div className="flex items-center gap-2">
+                            <span
+                              className="w-3 h-3 rounded-full shrink-0"
+                              style={{ backgroundColor: comp.bean.color }}
                             />
-                            <div>
-                              <label
-                                htmlFor={`bean-${bean.id}`}
-                                className="font-amiri text-base font-bold text-[#1A110A] cursor-pointer leading-tight block"
-                              >
-                                {bean.name}
-                              </label>
+                            <h4 className="font-amiri text-base font-bold text-[#1A110A]">
+                              {comp.bean.name}
+                            </h4>
+                            <span className="font-price font-bold text-xs bg-[#1A110B] text-[#C5A059] px-2 py-0.2 rounded-md">
+                              {comp.percentage}%
+                            </span>
+                          </div>
 
-                              {/* Blend Role Tag */}
-                              <span className="text-[10px] font-bold text-[#C5A059] bg-[#1A110B] px-2 py-0.5 rounded-md inline-block mt-1 font-alexandria shadow-2xs">
-                                🎯 {bean.blendRole}
+                          <div className="flex items-center gap-2 text-xs text-[#1A110A]/60">
+                            <span>🎯 {comp.bean.blendRole}</span>
+                            <span>•</span>
+                            <span className="font-price text-[#C5A059] font-bold">
+                              {comp.bean.kiloPrice} ج.م / ك
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Grams Counter & Controls Right */}
+                        <div className="flex items-center justify-between sm:justify-end gap-3 pt-2 sm:pt-0 border-t sm:border-t-0 border-[#1A110A]/10">
+                          {/* Weight Stepper */}
+                          <div className="flex items-center gap-1.5 bg-white border border-[#1A110A]/15 rounded-xl p-1 shadow-2xs">
+                            <button
+                              type="button"
+                              onClick={() => handleStepGrams(comp.bean.id, -25)}
+                              className="w-7 h-7 rounded-lg bg-[#FAF8F5] hover:bg-[#1A110A] hover:text-[#FAF8F5] text-[#1A110A] flex items-center justify-center cursor-pointer transition-all active:scale-95"
+                              title="تقليل 25 جرام"
+                            >
+                              <Minus className="w-3.5 h-3.5" />
+                            </button>
+
+                            <div className="flex items-center px-1">
+                              <input
+                                type="number"
+                                min="1"
+                                max="3000"
+                                step="5"
+                                value={comp.grams}
+                                onChange={(e) =>
+                                  handleGramsChange(
+                                    comp.bean.id,
+                                    parseInt(e.target.value, 10)
+                                  )
+                                }
+                                className="w-14 text-center font-price font-bold text-sm text-[#1A110A] focus:outline-none"
+                              />
+                              <span className="text-xs text-[#C5A059] font-bold">
+                                جم
                               </span>
                             </div>
+
+                            <button
+                              type="button"
+                              onClick={() => handleStepGrams(comp.bean.id, 25)}
+                              className="w-7 h-7 rounded-lg bg-[#FAF8F5] hover:bg-[#1A110A] hover:text-[#FAF8F5] text-[#1A110A] flex items-center justify-center cursor-pointer transition-all active:scale-95"
+                              title="زيادة 25 جرام"
+                            >
+                              <Plus className="w-3.5 h-3.5" />
+                            </button>
                           </div>
 
-                          {/* Percentage Badge */}
-                          {isSelected ? (
-                            <span className="font-price font-bold text-[11px] bg-[#1A110B] text-[#C5A059] px-2.5 py-0.5 rounded-full shrink-0 shadow-2xs">
-                              {percentage}%
-                            </span>
-                          ) : (
-                            <span className="text-[10px] text-[#1A110A]/40 font-alexandria bg-gray-100 px-2 py-0.5 rounded-md">
-                              0 جم
-                            </span>
-                          )}
-                        </div>
-
-                        {/* Price Row */}
-                        <div className="flex items-center justify-between mt-2 pt-1 border-t border-dashed border-[#1A110A]/10 text-xs">
-                          <span className="font-price font-bold text-[#C5A059]">
-                            {bean.kiloPrice} ج.م / ك
-                          </span>
-                          {isSelected && (
-                            <span className="font-price text-[11px] text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200 font-bold">
-                              {grams} جم = {subtotal} ج.م
-                            </span>
-                          )}
-                        </div>
-                      </div>
-
-                      {/* Grams Slider Counter Controls */}
-                      <div className="mt-3 pt-2 border-t border-[#1A110A]/10 space-y-2">
-                        <div className="flex items-center gap-1.5">
-                          <button
-                            type="button"
-                            onClick={() => handleStepGrams(bean.id, -25)}
-                            className="w-7 h-7 rounded-lg bg-white border border-[#1A110A]/20 hover:bg-[#1A110A]/5 text-[#1A110A] flex items-center justify-center cursor-pointer shadow-2xs text-xs shrink-0 transition-all active:scale-95"
-                            title="تقليل 25 جرام"
-                          >
-                            <Minus className="w-3.5 h-3.5" />
-                          </button>
-
-                          <input
-                            type="range"
-                            min="0"
-                            max="1000"
-                            step="5"
-                            value={grams}
-                            onChange={(e) =>
-                              handleGramsChange(bean.id, Number(e.target.value))
-                            }
-                            className="flex-1 accent-[#C5A059] h-2 bg-gray-200 rounded-lg cursor-pointer"
-                          />
-
-                          <button
-                            type="button"
-                            onClick={() => handleStepGrams(bean.id, 25)}
-                            className="w-7 h-7 rounded-lg bg-white border border-[#1A110A]/20 hover:bg-[#1A110A]/5 text-[#1A110A] flex items-center justify-center cursor-pointer shadow-2xs text-xs shrink-0 transition-all active:scale-95"
-                            title="زيادة 25 جرام"
-                          >
-                            <Plus className="w-3.5 h-3.5" />
-                          </button>
-
-                          <div
-                            className={`flex items-center gap-1 bg-white border rounded-xl px-2 py-0.5 shrink-0 shadow-2xs ${
-                              isSelected
-                                ? "border-[#C5A059] ring-1 ring-[#C5A059]"
-                                : "border-[#1A110A]/20"
-                            }`}
-                          >
-                            <input
-                              type="number"
-                              min="0"
-                              max="5000"
-                              step="5"
-                              value={grams === 0 ? "" : grams}
-                              placeholder="0"
-                              onChange={(e) =>
-                                handleGramsChange(
-                                  bean.id,
-                                  parseInt(e.target.value, 10)
-                                )
-                              }
-                              className="w-12 font-price font-bold text-center text-xs text-[#1A110A] focus:outline-none"
-                            />
-                            <span className="text-[10px] text-[#C5A059] font-bold">
-                              جم
-                            </span>
-                          </div>
-                        </div>
-
-                        {/* Quick Presets */}
-                        <div className="flex items-center justify-between gap-1 pt-0.5">
-                          <span className="text-[10px] text-[#1A110A]/50 font-alexandria shrink-0">
-                            أوزان سريعة:
-                          </span>
-                          <div className="flex items-center gap-1 overflow-x-auto">
-                            {[50, 100, 150, 250, 500].map((preset) => (
+                          {/* Quick weight chips */}
+                          <div className="hidden md:flex items-center gap-1">
+                            {[50, 100, 150, 250].map((preset) => (
                               <button
                                 key={preset}
                                 type="button"
-                                onClick={() => handleGramsChange(bean.id, preset)}
-                                className={`px-2 py-0.5 rounded-md text-[10px] font-price font-bold transition-all cursor-pointer border ${
-                                  grams === preset
-                                    ? "bg-[#1A110B] text-[#C5A059] border-[#C5A059] shadow-xs"
-                                    : "bg-white text-[#1A110A] border-[#1A110A]/15 hover:border-[#C5A059]"
+                                onClick={() =>
+                                  handleGramsChange(comp.bean.id, preset)
+                                }
+                                className={`px-2 py-1 rounded-md text-[11px] font-price font-bold transition-all cursor-pointer border ${
+                                  comp.grams === preset
+                                    ? "bg-[#1A110B] text-[#C5A059] border-[#C5A059]"
+                                    : "bg-white text-[#1A110A]/70 border-[#1A110A]/10 hover:border-[#C5A059]"
                                 }`}
                               >
                                 {preset}جم
                               </button>
                             ))}
                           </div>
+
+                          {/* Price & Delete */}
+                          <div className="flex items-center gap-2">
+                            <span className="font-price font-bold text-xs sm:text-sm text-[#1A110A] bg-white border border-[#C5A059]/40 px-2.5 py-1 rounded-lg">
+                              {comp.subtotal} ج.م
+                            </span>
+
+                            <button
+                              type="button"
+                              onClick={() => handleRemoveBean(comp.bean.id)}
+                              className="w-7 h-7 rounded-lg text-red-500 hover:text-red-700 hover:bg-red-50 flex items-center justify-center cursor-pointer transition-colors"
+                              title="حذف هذا الصنف من التوليفة"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </div>
                         </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <div className="py-8 text-center bg-[#FAF8F5] rounded-xl border border-dashed border-[#C5A059]/40 space-y-2">
+                  <Coffee className="w-8 h-8 text-[#C5A059] mx-auto opacity-70" />
+                  <h4 className="font-amiri text-lg font-bold text-[#1A110B]">
+                    لم تختر أي نوع بن بعد!
+                  </h4>
+                  <p className="text-xs text-[#1A110A]/60 max-w-sm mx-auto">
+                    اضغط على زر &quot;+ إضافة للتوليفة&quot; على أي نوع بن من القائمة بالأسفل للبدء في تركيب خلطتك.
+                  </p>
+                </div>
+              )}
+            </div>
+
+            {/* ----------------- STEP 2: AVAILABLE BEAN CATALOG (قائمة أصناف البن) ----------------- */}
+            <div className="space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="flex items-center gap-2.5">
+                  <span className="w-7 h-7 rounded-full bg-[#1A110B] text-[#C5A059] font-price font-bold text-sm flex items-center justify-center shadow-xs">
+                    2
+                  </span>
+                  <div>
+                    <h3 className="font-amiri text-lg sm:text-xl font-bold text-[#1A110A]">
+                      قائمة حبوب البن المتاحة للتركيب:
+                    </h3>
+                    <span className="text-[11px] text-[#1A110A]/60">
+                      اضغط على أي نوع لإضافته أو إزالته من وصفتك
+                    </span>
+                  </div>
+                </div>
+
+                {/* Search Bar */}
+                <div className="relative w-full sm:w-64">
+                  <Search className="w-4 h-4 text-[#1A110A]/40 absolute top-2.5 right-3 pointer-events-none" />
+                  <input
+                    type="text"
+                    placeholder="ابحث عن نوع بن أو وظيفة..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full py-1.5 pr-9 pl-3 bg-white border border-[#1A110A]/15 rounded-xl text-xs text-[#1A110A] focus:outline-none focus:border-[#C5A059]"
+                  />
+                </div>
+              </div>
+
+              {/* Category Filter Tabs */}
+              <div className="flex flex-wrap gap-1.5 bg-white p-2 rounded-2xl border border-[#1A110A]/10">
+                {BLEND_ORIGIN_CATEGORIES.map((cat) => (
+                  <button
+                    key={cat.id}
+                    type="button"
+                    onClick={() => setActiveCategory(cat.id)}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer border ${
+                      activeCategory === cat.id
+                        ? "bg-[#1A110B] text-[#FAF8F5] border-[#C5A059] shadow-xs"
+                        : "bg-transparent text-[#1A110A]/75 border-transparent hover:bg-[#FAF8F5]"
+                    }`}
+                  >
+                    {cat.label}
+                  </button>
+                ))}
+              </div>
+
+              {/* Clean Bean Cards Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                {filteredBeans.map((bean) => {
+                  const isSelected =
+                    selectedGrams[bean.id] !== undefined &&
+                    selectedGrams[bean.id] > 0;
+                  const currentGrams = selectedGrams[bean.id] || 0;
+
+                  return (
+                    <div
+                      key={bean.id}
+                      className={`p-3.5 rounded-2xl border transition-all flex flex-col justify-between cursor-pointer ${
+                        isSelected
+                          ? "bg-white border-[#C5A059] shadow-sm ring-1 ring-[#C5A059]"
+                          : "bg-white/80 hover:bg-white border-[#1A110A]/10 hover:border-[#C5A059]/60 hover:shadow-xs"
+                      }`}
+                      onClick={() => handleToggleBean(bean)}
+                    >
+                      <div className="space-y-2">
+                        {/* Header: Origin & Role Tag */}
+                        <div className="flex items-center justify-between gap-1.5">
+                          <span className="text-[10px] font-bold text-[#C5A059] bg-[#1A110B] px-2 py-0.5 rounded-md font-alexandria">
+                            🎯 {bean.blendRole}
+                          </span>
+
+                          <span className="text-[10px] text-[#1A110A]/50 font-price">
+                            {bean.categoryLabel}
+                          </span>
+                        </div>
+
+                        {/* Bean Name */}
+                        <h4 className="font-amiri text-base font-bold text-[#1A110A] leading-snug">
+                          {bean.name}
+                        </h4>
+
+                        {/* Flavor Notes */}
+                        <div className="flex flex-wrap gap-1">
+                          {bean.flavorNotes.map((note, idx) => (
+                            <span
+                              key={idx}
+                              className="text-[9px] text-[#1A110A]/60 bg-[#FAF8F5] border border-[#1A110A]/5 px-1.5 py-0.5 rounded"
+                            >
+                              {note}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Bottom Row: Price & Action Button */}
+                      <div className="mt-3 pt-2.5 border-t border-[#1A110A]/10 flex items-center justify-between gap-2">
+                        <div className="font-price font-bold text-xs text-[#C5A059]">
+                          {bean.kiloPrice} ج.م / ك
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleToggleBean(bean);
+                          }}
+                          className={`text-xs font-bold py-1 px-3 rounded-lg flex items-center gap-1 transition-all cursor-pointer ${
+                            isSelected
+                              ? "bg-[#1A110B] text-[#C5A059] border border-[#C5A059]"
+                              : "bg-[#FAF8F5] text-[#1A110A] border border-[#1A110A]/15 hover:bg-[#1A110A] hover:text-white"
+                          }`}
+                        >
+                          {isSelected ? (
+                            <>
+                              <Check className="w-3.5 h-3.5 text-[#C5A059]" />
+                              <span>مضاف ({currentGrams}جم)</span>
+                            </>
+                          ) : (
+                            <>
+                              <Plus className="w-3.5 h-3.5" />
+                              <span>+ إضافة</span>
+                            </>
+                          )}
+                        </button>
                       </div>
                     </div>
                   );
@@ -616,23 +723,23 @@ export default function BlendBuilder({
               </div>
             </div>
 
-            {/* ================= STEP 2: GRIND DEGREE ================= */}
-            <div className="pt-6 border-t border-dashed border-[#1A110A]/15 space-y-3">
+            {/* ----------------- STEP 3: GRIND DEGREE (درجة الطحن) ----------------- */}
+            <div className="pt-4 border-t border-dashed border-[#1A110A]/15 space-y-3">
               <div className="flex items-center gap-2.5">
                 <span className="w-7 h-7 rounded-full bg-[#1A110B] text-[#C5A059] font-price font-bold text-sm flex items-center justify-center shadow-xs">
-                  2
+                  3
                 </span>
                 <div>
-                  <h3 className="font-amiri text-xl font-bold text-[#1A110A]">
+                  <h3 className="font-amiri text-lg sm:text-xl font-bold text-[#1A110A]">
                     درجة الطحن المفضلة:
                   </h3>
                   <span className="text-[11px] text-[#1A110A]/60">
-                    نطحنها لك طازجة بالنسب المطلوبة فور تجهيز الطلب
+                    نطحنها طازجة فور طلبك بالنسب المطلوبة
                   </span>
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
                 {GRIND_OPTIONS.map((g) => {
                   const isSelected = grind === g;
                   return (
@@ -656,19 +763,19 @@ export default function BlendBuilder({
               </div>
             </div>
 
-            {/* ================= STEP 3: SECRET ADDITIONS (STARTS AT 1 GRAM) ================= */}
-            <div className="pt-6 border-t border-dashed border-[#1A110A]/15 space-y-3">
+            {/* ----------------- STEP 4: SECRET LUXURY ADDITIONS (إضافات خاصة) ----------------- */}
+            <div className="pt-4 border-t border-dashed border-[#1A110A]/15 space-y-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2.5">
                   <span className="w-7 h-7 rounded-full bg-[#1A110B] text-[#C5A059] font-price font-bold text-sm flex items-center justify-center shadow-xs">
-                    3
+                    4
                   </span>
                   <div>
-                    <h3 className="font-amiri text-xl font-bold text-[#1A110A]">
-                      إضافات سرية خاصة (بالجرام تبدأ من 1 جم):
+                    <h3 className="font-amiri text-lg sm:text-xl font-bold text-[#1A110A]">
+                      إضافات سرية خاصة (اختياري بالجرام):
                     </h3>
                     <span className="text-[11px] text-[#1A110A]/60">
-                      إضافات فاخرة تقاس بالجرام الواحد وتوزن بدقة متناهية
+                      إضافات فاخرة توزن بدقة متناهية بالجرام الواحد
                     </span>
                   </div>
                 </div>
@@ -691,10 +798,10 @@ export default function BlendBuilder({
                   return (
                     <div
                       key={add.id}
-                      className={`p-3 rounded-2xl border transition-all ${
+                      className={`p-3 rounded-xl border transition-all ${
                         isChecked
-                          ? "bg-[#FAF8F5] border-[#C5A059] ring-1 ring-[#C5A059]/50 shadow-xs"
-                          : "bg-white border-[#1A110A]/15 hover:border-[#C5A059]/60"
+                          ? "bg-[#FAF8F5] border-[#C5A059] ring-1 ring-[#C5A059]/40 shadow-xs"
+                          : "bg-white border-[#1A110A]/15 hover:border-[#C5A059]/50"
                       }`}
                     >
                       <div className="flex items-center justify-between gap-2">
@@ -720,75 +827,55 @@ export default function BlendBuilder({
                         </button>
 
                         {isChecked && (
-                          <span className="font-price text-xs font-bold text-[#C5A059] bg-white border border-[#C5A059] px-2 py-0.5 rounded-lg shadow-2xs">
+                          <span className="font-price text-xs font-bold text-[#C5A059] bg-white border border-[#C5A059] px-2 py-0.5 rounded-lg">
                             {grams} جم = {itemSubtotal} ج.م
                           </span>
                         )}
                       </div>
 
-                      {/* 1-Gram Counter & Slider (Starts from 1g) */}
+                      {/* Clean 1-Gram Stepper (Starts at 1g) */}
                       {isChecked && (
-                        <div className="mt-3 pt-2 border-t border-dashed border-[#C5A059]/40 space-y-1.5 animate-fadeIn">
-                          <div className="flex items-center justify-between text-[10px] text-[#1A110A]/70">
-                            <span>الوزن المطلوب (بالجرام):</span>
-                            <span className="font-price font-bold text-[#C5A059]">
-                              {grams} جم
-                            </span>
-                          </div>
+                        <div className="mt-2.5 pt-2 border-t border-dashed border-[#C5A059]/40 flex items-center justify-between gap-2 animate-fadeIn">
+                          <span className="text-[11px] text-[#1A110A]/70">
+                            الوزن المطلوب:
+                          </span>
 
-                          <div className="flex items-center gap-2">
+                          <div className="flex items-center gap-1.5 bg-white border border-[#C5A059] rounded-lg p-0.5">
                             <button
                               type="button"
                               onClick={() => handleStepAddition(add.id, -1)}
-                              className="w-6 h-6 rounded-lg bg-white border border-[#1A110A]/20 hover:bg-[#1A110A]/5 text-[#1A110A] flex items-center justify-center cursor-pointer shadow-2xs text-xs font-bold"
+                              className="w-6 h-6 rounded bg-[#FAF8F5] hover:bg-[#1A110A] hover:text-white text-[#1A110A] flex items-center justify-center cursor-pointer text-xs"
                               title="تقليل 1 جرام"
                             >
                               <Minus className="w-3 h-3" />
                             </button>
 
                             <input
-                              type="range"
+                              type="number"
                               min="1"
-                              max="25"
+                              max="50"
                               step="1"
                               value={grams}
                               onChange={(e) =>
                                 handleAdditionGramsChange(
                                   add.id,
-                                  Number(e.target.value)
+                                  parseInt(e.target.value, 10)
                                 )
                               }
-                              className="flex-1 accent-[#C5A059] h-2 bg-gray-200 rounded-lg cursor-pointer"
+                              className="w-8 text-center font-price font-bold text-xs text-[#1A110A] focus:outline-none"
                             />
+                            <span className="text-[10px] text-[#C5A059] font-bold pl-1">
+                              جم
+                            </span>
 
                             <button
                               type="button"
                               onClick={() => handleStepAddition(add.id, 1)}
-                              className="w-6 h-6 rounded-lg bg-white border border-[#1A110A]/20 hover:bg-[#1A110A]/5 text-[#1A110A] flex items-center justify-center cursor-pointer shadow-2xs text-xs font-bold"
+                              className="w-6 h-6 rounded bg-[#FAF8F5] hover:bg-[#1A110A] hover:text-white text-[#1A110A] flex items-center justify-center cursor-pointer text-xs"
                               title="زيادة 1 جرام"
                             >
                               <Plus className="w-3 h-3" />
                             </button>
-
-                            <div className="flex items-center gap-1 bg-white border border-[#C5A059] rounded-xl px-2 py-0.5 shrink-0 shadow-2xs">
-                              <input
-                                type="number"
-                                min="1"
-                                max="50"
-                                step="1"
-                                value={grams}
-                                onChange={(e) =>
-                                  handleAdditionGramsChange(
-                                    add.id,
-                                    parseInt(e.target.value, 10)
-                                  )
-                                }
-                                className="w-9 font-price font-bold text-center text-xs text-[#1A110A] focus:outline-none"
-                              />
-                              <span className="text-[10px] text-[#C5A059] font-bold">
-                                جم
-                              </span>
-                            </div>
                           </div>
                         </div>
                       )}
@@ -798,47 +885,47 @@ export default function BlendBuilder({
               </div>
             </div>
 
-            {/* ================= STEP 4: BLEND NAME & NOTES ================= */}
-            <div className="pt-6 border-t border-dashed border-[#1A110A]/15 space-y-3">
+            {/* ----------------- STEP 5: BLEND NAME & NOTES ----------------- */}
+            <div className="pt-4 border-t border-dashed border-[#1A110A]/15 space-y-3">
               <div className="flex items-center gap-2.5">
                 <span className="w-7 h-7 rounded-full bg-[#1A110B] text-[#C5A059] font-price font-bold text-sm flex items-center justify-center shadow-xs">
-                  4
+                  5
                 </span>
                 <div>
-                  <h3 className="font-amiri text-xl font-bold text-[#1A110A]">
+                  <h3 className="font-amiri text-lg sm:text-xl font-bold text-[#1A110A]">
                     سمّي توليفك الخاصة (اختياري):
                   </h3>
                   <span className="text-[11px] text-[#1A110A]/60">
-                    اكتب اسماً مميزاً سنطبعه لك على كيس القهوة
+                    اكتب اسماً سنطبعه لك على كيس قهوتك الخاصة
                   </span>
                 </div>
               </div>
 
               <input
                 type="text"
-                placeholder="مثال: خلطة الصباح الملكية، قهوة ديوانية بدران، توليفة أبو علي..."
+                placeholder="مثال: خلطة الصباح، قهوة المزاج العالي، توليفة ديوانية بدران..."
                 value={blendName}
                 onChange={(e) => setBlendName(e.target.value)}
-                className="w-full py-3 px-4 bg-[#FAF8F5] border border-[#1A110A]/15 rounded-2xl text-xs sm:text-sm text-[#1A110A] focus:outline-none focus:border-[#C5A059] focus:bg-white transition-all shadow-2xs"
+                className="w-full py-2.5 px-4 bg-white border border-[#1A110A]/15 rounded-xl text-xs sm:text-sm text-[#1A110A] focus:outline-none focus:border-[#C5A059] shadow-2xs"
               />
             </div>
           </div>
 
-          {/* ================= RIGHT: LUXURY STICKY BLEND ATELIER SUMMARY (4 COLS) ================= */}
+          {/* ================= RIGHT: STICKY PASSPORT SUMMARY CARD (4-5 COLS) ================= */}
           <div className="lg:col-span-5 xl:col-span-4 sticky top-24 space-y-4 font-alexandria">
-            <div className="bg-[#FAF8F5] border-2 border-[#C5A059] rounded-3xl p-5 sm:p-6 shadow-sm space-y-5">
-              {/* Summary Header */}
+            <div className="bg-white border-2 border-[#C5A059] rounded-3xl p-5 sm:p-6 shadow-md space-y-5">
+              {/* Header */}
               <div className="flex items-center justify-between border-b border-dashed border-[#C5A059]/40 pb-4">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-9 h-9 rounded-2xl bg-[#1A110B] text-[#C5A059] flex items-center justify-center shadow-xs">
+                  <div className="w-9 h-9 rounded-xl bg-[#1A110B] text-[#C5A059] flex items-center justify-center shadow-xs">
                     <Scale className="w-4 h-4" />
                   </div>
                   <div>
-                    <h4 className="font-amiri text-xl font-bold text-[#1A110B]">
-                      ملخص التوليفة المباشر
+                    <h4 className="font-amiri text-lg font-bold text-[#1A110B]">
+                      بطاقة توليفة قهوتك
                     </h4>
                     <span className="text-[11px] text-[#1A110A]/60">
-                      {selectedComponentsList.length} أنواع بن مختارة
+                      {selectedComponentsList.length} أصناف بن مختارة
                     </span>
                   </div>
                 </div>
@@ -850,13 +937,13 @@ export default function BlendBuilder({
                 )}
               </div>
 
-              {/* Visual Multi-Bean Color Ratio Bar */}
+              {/* Recipe Ratio Preview Bar */}
               {blendResult.totalGrams > 0 ? (
                 <div className="space-y-2">
                   <span className="text-xs font-bold text-[#1A110A]/80 block">
-                    توزيع النسب في الفنجان:
+                    توزيع النسب في الكيس:
                   </span>
-                  <div className="h-3.5 w-full rounded-full overflow-hidden flex bg-gray-200 shadow-inner">
+                  <div className="h-3 w-full rounded-full overflow-hidden flex bg-gray-100 shadow-inner">
                     {blendResult.componentsRatio.map((comp) => (
                       <div
                         key={comp.bean.id}
@@ -864,24 +951,23 @@ export default function BlendBuilder({
                           width: `${comp.percentage}%`,
                           backgroundColor: comp.bean.color,
                         }}
-                        title={`${comp.bean.name}: ${comp.grams} جم (${comp.percentage}%)`}
                         className="h-full transition-all"
                       />
                     ))}
                   </div>
 
-                  {/* Ratio Legend Tags */}
-                  <div className="flex flex-wrap gap-1.5 pt-1">
+                  {/* Ratio Tags */}
+                  <div className="flex flex-wrap gap-1 pt-1">
                     {blendResult.componentsRatio.map((comp) => (
                       <span
                         key={comp.bean.id}
-                        className="inline-flex items-center gap-1 text-[10px] bg-white border border-[#1A110A]/10 px-2 py-0.5 rounded-lg font-price font-bold"
+                        className="inline-flex items-center gap-1 text-[10px] bg-[#FAF8F5] border border-[#1A110A]/10 px-2 py-0.5 rounded-md font-price font-bold"
                       >
                         <span
                           className="w-2 h-2 rounded-full shrink-0"
                           style={{ backgroundColor: comp.bean.color }}
                         />
-                        <span className="font-alexandria truncate max-w-[100px]">
+                        <span className="font-alexandria truncate max-w-[90px]">
                           {comp.bean.name.replace("بن ", "")}
                         </span>
                         <strong className="text-[#C5A059]">
@@ -892,13 +978,12 @@ export default function BlendBuilder({
                   </div>
                 </div>
               ) : (
-                <div className="p-3.5 bg-amber-50 border border-amber-200 rounded-2xl text-center text-amber-800 text-xs flex items-center gap-2">
-                  <Info className="w-4 h-4 text-amber-600 shrink-0" />
-                  <span>اختار نوع بن واحد على الأقل واكتب وزنه للبدء</span>
+                <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl text-center text-amber-800 text-xs">
+                  اختر أصناف البن من القائمة للبدء
                 </div>
               )}
 
-              {/* Detailed Breakdown List */}
+              {/* Breakdown List */}
               {blendResult.componentsRatio.length > 0 && (
                 <div className="space-y-2 max-h-44 overflow-y-auto pr-1 text-xs border-y border-dashed border-[#1A110A]/10 py-3">
                   {blendResult.componentsRatio.map((comp) => (
@@ -920,15 +1005,15 @@ export default function BlendBuilder({
                     </div>
                   ))}
 
-                  {/* Grind degree in summary */}
+                  {/* Grind Summary */}
                   <div className="flex items-center justify-between text-xs text-[#1A110A]/75 pt-1 border-t border-dashed border-[#1A110A]/10">
                     <span>درجة الطحن:</span>
-                    <span className="font-bold text-[#1A110A] truncate max-w-[160px]">
+                    <span className="font-bold text-[#1A110A] truncate max-w-[150px]">
                       {grind}
                     </span>
                   </div>
 
-                  {/* Active additions breakdown */}
+                  {/* Additions Summary */}
                   {blendResult.additionsPrice > 0 && (
                     <div className="space-y-1 pt-1 border-t border-dashed border-[#1A110A]/10">
                       {Object.entries(additionGrams)
@@ -955,22 +1040,22 @@ export default function BlendBuilder({
                 </div>
               )}
 
-              {/* Pricing Breakdown */}
-              <div className="space-y-2.5 pt-1">
+              {/* Total Calculation */}
+              <div className="space-y-2 pt-1">
                 <div className="flex items-baseline justify-between text-xs text-[#1A110A]/70">
-                  <span>سعر الكيلو المرجّح للتوليفة:</span>
+                  <span>سعر الكيلو التقديري للتوليفة:</span>
                   <strong className="font-price text-sm text-[#1A110A]">
                     {blendResult.weightedKiloPrice} ج.م / ك
                   </strong>
                 </div>
 
-                <div className="flex items-center justify-between bg-white p-3.5 rounded-2xl border border-[#C5A059] shadow-2xs">
+                <div className="flex items-center justify-between bg-[#FAF8F5] p-3.5 rounded-xl border border-[#C5A059]/50 shadow-2xs">
                   <div>
                     <span className="text-xs font-bold text-[#1A110A] block">
-                      الإجمالي المستحق:
+                      الإجمالي النهائي:
                     </span>
                     <span className="text-[10px] text-[#1A110A]/60">
-                      شامل الطحن الطازج والتعبئة
+                      شامل الطحن والتعبئة
                     </span>
                   </div>
                   <div className="font-price font-bold text-2xl text-[#C5A059]">
@@ -982,7 +1067,7 @@ export default function BlendBuilder({
                 </div>
               </div>
 
-              {/* Added to Cart Notification Alert */}
+              {/* Added Alert */}
               {addedAlert && (
                 <div className="p-3 bg-emerald-50 border border-emerald-300 rounded-xl text-emerald-800 text-xs text-center font-bold flex items-center justify-center gap-1.5 animate-fadeIn">
                   <CheckCircle className="w-4 h-4 text-emerald-600" />
@@ -990,7 +1075,7 @@ export default function BlendBuilder({
                 </div>
               )}
 
-              {/* Action Buttons */}
+              {/* Actions */}
               <div className="space-y-2.5 pt-1">
                 <button
                   type="button"
@@ -998,7 +1083,7 @@ export default function BlendBuilder({
                   onClick={handleAddToCartClick}
                   className={`w-full py-3.5 px-4 rounded-xl font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all shadow-md cursor-pointer ${
                     isValidBlend
-                      ? "bg-[#1A110B] hover:bg-[#2A1D15] text-[#FAF8F5] border border-[#C5A059]"
+                      ? "bg-[#1A110B] hover:bg-[#2A1D15] text-[#FAF8F5] border border-[#C5A059] active:scale-[0.98]"
                       : "bg-gray-200 text-gray-400 border border-gray-300 cursor-not-allowed shadow-none"
                   }`}
                 >
@@ -1006,7 +1091,7 @@ export default function BlendBuilder({
                   <span>
                     {isValidBlend
                       ? `أضف التوليفة للسلة (${blendResult.totalPrice} ج.م)`
-                      : "حدد نوع بن ووزنه للتفعيل"}
+                      : "اختر نوع بن ووزنه للتفعيل"}
                   </span>
                 </button>
 
