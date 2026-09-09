@@ -294,6 +294,7 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
           iconName: "Sparkles",
           description: "أصناف بن بدران المختارة بعناية والأعلى ترشيحاً لزبائننا الكرام",
           pageNumber: 3,
+          image: "/categories/blends.jpg",
           items: filteredProducts,
         },
       ];
@@ -507,24 +508,61 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
                 id={cat.id}
                 className="framed-section p-4 sm:p-6 md:p-8 bg-white"
               >
-                {/* Section Header */}
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-b border-dashed border-[#C5A059]/40 pb-4 mb-6">
-                  <div className="flex items-center gap-3">
-                    <span className="solid-badge text-sm md:text-base py-1.5 px-4 font-amiri font-bold">
-                      <span className="text-[#C5A059]">
-                        {getCategoryIcon(cat.iconName)}
-                      </span>
-                      <span>{cat.name}</span>
-                    </span>
-                    <span className="text-xs text-[#1A110A]/60 font-alexandria font-semibold">
-                      ({cat.items.length} صنف)
-                    </span>
-                  </div>
+                {/* Category Hero Banner with Representing Photo */}
+                {cat.image ? (
+                  <div className="relative overflow-hidden rounded-2xl mb-6 shadow-md border border-[#C5A059]/40 h-44 sm:h-52 md:h-64 group bg-[#1A110B]">
+                    <Image
+                      src={cat.image}
+                      alt={cat.name}
+                      fill
+                      className="object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out opacity-90"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1200px"
+                    />
+                    {/* Rich gradient overlays for luxury contrast and legibility */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#1A110B] via-[#1A110B]/60 to-black/25" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#1A110B]/20 to-[#1A110B]/85" />
 
-                  <p className="font-alexandria text-xs text-[#1A110A]/70 font-light max-w-md text-right">
-                    {cat.description}
-                  </p>
-                </div>
+                    {/* Banner Content */}
+                    <div className="absolute inset-0 p-4 sm:p-6 md:p-7 flex flex-col justify-end text-right z-10">
+                      <div className="flex flex-wrap items-center gap-2 mb-2">
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold font-alexandria bg-[#C5A059] text-[#1A110B] shadow-xs">
+                          {getCategoryIcon(cat.iconName)}
+                          <span>{cat.shortName || cat.name}</span>
+                        </span>
+                        <span className="text-[11px] sm:text-xs font-bold font-alexandria px-2.5 py-0.5 rounded-full bg-white/20 text-white backdrop-blur-xs border border-white/20">
+                          {cat.items.length} أصناف متوفرة
+                        </span>
+                      </div>
+
+                      <h3 className="font-amiri text-2xl sm:text-3xl md:text-4xl font-bold text-white drop-shadow-md leading-tight">
+                        {cat.name}
+                      </h3>
+
+                      <p className="font-alexandria text-xs sm:text-sm text-[#FAF8F5]/90 max-w-2xl leading-relaxed mt-1.5 font-light line-clamp-2 sm:line-clamp-none drop-shadow-sm">
+                        {cat.description}
+                      </p>
+                    </div>
+                  </div>
+                ) : (
+                  /* Fallback Header */
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-b border-dashed border-[#C5A059]/40 pb-4 mb-6">
+                    <div className="flex items-center gap-3">
+                      <span className="solid-badge text-sm md:text-base py-1.5 px-4 font-amiri font-bold">
+                        <span className="text-[#C5A059]">
+                          {getCategoryIcon(cat.iconName)}
+                        </span>
+                        <span>{cat.name}</span>
+                      </span>
+                      <span className="text-xs text-[#1A110A]/60 font-alexandria font-semibold">
+                        ({cat.items.length} صنف)
+                      </span>
+                    </div>
+
+                    <p className="font-alexandria text-xs text-[#1A110A]/70 font-light max-w-md text-right">
+                      {cat.description}
+                    </p>
+                  </div>
+                )}
 
                   {/* 2-Column Responsive Product Card Grid */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-5">

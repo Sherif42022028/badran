@@ -17,6 +17,7 @@ export interface CategoryInfo {
   iconName: string;
   description: string;
   pageNumber: number; // page in printed PDF menu
+  image?: string;
 }
 
 export const CATEGORIES_LIST: CategoryInfo[] = [
@@ -27,6 +28,7 @@ export const CATEGORIES_LIST: CategoryInfo[] = [
     iconName: "Flame",
     description: "بن بأنواع تحميص مختلفة، عبوات سريعة، نسكافيه وشاي بدران المميز",
     pageNumber: 3,
+    image: "/categories/basics.jpg",
   },
   {
     id: "blends",
@@ -35,6 +37,7 @@ export const CATEGORIES_LIST: CategoryInfo[] = [
     iconName: "Sparkles",
     description: "توليفات بدران الحصرية: اسبيشيال، السلطان، العميد، الملكي، وخلطات الاسبريسو",
     pageNumber: 10,
+    image: "/categories/blends.jpg",
   },
   {
     id: "indian",
@@ -43,6 +46,7 @@ export const CATEGORIES_LIST: CategoryInfo[] = [
     iconName: "Globe",
     description: "بن هندي بلنتيشن، أرابيكا وروبوستا بمذاق قوي ورغوة ذهبية متماسكة",
     pageNumber: 8,
+    image: "/categories/indian.jpg",
   },
   {
     id: "brazilian",
@@ -51,6 +55,7 @@ export const CATEGORIES_LIST: CategoryInfo[] = [
     iconName: "Sun",
     description: "سيرادو مختص، سانتوس الكلاسيكي، وريو بنكهات متوازنة وكثافة ممتازة",
     pageNumber: 9,
+    image: "/categories/brazilian.jpg",
   },
   {
     id: "habashi",
@@ -59,6 +64,7 @@ export const CATEGORIES_LIST: CategoryInfo[] = [
     iconName: "Coffee",
     description: "أجود حبوب البن الإثيوبي الهراري واللقميتي بطعم فاكهي وإيحاءات طبيعية عريقة",
     pageNumber: 11,
+    image: "/categories/habashi.jpg",
   },
   {
     id: "arabicas",
@@ -67,6 +73,7 @@ export const CATEGORIES_LIST: CategoryInfo[] = [
     iconName: "Coffee",
     description: "أجود حبوب البن الأرابيكا العالمية من كولومبيا، اليمن، جواتيمالا والمكسيك وغيرها",
     pageNumber: 11,
+    image: "/categories/arabicas.jpg",
   },
   {
     id: "french",
@@ -75,6 +82,7 @@ export const CATEGORIES_LIST: CategoryInfo[] = [
     iconName: "CupSoda",
     description: "بن فرنسي ناعم بنكهات البندق، الشوكولاتة، الكراميل، والفواكه الاستوائية",
     pageNumber: 7,
+    image: "/categories/french.jpg",
   },
   {
     id: "honey_tahina",
@@ -83,6 +91,7 @@ export const CATEGORIES_LIST: CategoryInfo[] = [
     iconName: "Sparkles",
     description: "عسل طبيعي نقي بأنواعه المختلفة، عسل مكسرات، وطحينة سمسم صافية",
     pageNumber: 4,
+    image: "/categories/honey_tahina.jpg",
   },
 ];
 
