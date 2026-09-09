@@ -54,7 +54,7 @@ type SortOption = "popular" | "price-asc" | "price-desc" | "alpha";
 
 export default function MenuSection({ onAddToCart }: MenuSectionProps) {
   const [activeTab, setActiveTab] = useState<"digital" | "printed">("digital");
-  const [selectedCategory, setSelectedCategory] = useState<string>("basics");
+  const [selectedCategory, setSelectedCategory] = useState<string>("custom_blend");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [sortBy, setSortBy] = useState<SortOption>("popular");
 
@@ -82,8 +82,8 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
     }));
   };
 
-  // Track which product has custom grams input box expanded
-  const [customWeightExpanded, setCustomWeightExpanded] = useState<
+  // Track which product has presets view active (default false = Free Weight Slider counter active)
+  const [productWeightPresetsView, setProductWeightPresetsView] = useState<
     Record<string, boolean>
   >({});
 
@@ -180,8 +180,8 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
     }));
   };
 
-  const toggleCustomWeightInput = (productId: string) => {
-    setCustomWeightExpanded((prev) => ({
+  const toggleWeightView = (productId: string) => {
+    setProductWeightPresetsView((prev) => ({
       ...prev,
       [productId]: !prev[productId],
     }));
@@ -189,13 +189,13 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
 
   const handleResetFilters = () => {
     setSearchQuery("");
-    setSelectedCategory("basics");
+    setSelectedCategory("custom_blend");
     setSortBy("popular");
   };
 
   const isFiltered =
     searchQuery.trim() !== "" ||
-    selectedCategory !== "basics" ||
+    selectedCategory !== "custom_blend" ||
     sortBy !== "popular";
 
   const handlePrevPage = () => {
@@ -565,8 +565,8 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
                         product,
                         currentSelection
                       );
-                      const isCustomWeightOpen =
-                        customWeightExpanded[product.id] || false;
+                      const isPresetsView =
+                        productWeightPresetsView[product.id] || false;
 
                     return (
                       <SpotlightCard
@@ -749,100 +749,212 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
                               </div>
                             )}
 
-                          {/* 5C. Weighted Products: 4 Quick Weight Buttons + Optional Custom Grams */}
+                          {/* 5C. Weighted Products: Free Weight Slider Counter & Presets */}
                           {isProductEligibleForGrams(product) &&
                             product.id !== "basic-plain-matrix" &&
                             product.id !== "basic-mohawaj-matrix" && (
-                              <div className="my-2.5 p-3 bg-[#FAF8F5] rounded-xl border border-[#1A110A]/10 space-y-2">
-                                <div className="flex items-center justify-between">
-                                  <span className="text-xs font-bold font-alexandria text-[#1A110A] flex items-center gap-1.5">
+                              <div className="my-2.5 p-3 bg-[#FAF8F5] rounded-xl border border-[#C5A059]/30 space-y-2.5 shadow-2xs">
+                                <div className="flex items-center justify-between gap-2">
+                                  <div className="flex items-center gap-1.5 font-bold text-xs font-alexandria text-[#1A110A]">
                                     <Scale className="w-3.5 h-3.5 text-[#C5A059]" />
-                                    <span>اختار الوزن المطلوب:</span>
-                                  </span>
+                                    <span>
+                                      {!isPresetsView
+                                        ? "أو اكتب الجرامات يدوياً (حسب رغبتك):"
+                                        : "اختار الوزن المطلوب:"}
+                                    </span>
+                                  </div>
                                   <button
-                                    onClick={() =>
-                                      toggleCustomWeightInput(product.id)
-                                    }
-                                    className="text-[11px] font-alexandria font-bold text-[#C5A059] hover:underline cursor-pointer"
+                                    type="button"
+                                    onClick={() => toggleWeightView(product.id)}
+                                    className="px-2.5 py-1 rounded-lg text-[11px] font-alexandria font-bold transition-all cursor-pointer bg-white border border-[#1A110A]/20 hover:border-[#C5A059] text-[#1A110A] shadow-2xs"
                                   >
-                                    {isCustomWeightOpen
-                                      ? "إخفاء الوزن المخصص"
-                                      : "وزن مخصص؟"}
+                                    {!isPresetsView
+                                      ? "الأوزان السريعة"
+                                      : "تفعيل الوزن الحر"}
                                   </button>
                                 </div>
 
-                                {/* 4 Clear Weight Preset Buttons with Instant Price */}
-                                <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
-                                  {weightPresets.map((preset) => {
-                                    const isSelected =
-                                      (currentSelection.customGrams || 250) ===
-                                      preset.grams;
-                                    return (
+                                {!isPresetsView ? (
+                                  /* Free Weight Slider View matching user's screenshot */
+                                  <div className="space-y-2 pt-0.5 animate-fadeIn">
+                                    <div className="flex items-center gap-2">
+                                      {/* Minus button on the right (RTL) */}
                                       <button
-                                        key={preset.grams}
+                                        type="button"
                                         onClick={() =>
                                           handleGramsSelect(
                                             product,
-                                            preset.grams
-                                          )
-                                        }
-                                        className={`p-2 rounded-xl text-center transition-all cursor-pointer border ${
-                                          isSelected
-                                            ? "bg-[#1A110B] text-white border-[#C5A059] shadow-xs ring-1 ring-[#C5A059]"
-                                            : "bg-white text-[#1A110A] border-[#1A110A]/15 hover:bg-[#1A110A]/5"
-                                        }`}
-                                      >
-                                        <span className="block text-xs font-alexandria font-bold leading-tight">
-                                          {preset.title}
-                                        </span>
-                                        <span className="block text-[10px] font-alexandria text-[#C5A059] font-semibold mt-0.5">
-                                          {preset.shortLabel}
-                                        </span>
-                                        <span
-                                          className={`block font-price text-xs font-bold mt-1 ${
-                                            isSelected
-                                              ? "text-white"
-                                              : "text-[#1A110A]/80"
-                                          }`}
-                                        >
-                                          {preset.price} ج.م
-                                        </span>
-                                      </button>
-                                    );
-                                  })}
-                                </div>
-
-                                {/* Custom Grams Field (Revealed only when activated) */}
-                                {isCustomWeightOpen && (
-                                  <div className="pt-2 border-t border-dashed border-[#1A110A]/10 flex items-center justify-between gap-2 animate-fadeIn">
-                                    <span className="text-[11px] font-alexandria text-[#1A110A]/70">
-                                      اكتب عدد الجرامات:
-                                    </span>
-                                    <div className="inline-flex items-center gap-1.5 bg-white border border-[#1A110A]/20 rounded-lg px-2 py-1">
-                                      <input
-                                        type="number"
-                                        min="25"
-                                        max="5000"
-                                        step="25"
-                                        placeholder="جرام"
-                                        value={
-                                          currentSelection.customGrams || 250
-                                        }
-                                        onChange={(e) =>
-                                          handleGramsSelect(
-                                            product,
                                             Math.max(
-                                              25,
-                                              Number(e.target.value) || 25
+                                              50,
+                                              (currentSelection.customGrams || 250) - 25
                                             )
                                           )
                                         }
-                                        className="w-16 text-center text-xs font-price font-bold text-[#1A110A] focus:outline-none"
+                                        className="w-8 h-8 flex items-center justify-center bg-white border border-[#1A110A]/20 rounded-xl hover:bg-[#1A110A]/5 text-[#1A110A] transition-all shrink-0 cursor-pointer shadow-2xs"
+                                        title="تقليل 25 جرام"
+                                      >
+                                        <Minus className="w-3.5 h-3.5" />
+                                      </button>
+
+                                      {/* Range slider */}
+                                      <input
+                                        type="range"
+                                        min="50"
+                                        max="2000"
+                                        step="25"
+                                        value={currentSelection.customGrams || 250}
+                                        onChange={(e) =>
+                                          handleGramsSelect(
+                                            product,
+                                            Number(e.target.value)
+                                          )
+                                        }
+                                        className="flex-1 accent-[#C5A059] h-2 bg-white rounded-lg cursor-pointer"
                                       />
-                                      <span className="text-xs font-alexandria text-[#1A110A]/60">
-                                        جم
-                                      </span>
+
+                                      {/* Plus button */}
+                                      <button
+                                        type="button"
+                                        onClick={() =>
+                                          handleGramsSelect(
+                                            product,
+                                            Math.min(
+                                              2000,
+                                              (currentSelection.customGrams || 250) + 25
+                                            )
+                                          )
+                                        }
+                                        className="w-8 h-8 flex items-center justify-center bg-white border border-[#1A110A]/20 rounded-xl hover:bg-[#1A110A]/5 text-[#1A110A] transition-all shrink-0 cursor-pointer shadow-2xs"
+                                        title="زيادة 25 جرام"
+                                      >
+                                        <Plus className="w-3.5 h-3.5" />
+                                      </button>
+
+                                      {/* Number input pill box matching screenshot */}
+                                      <div className="flex items-center gap-1 bg-white border border-[#C5A059] rounded-xl px-2.5 py-1 shrink-0 shadow-2xs">
+                                        <input
+                                          type="number"
+                                          min="50"
+                                          max="5000"
+                                          step="10"
+                                          value={currentSelection.customGrams || 250}
+                                          onChange={(e) =>
+                                            handleGramsSelect(
+                                              product,
+                                              Math.max(
+                                                25,
+                                                Math.min(
+                                                  5000,
+                                                  Number(e.target.value) || 25
+                                                )
+                                              )
+                                            )
+                                          }
+                                          className="w-12 font-price font-bold text-center text-xs text-[#1A110A] focus:outline-none"
+                                        />
+                                        <span className="text-[10px] font-alexandria text-[#C5A059] font-bold">
+                                          جم
+                                        </span>
+                                      </div>
                                     </div>
+
+                                    {/* Clickable Preset Ticks matching screenshot */}
+                                    <div className="flex justify-between text-[10px] text-[#1A110A]/70 font-price px-0.5 pt-0.5">
+                                      <button
+                                        type="button"
+                                        onClick={() => handleGramsSelect(product, 50)}
+                                        className={`hover:text-[#C5A059] cursor-pointer transition-colors ${
+                                          (currentSelection.customGrams || 250) === 50
+                                            ? "text-[#C5A059] font-bold underline"
+                                            : ""
+                                        }`}
+                                      >
+                                        50 جم (عينة خلطة)
+                                      </button>
+                                      <button
+                                        type="button"
+                                        onClick={() => handleGramsSelect(product, 250)}
+                                        className={`hover:text-[#C5A059] cursor-pointer transition-colors ${
+                                          (currentSelection.customGrams || 250) === 250
+                                            ? "text-[#C5A059] font-bold underline"
+                                            : ""
+                                        }`}
+                                      >
+                                        250 جم (ربع)
+                                      </button>
+                                      <button
+                                        type="button"
+                                        onClick={() => handleGramsSelect(product, 500)}
+                                        className={`hover:text-[#C5A059] cursor-pointer transition-colors ${
+                                          (currentSelection.customGrams || 250) === 500
+                                            ? "text-[#C5A059] font-bold underline"
+                                            : ""
+                                        }`}
+                                      >
+                                        500 جم (نصف)
+                                      </button>
+                                      <button
+                                        type="button"
+                                        onClick={() => handleGramsSelect(product, 1000)}
+                                        className={`hover:text-[#C5A059] cursor-pointer transition-colors ${
+                                          (currentSelection.customGrams || 250) === 1000
+                                            ? "text-[#C5A059] font-bold underline"
+                                            : ""
+                                        }`}
+                                      >
+                                        1000 جم (كيلو)
+                                      </button>
+                                      <button
+                                        type="button"
+                                        onClick={() => handleGramsSelect(product, 2000)}
+                                        className={`hover:text-[#C5A059] cursor-pointer transition-colors ${
+                                          (currentSelection.customGrams || 250) === 2000
+                                            ? "text-[#C5A059] font-bold underline"
+                                            : ""
+                                        }`}
+                                      >
+                                        2000 جم (2 ك)
+                                      </button>
+                                    </div>
+                                  </div>
+                                ) : (
+                                  /* Presets View (4 compact buttons) */
+                                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 pt-1 animate-fadeIn">
+                                    {weightPresets.map((preset) => {
+                                      const isSelected =
+                                        (currentSelection.customGrams || 250) ===
+                                        preset.grams;
+                                      return (
+                                        <button
+                                          key={preset.grams}
+                                          type="button"
+                                          onClick={() =>
+                                            handleGramsSelect(product, preset.grams)
+                                          }
+                                          className={`p-2 rounded-xl text-center transition-all cursor-pointer border ${
+                                            isSelected
+                                              ? "bg-[#1A110B] text-white border-[#C5A059] shadow-xs ring-1 ring-[#C5A059]"
+                                              : "bg-white text-[#1A110A] border-[#1A110A]/15 hover:bg-[#1A110A]/5"
+                                          }`}
+                                        >
+                                          <span className="block text-xs font-alexandria font-bold leading-tight">
+                                            {preset.title}
+                                          </span>
+                                          <span className="block text-[10px] font-alexandria text-[#C5A059] font-semibold mt-0.5">
+                                            {preset.shortLabel}
+                                          </span>
+                                          <span
+                                            className={`block font-price text-xs font-bold mt-1 ${
+                                              isSelected
+                                                ? "text-white"
+                                                : "text-[#1A110A]/80"
+                                            }`}
+                                          >
+                                            {preset.price} ج.م
+                                          </span>
+                                        </button>
+                                      );
+                                    })}
                                   </div>
                                 )}
                               </div>

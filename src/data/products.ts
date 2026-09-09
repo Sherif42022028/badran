@@ -21,20 +21,20 @@ export interface CategoryInfo {
 
 export const CATEGORIES_LIST: CategoryInfo[] = [
   {
-    id: "basics",
-    name: "1. الأساسيات والتحميص",
-    shortName: "الأساسيات",
-    iconName: "Flame",
-    description: "بن بأنواع تحميص مختلفة، عبوات سريعة، نسكافيه وشاي بدران المميز",
-    pageNumber: 3,
-  },
-  {
     id: "custom_blend",
-    name: "2. توليفتك على زوقك",
+    name: "1. توليفتك على زوقك",
     shortName: "توليفتك على زوقك",
     iconName: "Sparkles",
     description: "صمم خلطتك الخاصة بالجرام ونسب التحويج ونوع البن حسب ذوقك المفضل",
     pageNumber: 10,
+  },
+  {
+    id: "basics",
+    name: "2. الأساسيات والتحميص",
+    shortName: "الأساسيات",
+    iconName: "Flame",
+    description: "بن بأنواع تحميص مختلفة، عبوات سريعة، نسكافيه وشاي بدران المميز",
+    pageNumber: 3,
   },
   {
     id: "blends",
@@ -108,18 +108,16 @@ export const PRODUCTS_CATALOG: Product[] = [
       option1Name: "التحميص",
       option1Values: ["فاتح", "وسط", "غامق", "محروق"],
       option2Name: "العبوة",
-      option2Values: ["كيلو", "100 جم", "450جم جردل", "ربطة 30جم", "شريط 10 كيس (10ج)"],
+      option2Values: ["كيلو", "100 جم", "450جم جردل", "ربطة 30جم"],
       prices: {
         "فاتح|كيلو": 520,
         "فاتح|100 جم": 460,
         "فاتح|450جم جردل": 220,
         "فاتح|ربطة 30جم": 140,
-        "فاتح|شريط 10 كيس (10ج)": 90,
         "وسط|كيلو": 520,
         "وسط|100 جم": 460,
         "وسط|450جم جردل": 220,
         "وسط|ربطة 30جم": 140,
-        "وسط|شريط 10 كيس (10ج)": 90,
         "غامق|كيلو": 540,
         "غامق|100 جم": 480,
         "محروق|كيلو": 580,
@@ -157,7 +155,7 @@ export const PRODUCTS_CATALOG: Product[] = [
     description: "حبوب بن خضراء طبيعية 100% غير محمصة، غنية بحمض الكلوروجينيك ومضادات الأكسدة لدعم الحيوية والرشاقة ونقاء المذاق.",
     tier: 1,
     variantType: "none",
-    basePrice: 600,
+    basePrice: 640,
     unitLabel: "للكيلو",
   },
   {
@@ -167,7 +165,7 @@ export const PRODUCTS_CATALOG: Product[] = [
     description: "توليفة خليجية عريقة مع الحبهان الأخضر والزعفران الفاخر والشيبة.",
     tier: 1,
     variantType: "none",
-    basePrice: 800,
+    basePrice: 840,
     unitLabel: "للكيلو",
   },
   {
@@ -177,7 +175,7 @@ export const PRODUCTS_CATALOG: Product[] = [
     description: "أوراق شاي أسود سيلاني منتقاة بعناية للون ياقوتي ومذاق متوازن.",
     tier: 1,
     variantType: "none",
-    basePrice: 160,
+    basePrice: 200,
     unitLabel: "للكيلو",
   },
   {
@@ -187,7 +185,7 @@ export const PRODUCTS_CATALOG: Product[] = [
     description: "حبيبات قهوة سريعة التحضير نقية 100% بنكهة غنية قوية.",
     tier: 1,
     variantType: "none",
-    basePrice: 1000,
+    basePrice: 1040,
     unitLabel: "للكيلو",
   },
   {
@@ -197,7 +195,7 @@ export const PRODUCTS_CATALOG: Product[] = [
     description: "نسكافيه جولد بحبيبات ذهبية مجففة بالتجميد لنكهة أرابيكا ناعمة.",
     tier: 1,
     variantType: "none",
-    basePrice: 1200,
+    basePrice: 1240,
     unitLabel: "للكيلو",
   },
 
@@ -211,8 +209,8 @@ export const PRODUCTS_CATALOG: Product[] = [
     tier: 2,
     variantType: "preparation",
     variants: [
-      { id: "bl-spec-sada", label: "ساده (680 ج.م)", price: 680 },
-      { id: "bl-spec-mohawaj", label: "محوج بالحبهان (800 ج.م)", price: 800 },
+      { id: "bl-spec-sada", label: "ساده (760 ج.م)", price: 760 },
+      { id: "bl-spec-mohawaj", label: "محوج بالحبهان (880 ج.م)", price: 880 },
     ],
   },
   {
@@ -223,8 +221,8 @@ export const PRODUCTS_CATALOG: Product[] = [
     tier: 2,
     variantType: "preparation",
     variants: [
-      { id: "bl-sult-sada", label: "ساده (680 ج.م)", price: 680 },
-      { id: "bl-sult-mohawaj", label: "محوج بالحبهان (800 ج.م)", price: 800 },
+      { id: "bl-sult-sada", label: "ساده (760 ج.م)", price: 760 },
+      { id: "bl-sult-mohawaj", label: "محوج بالحبهان (880 ج.م)", price: 880 },
     ],
   },
   {
@@ -235,8 +233,8 @@ export const PRODUCTS_CATALOG: Product[] = [
     tier: 2,
     variantType: "preparation",
     variants: [
-      { id: "bl-am-sada", label: "ساده (920 ج.م)", price: 920 },
-      { id: "bl-am-mohawaj", label: "محوج بالحبهان (1040 ج.م)", price: 1040 },
+      { id: "bl-am-sada", label: "ساده (1000 ج.م)", price: 1000 },
+      { id: "bl-am-mohawaj", label: "محوج بالحبهان (1120 ج.م)", price: 1120 },
     ],
   },
   {
@@ -247,8 +245,8 @@ export const PRODUCTS_CATALOG: Product[] = [
     tier: 2,
     variantType: "preparation",
     variants: [
-      { id: "bl-mal-sada", label: "ساده (720 ج.م)", price: 720 },
-      { id: "bl-mal-mohawaj", label: "محوج بالحبهان (840 ج.م)", price: 840 },
+      { id: "bl-mal-sada", label: "ساده (800 ج.م)", price: 800 },
+      { id: "bl-mal-mohawaj", label: "محوج بالحبهان (920 ج.م)", price: 920 },
     ],
   },
   {
@@ -259,8 +257,8 @@ export const PRODUCTS_CATALOG: Product[] = [
     tier: 2,
     variantType: "preparation",
     variants: [
-      { id: "bl-asli-sada", label: "ساده (800 ج.م)", price: 800 },
-      { id: "bl-asli-mohawaj", label: "محوج بالحبهان (920 ج.م)", price: 920 },
+      { id: "bl-asli-sada", label: "ساده (880 ج.م)", price: 880 },
+      { id: "bl-asli-mohawaj", label: "محوج بالحبهان (1000 ج.م)", price: 1000 },
     ],
   },
   {
@@ -272,10 +270,10 @@ export const PRODUCTS_CATALOG: Product[] = [
     tier: 4,
     variantType: "weight",
     variants: [
-      { id: "esp-30", label: "اسبريسو 30% أرابيكا (كيلو)", price: 600 },
-      { id: "esp-50", label: "اسبريسو 50% أرابيكا (كيلو)", price: 720 },
-      { id: "esp-80", label: "اسبريسو 80% أرابيكا (كيلو)", price: 880 },
-      { id: "esp-mohawaj", label: "اسبريسو محوج بدران (كيلو)", price: 840 },
+      { id: "esp-30", label: "اسبريسو 30% أرابيكا (كيلو)", price: 680 },
+      { id: "esp-50", label: "اسبريسو 50% أرابيكا (كيلو)", price: 800 },
+      { id: "esp-80", label: "اسبريسو 80% أرابيكا (كيلو)", price: 960 },
+      { id: "esp-mohawaj", label: "اسبريسو محوج بدران (كيلو)", price: 920 },
     ],
   },
 
