@@ -194,6 +194,15 @@ export function getBaseKiloPrice(
   }
 
   if (product.tier === 4 && product.variants && product.variants.length > 0) {
+    const selectedVariant = options?.variantId
+      ? product.variants.find((v) => v.id === options.variantId)
+      : null;
+    if (selectedVariant && (selectedVariant.label.includes("كيلو") || product.category === "blends")) {
+      return {
+        price: selectedVariant.price,
+        label: "سعر الكيلو",
+      };
+    }
     const kiloVariant = product.variants.find(
       (v) => v.label.includes("كيلو") || v.label.includes("1000")
     );

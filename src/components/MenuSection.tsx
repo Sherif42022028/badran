@@ -709,15 +709,30 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
                             </div>
                           )}
 
-                          {/* 5B. Tier 2: Preparation Toggle (ساده / محوج) */}
-                          {product.tier === 2 &&
-                            product.variants &&
-                            product.variants.length > 0 && (
-                              <div className="my-2.5 p-2 bg-[#FAF8F5] rounded-xl border border-[#1A110A]/10 flex items-center justify-between gap-2">
-                                <span className="text-xs font-bold font-alexandria text-[#1A110A]">
-                                  نوع التحضير:
-                                </span>
-                                <div className="flex items-center gap-1.5">
+                          {/* 5B. Variants Selector (Preparation for Tier 2 OR Espresso Concentrations) */}
+                          {product.variants &&
+                            product.variants.length > 0 &&
+                            isProductEligibleForGrams(product) && (
+                              <div className="my-2.5 p-2.5 bg-[#FAF8F5] rounded-xl border border-[#1A110A]/10 space-y-1.5">
+                                <div className="flex items-center justify-between">
+                                  <span className="text-xs font-bold font-alexandria text-[#1A110A]">
+                                    {product.id === "blend-espresso-custom"
+                                      ? "تركيز ونوع الاسبريسو:"
+                                      : "نوع التحضير:"}
+                                  </span>
+                                  {product.id === "blend-espresso-custom" && (
+                                    <span className="text-[10px] font-alexandria text-[#C5A059] font-bold">
+                                      (اختر التركيز المطلوب)
+                                    </span>
+                                  )}
+                                </div>
+                                <div
+                                  className={
+                                    product.variants.length > 2
+                                      ? "grid grid-cols-1 sm:grid-cols-2 gap-1.5"
+                                      : "flex items-center gap-1.5"
+                                  }
+                                >
                                   {product.variants.map((v) => {
                                     const isSelected =
                                       (currentSelection.variantId ||
@@ -725,6 +740,7 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
                                     return (
                                       <button
                                         key={v.id}
+                                        type="button"
                                         onClick={() =>
                                           handleVariantSelect(
                                             product,
@@ -732,16 +748,31 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
                                             v.label
                                           )
                                         }
-                                        className={`px-3 py-1 rounded-lg text-xs font-alexandria font-bold transition-all flex items-center gap-1 cursor-pointer ${
+                                        className={`px-3 py-1.5 rounded-lg text-xs font-alexandria font-bold transition-all flex items-center justify-between gap-1.5 cursor-pointer border ${
                                           isSelected
-                                            ? "bg-[#1A110B] text-[#FAF8F5] shadow-xs"
+                                            ? "bg-[#1A110B] text-[#FAF8F5] border-[#C5A059] shadow-xs ring-1 ring-[#C5A059]"
                                             : "bg-white text-[#1A110A] border border-[#1A110A]/15 hover:bg-[#1A110A]/5"
                                         }`}
                                       >
-                                        {isSelected && (
-                                          <Check className="w-3 h-3 text-[#C5A059]" />
+                                        <div className="flex items-center gap-1">
+                                          {isSelected && (
+                                            <Check className="w-3.5 h-3.5 text-[#C5A059] shrink-0" />
+                                          )}
+                                          <span>
+                                            {v.label.replace(/\s*\(كيلو\)/, "")}
+                                          </span>
+                                        </div>
+                                        {product.id === "blend-espresso-custom" && (
+                                          <span
+                                            className={`font-price text-[11px] font-bold shrink-0 ${
+                                              isSelected
+                                                ? "text-[#C5A059]"
+                                                : "text-[#1A110A]/65"
+                                            }`}
+                                          >
+                                            {v.price} ج.م
+                                          </span>
                                         )}
-                                        <span>{v.label}</span>
                                       </button>
                                     );
                                   })}
