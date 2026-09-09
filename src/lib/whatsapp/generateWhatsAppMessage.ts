@@ -73,6 +73,9 @@ export function generateBlendWhatsAppMessage(order: CustomBlendOrder): string {
   }
 
   lines.push("");
+  lines.push("⚠️ *تنبيه الدفع والتجهيز:*");
+  lines.push("يتم سداد كامل المبلغ أثناء التأكيد عبر الواتساب، ولن يتم تجهيز أو خروج الأوردر إلا بعد تحصيل المبلغ كاملاً.");
+  lines.push("");
   lines.push(MESSAGE_DIVIDER);
   lines.push("شكراً لكم 🤎");
 
@@ -130,6 +133,9 @@ export function generateCartWhatsAppMessage(
     lines.push(notes.trim());
   }
 
+  lines.push("");
+  lines.push("⚠️ *تنبيه الدفع والتجهيز:*");
+  lines.push("يتم سداد كامل المبلغ أثناء التأكيد عبر الواتساب، ولن يتم تجهيز أو خروج الأوردر إلا بعد تحصيل المبلغ كاملاً.");
   lines.push("");
   lines.push(MESSAGE_DIVIDER);
   lines.push("قهوة تستحقها كل يوم ☕🤎");

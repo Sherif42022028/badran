@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { X, Plus, Minus, MessageSquare, ShoppingBag, User, Phone, FileText } from "lucide-react";
+import { X, Plus, Minus, MessageSquare, ShoppingBag, User, Phone, FileText, AlertCircle } from "lucide-react";
 import { trackContactClick } from "@/lib/analytics";
 import { generateOrderId } from "@/lib/orderId";
 import { WHATSAPP_NUMBER } from "@/config/whatsapp";
@@ -274,6 +274,19 @@ export default function CartModal({
                 <span className="font-price font-bold text-2xl text-[#F78320]">
                   {totalAmount} <span className="text-xs text-[#5C2A26]">ج.م</span>
                 </span>
+              </div>
+
+              {/* Payment Policy Notice */}
+              <div className="w-full bg-amber-50 border border-amber-300/80 rounded-xl p-2.5 text-xs text-amber-950 flex items-start gap-2 shadow-2xs leading-relaxed text-right">
+                <AlertCircle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                <div className="space-y-0.5">
+                  <strong className="font-bold block text-amber-900 font-alexandria text-[11px]">
+                    تنبيه الدفع وتجهيز الطلب:
+                  </strong>
+                  <p className="text-[11px] text-amber-950/85 leading-normal font-alexandria">
+                    يتم سداد قيمة الأوردر بالكامل أثناء التأكيد عبر الواتساب (عبر إنستاباي أو فودافون كاش)، ولن يتم تجهيز أو خروج الأوردر إلا بعد تحصيل المبلغ كاملاً.
+                  </p>
+                </div>
               </div>
 
               <div className="flex gap-2 pt-1">

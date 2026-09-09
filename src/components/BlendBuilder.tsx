@@ -14,6 +14,7 @@ import {
   RotateCcw,
   MessageSquare,
   Trash2,
+  AlertCircle,
 } from "lucide-react";
 import {
   Card,
@@ -1039,7 +1040,20 @@ export default function BlendBuilder({
               </Card.Content>
 
               {/* Card Footer: Actions */}
-              <Card.Footer className="p-5 pt-0 space-y-2.5 flex flex-col w-full">
+              <Card.Footer className="p-5 pt-0 space-y-3 flex flex-col w-full">
+                {/* Payment Policy Notice Box */}
+                <div className="w-full bg-amber-50 border border-amber-300/80 rounded-xl p-3 text-xs text-amber-950 flex items-start gap-2 shadow-2xs leading-relaxed text-right">
+                  <AlertCircle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                  <div className="space-y-0.5">
+                    <strong className="font-bold block text-amber-900 font-alexandria text-[11px] sm:text-xs">
+                      تنبيه هام بشأن الدفع وتجهيز الأوردر:
+                    </strong>
+                    <p className="text-[11px] text-amber-950/85 leading-normal font-alexandria">
+                      يتم سداد قيمة الأوردر بالكامل أثناء التأكيد عبر الواتساب (عبر إنستاباي أو فودافون كاش)، ولن يتم تجهيز أو خروج الأوردر إلا بعد تحصيل المبلغ كاملاً.
+                    </p>
+                  </div>
+                </div>
+
                 <Button
                   variant="primary"
                   isDisabled={!isValidBlend}

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { X, Send, Copy, Check, MessageSquare, ShoppingBag, User, MapPin, Store, CreditCard } from "lucide-react";
+import { X, Send, Copy, Check, MessageSquare, ShoppingBag, User, MapPin, Store, CreditCard, AlertCircle } from "lucide-react";
 import { CheckoutOrder } from "@/types/Order";
 
 interface OrderPreviewModalProps {
@@ -111,6 +111,19 @@ export default function OrderPreviewModal({
               <span className="font-bold text-[#25D366] mt-0.5 font-price">
                 {order.total} {order.currency || "ج.م"}
               </span>
+            </div>
+          </div>
+
+          {/* Payment & Processing Policy Banner */}
+          <div className="bg-amber-50 border border-amber-300 rounded-xl p-3.5 flex items-start gap-3 shadow-2xs text-right">
+            <AlertCircle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+            <div className="space-y-1">
+              <strong className="block text-amber-900 font-bold font-alexandria text-xs sm:text-sm">
+                تنبيه هام بشأن تأكيد الطلب والدفع:
+              </strong>
+              <p className="text-xs text-amber-950/90 leading-relaxed font-alexandria">
+                يتم سداد قيمة الأوردر بالكامل أثناء التأكيد عبر الواتساب (عبر إنستاباي أو فودافون كاش)، ولن يتم تجهيز أو خروج الأوردر إلا بعد تحصيل المبلغ كاملاً.
+              </p>
             </div>
           </div>
 
