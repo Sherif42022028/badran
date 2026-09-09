@@ -541,8 +541,8 @@ export const PRODUCTS_CATALOG: Product[] = [
     tier: 2,
     variantType: "preparation",
     variants: [
-      { id: "fr-haz-am-std", label: "عادي ناعم", price: 640 },
-      { id: "fr-haz-am-pcs", label: "مع قطع بندق مقرمشة", price: 680 },
+      { id: "fr-haz-am-std", label: "عادي ناعم", price: 680 },
+      { id: "fr-haz-am-pcs", label: "مع قطع بندق مقرمشة", price: 720 },
     ],
   },
   {
@@ -553,8 +553,8 @@ export const PRODUCTS_CATALOG: Product[] = [
     tier: 2,
     variantType: "preparation",
     variants: [
-      { id: "fr-haz-bd-std", label: "عادي ناعم", price: 520 },
-      { id: "fr-haz-bd-pcs", label: "مع قطع بندق", price: 600 },
+      { id: "fr-haz-bd-std", label: "عادي ناعم", price: 560 },
+      { id: "fr-haz-bd-pcs", label: "مع قطع بندق", price: 640 },
     ],
   },
   {
@@ -564,7 +564,7 @@ export const PRODUCTS_CATALOG: Product[] = [
     description: "القهوة الفرنسية التراثية الناعمة برغوة كريمية مخملية وطعم هادئ.",
     tier: 1,
     variantType: "none",
-    basePrice: 480,
+    basePrice: 520,
     unitLabel: "للكيلو",
   },
   {
@@ -575,12 +575,12 @@ export const PRODUCTS_CATALOG: Product[] = [
     tier: 4,
     variantType: "weight",
     variants: [
-      { id: "fr-choco", label: "فرنساوي شوكولاتة (كيلو)", price: 600 },
-      { id: "fr-mocha", label: "فرنساوي موكا غنية (كيلو)", price: 600 },
-      { id: "fr-vanilla", label: "فرنساوي فانيليا كريمية (كيلو)", price: 600 },
-      { id: "fr-caramel", label: "فرنساوي كراميل بالزبدة (كيلو)", price: 600 },
-      { id: "fr-hot-choco", label: "هوت شوكليت بدران (كيلو)", price: 520 },
-      { id: "fr-coffee-mix", label: "كوفي ميكس فرنسي (كيلو)", price: 480 },
+      { id: "fr-choco", label: "فرنساوي شوكولاتة (كيلو)", price: 640 },
+      { id: "fr-mocha", label: "فرنساوي موكا غنية (كيلو)", price: 640 },
+      { id: "fr-vanilla", label: "فرنساوي فانيليا كريمية (كيلو)", price: 640 },
+      { id: "fr-caramel", label: "فرنساوي كراميل بالزبدة (كيلو)", price: 640 },
+      { id: "fr-hot-choco", label: "هوت شوكليت بدران (كيلو)", price: 560 },
+      { id: "fr-coffee-mix", label: "كوفي ميكس فرنسي (كيلو)", price: 520 },
     ],
   },
   {
@@ -591,12 +591,12 @@ export const PRODUCTS_CATALOG: Product[] = [
     tier: 4,
     variantType: "weight",
     variants: [
-      { id: "fr-straw", label: "فرنساوي فراولة (كيلو)", price: 600 },
-      { id: "fr-mango", label: "فرنساوي مانجو (كيلو)", price: 600 },
-      { id: "fr-peach", label: "فرنساوي خوخ (كيلو)", price: 600 },
-      { id: "fr-banana", label: "فرنساوي موز (كيلو)", price: 600 },
-      { id: "fr-orange", label: "فرنساوي برتقال (كيلو)", price: 600 },
-      { id: "fr-apple", label: "فرنساوي تفاح (كيلو)", price: 600 },
+      { id: "fr-straw", label: "فرنساوي فراولة (كيلو)", price: 640 },
+      { id: "fr-mango", label: "فرنساوي مانجو (كيلو)", price: 640 },
+      { id: "fr-peach", label: "فرنساوي خوخ (كيلو)", price: 640 },
+      { id: "fr-banana", label: "فرنساوي موز (كيلو)", price: 640 },
+      { id: "fr-orange", label: "فرنساوي برتقال (كيلو)", price: 640 },
+      { id: "fr-apple", label: "فرنساوي تفاح (كيلو)", price: 640 },
     ],
   },
 
