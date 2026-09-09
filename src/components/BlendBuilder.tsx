@@ -543,22 +543,27 @@ export default function BlendBuilder({
                         )}
                       </div>
 
-                      {/* Bean Description */}
-                      <p className="font-alexandria text-[11px] text-[#1A110A]/70 font-light mt-1.5 line-clamp-1 leading-relaxed">
-                        {bean.description}
-                      </p>
-
-                      {/* Flavor tags */}
-                      <div className="flex items-center gap-1 mt-1 text-[#1A110A]/55">
-                        {bean.flavorNotes.slice(0, 3).map((fn) => (
+                      {/* Blend Role & Flavor Tags */}
+                      <div className="flex flex-wrap items-center gap-1.5 mt-1.5">
+                        {bean.blendRole && (
+                          <span className="text-[9px] font-bold text-[#C5A059] bg-[#1A110B] px-1.5 py-0.5 rounded font-alexandria shadow-2xs">
+                            🎯 {bean.blendRole}
+                          </span>
+                        )}
+                        {bean.flavorNotes.slice(0, 2).map((fn) => (
                           <span
                             key={fn}
-                            className="bg-white px-1.5 py-0.2 rounded border border-[#1A110A]/10 text-[9px] font-alexandria"
+                            className="bg-white px-1.5 py-0.5 rounded border border-[#1A110A]/10 text-[9px] font-alexandria text-[#1A110A]/60"
                           >
                             {fn}
                           </span>
                         ))}
                       </div>
+
+                      {/* Bean Description */}
+                      <p className="font-alexandria text-[11px] text-[#1A110A]/70 font-light mt-1 line-clamp-1 leading-relaxed">
+                        {bean.description}
+                      </p>
                     </div>
 
                     {/* Dedicated Grams Slider Counter (عداد الجرامات التفاعلي لكل صنف) */}
