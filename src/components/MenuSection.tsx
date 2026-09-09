@@ -728,7 +728,9 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
                                 </div>
                                 <div
                                   className={
-                                    product.variants.length > 2
+                                    product.variants.length === 3
+                                      ? "grid grid-cols-1 sm:grid-cols-3 gap-1.5"
+                                      : product.variants.length > 2
                                       ? "grid grid-cols-1 sm:grid-cols-2 gap-1.5"
                                       : "flex items-center gap-1.5"
                                   }

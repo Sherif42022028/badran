@@ -273,7 +273,6 @@ export const PRODUCTS_CATALOG: Product[] = [
       { id: "esp-30", label: "اسبريسو 30% أرابيكا (كيلو)", price: 680 },
       { id: "esp-50", label: "اسبريسو 50% أرابيكا (كيلو)", price: 800 },
       { id: "esp-80", label: "اسبريسو 80% أرابيكا (كيلو)", price: 960 },
-      { id: "esp-mohawaj", label: "اسبريسو محوج بدران (كيلو)", price: 920 },
     ],
   },
 
