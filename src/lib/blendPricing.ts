@@ -22,10 +22,10 @@ export interface BlendCalculationResult {
 }
 
 export const CARDAMOM_OPTIONS = [
-  { id: "سادة", label: "سادة بدون حبهان", pricePerKilo: 0 },
-  { id: "محوج خفيف", label: "محوج خفيف (+80 ج.م/ك)", pricePerKilo: 80 },
-  { id: "محوج وسط", label: "محوج وسط (+120 ج.م/ك)", pricePerKilo: 120 },
-  { id: "محوج رويال", label: "محوج رويال سوبر (+180 ج.م/ك)", pricePerKilo: 180 },
+  { id: "سادة", label: "سادة بدون حبهان", grams: 0, pricePerKilo: 0 },
+  { id: "محوج خفيف", label: "محوج خفيف (10 جم)", grams: 10, pricePerKilo: 80 },
+  { id: "محوج وسط", label: "محوج وسط (20 جم)", grams: 20, pricePerKilo: 120 },
+  { id: "محوج رويال", label: "محوج رويال سوبر (35 جم)", grams: 35, pricePerKilo: 180 },
 ] as const;
 
 export const ROAST_OPTIONS = ["فاتح", "وسط", "غامق", "محروق"] as const;
@@ -39,10 +39,10 @@ export const GRIND_OPTIONS = [
 ] as const;
 
 export const ADDITIONS_LIST = [
-  { id: "مستكة يوناني", label: "مستكة يوناني نقية", priceFixed: 20 },
-  { id: "زعفران حر", label: "زعفران إيراني حر فاخر", priceFixed: 35 },
-  { id: "زر ورد", label: "زر ورد جبلي معطر", priceFixed: 15 },
-  { id: "جوزة الطيب", label: "جوزة الطيب وقرنفل", priceFixed: 15 },
+  { id: "مستكة يوناني", label: "مستكة يوناني نقية", pricePerGram: 4, defaultGrams: 5 },
+  { id: "زعفران حر", label: "زعفران إيراني حر فاخر", pricePerGram: 15, defaultGrams: 2 },
+  { id: "زر ورد", label: "زر ورد جبلي معطر", pricePerGram: 3, defaultGrams: 5 },
+  { id: "جوزة الطيب", label: "جوزة الطيب وقرنفل", pricePerGram: 3, defaultGrams: 5 },
 ] as const;
 
 /**
@@ -51,7 +51,8 @@ export const ADDITIONS_LIST = [
 export function calculateCustomBlend(
   selectedComponents: SelectedBlendComponent[],
   cardamomId: string = "سادة",
-  selectedAdditions: string[] = []
+  selectedAdditions: string[] | Record<string, number> = [],
+  cardamomGramsOverride?: number
 ): BlendCalculationResult {
   const validComponents = selectedComponents.filter((c) => c.grams > 0);
   const totalGrams = validComponents.reduce((sum, c) => sum + c.grams, 0);
@@ -85,20 +86,38 @@ export function calculateCustomBlend(
 
   coffeePrice = Math.round(coffeePrice);
 
-  // 2. Cardamom adjustment (proportional to total grams)
-  const cardamomOpt =
-    CARDAMOM_OPTIONS.find((c) => c.id === cardamomId) || CARDAMOM_OPTIONS[0];
-  const cardamomPrice = Math.round((cardamomOpt.pricePerKilo * totalGrams) / 1000);
+  // 2. Cardamom adjustment
+  let cardamomPrice = 0;
+  if (cardamomGramsOverride !== undefined) {
+    // Direct grams for cardamom (e.g. 2.2 EGP per gram of premium green cardamom)
+    cardamomPrice = Math.round(cardamomGramsOverride * 2.2);
+  } else {
+    const cardamomOpt =
+      CARDAMOM_OPTIONS.find((c) => c.id === cardamomId) || CARDAMOM_OPTIONS[0];
+    cardamomPrice = Math.round((cardamomOpt.pricePerKilo * totalGrams) / 1000);
+  }
 
-  // 3. Additions price (scaled based on weight ratio)
-  const weightScale = Math.max(0.5, totalGrams / 500);
+  // 3. Additions price
   let additionsPrice = 0;
-  selectedAdditions.forEach((addId) => {
-    const found = ADDITIONS_LIST.find((a) => a.id === addId);
-    if (found) {
-      additionsPrice += Math.round(found.priceFixed * weightScale);
-    }
-  });
+  if (Array.isArray(selectedAdditions)) {
+    const weightScale = Math.max(0.5, totalGrams / 500);
+    selectedAdditions.forEach((addId) => {
+      const found = ADDITIONS_LIST.find((a) => a.id === addId);
+      if (found) {
+        additionsPrice += Math.round(found.pricePerGram * found.defaultGrams * weightScale);
+      }
+    });
+  } else {
+    // Record<string, number>
+    Object.entries(selectedAdditions).forEach(([addId, grams]) => {
+      if (grams > 0) {
+        const found = ADDITIONS_LIST.find((a) => a.id === addId);
+        if (found) {
+          additionsPrice += Math.round(found.pricePerGram * grams);
+        }
+      }
+    });
+  }
 
   const totalPrice = Math.max(10, coffeePrice + cardamomPrice + additionsPrice);
   const weightedKiloPrice = Math.round((totalPrice / totalGrams) * 1000);
