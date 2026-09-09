@@ -142,9 +142,8 @@ export const BLEND_COFFEE_BEANS: BlendBeanOrigin[] = [
 ];
 
 export const BLEND_ORIGIN_CATEGORIES = [
-  { id: "all", label: "كل حبوب التوليف" },
-  { id: "brazilian", label: "البن البرازيلي (الأساس)" },
-  { id: "indian", label: "البن الهندي (الوش والنكهة)" },
-  { id: "habashi", label: "البن الحبشي (العطرية)" },
-  { id: "world", label: "أصناف مكملة فاخرة" },
+  { id: "brazilian", label: "البن البرازيلي (الأساس والقوام)" },
+  { id: "indian", label: "البن الهندي (الوش والرغوة)" },
+  { id: "habashi", label: "البن الحبشي (العطرية والفاكهية)" },
+  { id: "world", label: "أصناف مكملة فاخرة (يمني، كولومبي...)" },
 ] as const;

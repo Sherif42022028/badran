@@ -9,13 +9,21 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@heroui/react": "^3.2.4",
+    "@heroui/styles": "^3.2.4",
     "@neondatabase/serverless": "^1.1.0",
+    "@react-aria/i18n": "^3.13.1",
+    "@react-aria/ssr": "^3.10.1",
+    "@react-aria/utils": "^3.34.1",
     "@tabler/icons-react": "^3.46.0",
     "lucide-react": "^1.28.0",
     "motion": "^12.43.0",
     "next": "16.2.12",
     "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "react-aria": "^3.52.1",
+    "react-aria-components": "^1.21.1",
+    "react-dom": "19.2.4",
+    "tailwind-variants": "^3.3.1"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
