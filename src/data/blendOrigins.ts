@@ -83,6 +83,28 @@ export const BLEND_COFFEE_BEANS: BlendBeanOrigin[] = [
     color: "#DC2626", // red-600
   },
   {
+    id: "hab-sid",
+    name: "بن حبشي سيدامو إثيوبي",
+    category: "habashi",
+    categoryLabel: "البن الحبشي",
+    blendRole: "نكهات زهرية ياسمينية وحموضة ناعمة",
+    kiloPrice: 920,
+    description: "أرابيكا إثيوبية راقية من مرتفعات سيدامو بنكهات زهرية فاخرة وقوام حريري يمنح التوليفة تميزاً فريداً.",
+    flavorNotes: ["زهور الياسمين", "حمضيات ناعمة", "قوام حريري"],
+    color: "#B91C1C", // red-700
+  },
+  {
+    id: "hab-lim",
+    name: "بن حبشي ليمو إثيوبي مختص",
+    category: "habashi",
+    categoryLabel: "البن الحبشي",
+    blendRole: "إيحاءات فاكهية نبيذية وحلاوة سكرية",
+    kiloPrice: 1080,
+    description: "حبوب أرابيكا مغسولة من منطقة ليمو، تضفي على التوليفة إيحاءات فاكهية نبيذية وتوازناً راقياً للغاية.",
+    flavorNotes: ["فاكهي نبيذي", "حلاوة سكرية", "توابل خفيفة"],
+    color: "#7F1D1D", // red-900
+  },
+  {
     id: "hab-djm",
     name: "بن حبشي ديمي أصيل",
     category: "habashi",
