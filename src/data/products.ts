@@ -21,16 +21,8 @@ export interface CategoryInfo {
 
 export const CATEGORIES_LIST: CategoryInfo[] = [
   {
-    id: "custom_blend",
-    name: "1. توليفتك على زوقك",
-    shortName: "توليفتك على زوقك",
-    iconName: "Sparkles",
-    description: "صمم خلطتك الخاصة بالجرام ونسب التحويج ونوع البن حسب ذوقك المفضل",
-    pageNumber: 10,
-  },
-  {
     id: "basics",
-    name: "2. الأساسيات والتحميص",
+    name: "1. الأساسيات والتحميص",
     shortName: "الأساسيات",
     iconName: "Flame",
     description: "بن بأنواع تحميص مختلفة، عبوات سريعة، نسكافيه وشاي بدران المميز",
@@ -38,7 +30,7 @@ export const CATEGORIES_LIST: CategoryInfo[] = [
   },
   {
     id: "blends",
-    name: "3. التوليفات والاسبريسو",
+    name: "2. التوليفات والاسبريسو",
     shortName: "التوليفات",
     iconName: "Sparkles",
     description: "توليفات بدران الحصرية: اسبيشيال، السلطان، العميد، الملكي، وخلطات الاسبريسو",
@@ -46,7 +38,7 @@ export const CATEGORIES_LIST: CategoryInfo[] = [
   },
   {
     id: "indian",
-    name: "4. البن الهندي",
+    name: "3. البن الهندي",
     shortName: "الهندي",
     iconName: "Globe",
     description: "بن هندي بلنتيشن، أرابيكا وروبوستا بمذاق قوي ورغوة ذهبية متماسكة",
@@ -54,7 +46,7 @@ export const CATEGORIES_LIST: CategoryInfo[] = [
   },
   {
     id: "brazilian",
-    name: "5. البن البرازيلي",
+    name: "4. البن البرازيلي",
     shortName: "البرازيلي",
     iconName: "Sun",
     description: "سيرادو مختص، سانتوس الكلاسيكي، وريو بنكهات متوازنة وكثافة ممتازة",
@@ -62,7 +54,7 @@ export const CATEGORIES_LIST: CategoryInfo[] = [
   },
   {
     id: "habashi",
-    name: "6. البن الحبشي",
+    name: "5. البن الحبشي",
     shortName: "الحبشي",
     iconName: "Coffee",
     description: "أجود حبوب البن الإثيوبي الهراري واللقميتي بطعم فاكهي وإيحاءات طبيعية عريقة",
@@ -70,7 +62,7 @@ export const CATEGORIES_LIST: CategoryInfo[] = [
   },
   {
     id: "arabicas",
-    name: "7. أرابيكات أخرى",
+    name: "6. أرابيكات أخرى",
     shortName: "أرابيكات أخرى",
     iconName: "Coffee",
     description: "أجود حبوب البن الأرابيكا العالمية من كولومبيا، اليمن، جواتيمالا والمكسيك وغيرها",
@@ -78,7 +70,7 @@ export const CATEGORIES_LIST: CategoryInfo[] = [
   },
   {
     id: "french",
-    name: "8. الفرنساويات والخلطات",
+    name: "7. الفرنساويات والخلطات",
     shortName: "فرنساويات",
     iconName: "CupSoda",
     description: "بن فرنسي ناعم بنكهات البندق، الشوكولاتة، الكراميل، والفواكه الاستوائية",
@@ -86,7 +78,7 @@ export const CATEGORIES_LIST: CategoryInfo[] = [
   },
   {
     id: "honey_tahina",
-    name: "9. العسل والطحينة",
+    name: "8. العسل والطحينة",
     shortName: "العسل والطحينة",
     iconName: "Sparkles",
     description: "عسل طبيعي نقي بأنواعه المختلفة، عسل مكسرات، وطحينة سمسم صافية",

@@ -56,16 +56,16 @@ export default function Header({ cartCount, onOpenCart }: HeaderProps) {
             عن المحل
           </a>
           <a
+            href="#blend-builder"
+            className="hover:text-[#C5A059] transition-colors py-1"
+          >
+            توليفتك على زوقك
+          </a>
+          <a
             href="#menu"
             className="hover:text-[#C5A059] transition-colors py-1"
           >
             أسعار المنيو
-          </a>
-          <a
-            href="#blend-builder"
-            className="hover:text-[#C5A059] transition-colors py-1"
-          >
-            ركّب خلطتك
           </a>
           <a
             href="#contact"
@@ -129,18 +129,18 @@ export default function Header({ cartCount, onOpenCart }: HeaderProps) {
             عن المحل
           </a>
           <a
+            href="#blend-builder"
+            onClick={() => setMobileMenuOpen(false)}
+            className="block py-2 text-[#1A110B] font-semibold border-b border-dashed border-[#1A110B]/10"
+          >
+            توليفتك على زوقك
+          </a>
+          <a
             href="#menu"
             onClick={() => setMobileMenuOpen(false)}
             className="block py-2 text-[#1A110B] font-semibold border-b border-dashed border-[#1A110B]/10"
           >
             أسعار المنيو
-          </a>
-          <a
-            href="#blend-builder"
-            onClick={() => setMobileMenuOpen(false)}
-            className="block py-2 text-[#1A110B] font-semibold border-b border-dashed border-[#1A110B]/10"
-          >
-            ركّب خلطتك
           </a>
           <a
             href="#contact"

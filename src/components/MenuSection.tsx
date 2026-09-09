@@ -41,7 +41,6 @@ import {
   Minus,
 } from "lucide-react";
 import SpotlightCard from "@/components/reactbits/SpotlightCard";
-import BlendBuilder from "@/components/BlendBuilder";
 
 interface MenuSectionProps {
   onAddToCart: (
@@ -55,7 +54,7 @@ type SortOption = "popular" | "price-asc" | "price-desc" | "alpha";
 
 export default function MenuSection({ onAddToCart }: MenuSectionProps) {
   const [activeTab, setActiveTab] = useState<"digital" | "printed">("digital");
-  const [selectedCategory, setSelectedCategory] = useState<string>("custom_blend");
+  const [selectedCategory, setSelectedCategory] = useState<string>("basics");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [sortBy, setSortBy] = useState<SortOption>("popular");
 
@@ -190,13 +189,13 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
 
   const handleResetFilters = () => {
     setSearchQuery("");
-    setSelectedCategory("custom_blend");
+    setSelectedCategory("basics");
     setSortBy("popular");
   };
 
   const isFiltered =
     searchQuery.trim() !== "" ||
-    selectedCategory !== "custom_blend" ||
+    selectedCategory !== "basics" ||
     sortBy !== "popular";
 
   const handlePrevPage = () => {
@@ -304,7 +303,7 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
       return CATEGORIES_LIST.map((cat) => ({
         ...cat,
         items: filteredProducts.filter((p) => p.category === cat.id),
-      })).filter((cat) => cat.items.length > 0 || cat.id === "custom_blend");
+      })).filter((cat) => cat.items.length > 0);
     }
 
     const currentCat = CATEGORIES_LIST.find((c) => c.id === selectedCategory);
@@ -527,11 +526,7 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
                   </p>
                 </div>
 
-                {/* Embedded Custom Blend Builder Section */}
-                {cat.id === "custom_blend" ? (
-                  <BlendBuilder onAddToCart={onAddToCart} isEmbedded={true} />
-                ) : (
-                  /* 2-Column Responsive Product Card Grid */
+                  {/* 2-Column Responsive Product Card Grid */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                     {cat.items.map((product) => {
                       const currentSelection = getProductSelection(product);
@@ -1085,8 +1080,7 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
                     );
                   })}
                 </div>
-              )}
-            </div>
+              </div>
           );
         })}
 

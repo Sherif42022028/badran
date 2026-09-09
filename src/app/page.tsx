@@ -4,6 +4,7 @@ import { useState } from "react";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import AboutSection from "@/components/AboutSection";
+import BlendBuilder from "@/components/BlendBuilder";
 import MenuSection from "@/components/MenuSection";
 import ReviewsSection from "@/components/ReviewsSection";
 import LocationContact from "@/components/LocationContact";
@@ -87,6 +88,7 @@ export default function Home() {
       <div className="flex-1">
         <Hero />
         <AboutSection />
+        <BlendBuilder onAddToCart={handleAddToCart} />
         <MenuSection onAddToCart={handleAddToCart} />
         <ReviewsSection />
         <LocationContact />
