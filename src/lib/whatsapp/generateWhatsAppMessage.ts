@@ -6,8 +6,8 @@ export interface CustomBlendOrder {
   customerName?: string;
   customerPhone?: string;
   blendName?: string;
-  roast: string;
-  cardamom: string;
+  roast?: string;
+  cardamom?: string;
   origin?: string;
   recipeBreakdown?: string;
   grind?: string;
@@ -46,11 +46,15 @@ export function generateBlendWhatsAppMessage(order: CustomBlendOrder): string {
     lines.push(`• *البن الأساسي:* ${order.origin}`);
   }
 
-  lines.push(`• *درجة التحميص:* ${order.roast}`);
+  if (order.roast) {
+    lines.push(`• *درجة التحميص:* ${order.roast}`);
+  }
   if (order.grind) {
     lines.push(`• *درجة الطحن:* ${order.grind}`);
   }
-  lines.push(`• *مستوى التحويج:* ${order.cardamom}`);
+  if (order.cardamom) {
+    lines.push(`• *مستوى التحويج:* ${order.cardamom}`);
+  }
   lines.push(
     `• *الإضافات:* ${
       order.additions && order.additions.length > 0

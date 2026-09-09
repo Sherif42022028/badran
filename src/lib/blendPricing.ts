@@ -39,10 +39,10 @@ export const GRIND_OPTIONS = [
 ] as const;
 
 export const ADDITIONS_LIST = [
-  { id: "مستكة يوناني", label: "مستكة يوناني نقية", pricePerGram: 4, defaultGrams: 5 },
-  { id: "زعفران حر", label: "زعفران إيراني حر فاخر", pricePerGram: 15, defaultGrams: 2 },
-  { id: "زر ورد", label: "زر ورد جبلي معطر", pricePerGram: 3, defaultGrams: 5 },
-  { id: "جوزة الطيب", label: "جوزة الطيب وقرنفل", pricePerGram: 3, defaultGrams: 5 },
+  { id: "مستكة يوناني", label: "مستكة يوناني نقية", pricePerGram: 4, defaultGrams: 1 },
+  { id: "زعفران حر", label: "زعفران إيراني حر فاخر", pricePerGram: 15, defaultGrams: 1 },
+  { id: "زر ورد", label: "زر ورد جبلي معطر", pricePerGram: 3, defaultGrams: 1 },
+  { id: "جوزة الطيب", label: "جوزة الطيب وقرنفل", pricePerGram: 3, defaultGrams: 1 },
 ] as const;
 
 /**
