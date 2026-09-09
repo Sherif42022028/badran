@@ -5,7 +5,6 @@ import Image from "next/image";
 import {
   CATEGORIES_LIST,
   PRODUCTS_CATALOG,
-  PRINTED_MENU_PAGES,
 } from "@/data/products";
 import { Product, SelectedProductOptions } from "@/types/products";
 import {
@@ -41,6 +40,7 @@ import {
   Minus,
 } from "lucide-react";
 import SpotlightCard from "@/components/reactbits/SpotlightCard";
+import PrintedMenuBooklet from "@/components/PrintedMenuBooklet";
 
 interface MenuSectionProps {
   onAddToCart: (
@@ -86,9 +86,6 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
   const [productWeightPresetsView, setProductWeightPresetsView] = useState<
     Record<string, boolean>
   >({});
-
-  // Lightbox index state (0 to 6) or null
-  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   // Store selected options for each product: { [productId]: SelectedProductOptions }
   const [productOptions, setProductOptions] = useState<
@@ -197,22 +194,6 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
     searchQuery.trim() !== "" ||
     selectedCategory !== "basics" ||
     sortBy !== "popular";
-
-  const handlePrevPage = () => {
-    if (lightboxIndex !== null) {
-      setLightboxIndex(
-        lightboxIndex > 0 ? lightboxIndex - 1 : PRINTED_MENU_PAGES.length - 1
-      );
-    }
-  };
-
-  const handleNextPage = () => {
-    if (lightboxIndex !== null) {
-      setLightboxIndex(
-        lightboxIndex < PRINTED_MENU_PAGES.length - 1 ? lightboxIndex + 1 : 0
-      );
-    }
-  };
 
   const getCategoryIcon = (iconName: string) => {
     switch (iconName) {
@@ -368,7 +349,7 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
             }`}
           >
             <FileText className="w-4 h-4 text-[#C5A059]" />
-            <span>معرض المنيو المطبوع (1-7)</span>
+            <span>كتالوج ومنيو بن بدران المطبوع</span>
           </button>
         </div>
       </div>
@@ -1145,126 +1126,9 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
         </div>
       )}
 
-      {/* ================= PRINTED MENU GALLERY (1-7) ================= */}
+      {/* ================= PRINTED MENU BOOKLET ================= */}
       {activeTab === "printed" && (
-        <div className="space-y-5 animate-fadeIn">
-          <p className="text-center font-alexandria text-xs md:text-sm text-[#1A110A]/75">
-            اضغط على أي صفحة لمشاهدتها بالحجم الكامل ومعاينة كافة الأسعار
-            والأصناف كما هي في المحل.
-          </p>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-            {PRINTED_MENU_PAGES.map((page, index) => (
-              <div
-                key={page.id}
-                onClick={() => setLightboxIndex(index)}
-                className="group relative rounded-xl border border-[#C5A059]/40 overflow-hidden bg-white shadow-xs cursor-pointer hover:shadow-md transition-all"
-              >
-                <div className="relative aspect-[3/4] w-full bg-[#1A110B]">
-                  <Image
-                    src={page.src}
-                    alt={page.title}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white font-alexandria text-xs font-bold gap-2">
-                    <ZoomIn className="w-5 h-5 text-[#C5A059]" />
-                    <span>انقر للتكبير والمعاينة</span>
-                  </div>
-                </div>
-
-                <div className="p-3 bg-white border-t border-[#1A110A]/10 flex items-center justify-between">
-                  <span className="font-alexandria font-bold text-xs text-[#1A110A]">
-                    صفحة {page.id}: {page.title}
-                  </span>
-                  <ZoomIn className="w-4 h-4 text-[#C5A059] group-hover:scale-110 transition-transform" />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* LIGHTBOX MODAL WITH NEXT / PREV CAROUSEL */}
-      {lightboxIndex !== null && (
-        <div
-          onClick={() => setLightboxIndex(null)}
-          className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 animate-fadeIn"
-        >
-          <div
-            onClick={(e) => e.stopPropagation()}
-            className="relative w-full max-w-5xl max-h-[92vh] bg-[#1A110A] border border-[#C5A059]/60 rounded-2xl p-4 overflow-hidden flex flex-col items-center shadow-2xl"
-          >
-            {/* Lightbox Header Controls */}
-            <div className="w-full flex items-center justify-between border-b border-dashed border-[#C5A059]/30 pb-3 mb-3 text-white">
-              <div className="flex items-center gap-2">
-                <span className="bg-[#C5A059] text-white font-bold px-2.5 py-0.5 rounded-md text-xs font-price">
-                  {lightboxIndex + 1} / {PRINTED_MENU_PAGES.length}
-                </span>
-                <h4 className="font-amiri text-lg text-[#C5A059] font-bold">
-                  {PRINTED_MENU_PAGES[lightboxIndex].title}
-                </h4>
-              </div>
-
-              <button
-                onClick={() => setLightboxIndex(null)}
-                className="bg-white/10 hover:bg-white/20 text-[#FAF8F5] p-2 rounded-lg transition-colors border border-white/20 cursor-pointer"
-                aria-label="إغلاق"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            {/* Lightbox Image View with Navigation Buttons */}
-            <div className="relative w-full h-[72vh] flex items-center justify-center bg-black/40 rounded-xl overflow-hidden">
-              {/* Previous Page Button */}
-              <button
-                onClick={handlePrevPage}
-                className="absolute right-3 z-30 bg-[#1A110A]/80 hover:bg-[#C5A059] text-white p-3 rounded-full border border-[#C5A059]/40 transition-all shadow-md active:scale-95 cursor-pointer"
-                title="الصفحة السابقة"
-              >
-                <ChevronRight className="w-6 h-6" />
-              </button>
-
-              {/* High-res Image */}
-              <div className="relative w-full h-full">
-                <Image
-                  src={PRINTED_MENU_PAGES[lightboxIndex].src}
-                  alt={PRINTED_MENU_PAGES[lightboxIndex].title}
-                  fill
-                  className="object-contain"
-                  priority
-                />
-              </div>
-
-              {/* Next Page Button */}
-              <button
-                onClick={handleNextPage}
-                className="absolute left-3 z-30 bg-[#1A110A]/80 hover:bg-[#C5A059] text-white p-3 rounded-full border border-[#C5A059]/40 transition-all shadow-md active:scale-95 cursor-pointer"
-                title="الصفحة التالية"
-              >
-                <ChevronLeft className="w-6 h-6" />
-              </button>
-            </div>
-
-            {/* Quick Page Indicator Thumbnails */}
-            <div className="flex items-center gap-2 mt-3 overflow-x-auto max-w-full pb-1">
-              {PRINTED_MENU_PAGES.map((pg, idx) => (
-                <button
-                  key={pg.id}
-                  onClick={() => setLightboxIndex(idx)}
-                  className={`px-3 py-1 rounded-md text-xs font-alexandria font-bold transition-all cursor-pointer ${
-                    lightboxIndex === idx
-                      ? "bg-[#C5A059] text-white shadow-xs"
-                      : "bg-white/10 text-white/70 hover:bg-white/20"
-                  }`}
-                >
-                  صفحة {pg.id}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
+        <PrintedMenuBooklet />
       )}
     </section>
   );
