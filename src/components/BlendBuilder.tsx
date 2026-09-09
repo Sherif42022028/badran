@@ -1,34 +1,122 @@
 "use client";
 
-import { useState } from "react";
-import { Sparkles, Coffee, CheckCircle, MessageSquare, User, Phone, FileText, Scale, Plus, Minus } from "lucide-react";
+import { useState, useMemo } from "react";
+import {
+  Sparkles,
+  Coffee,
+  CheckCircle,
+  Plus,
+  Minus,
+  Scale,
+  Search,
+  ShoppingBag,
+  Sliders,
+  Flame,
+  Check,
+  RotateCcw,
+  MessageSquare,
+  Info,
+} from "lucide-react";
+import {
+  BLEND_COFFEE_BEANS,
+  BLEND_ORIGIN_CATEGORIES,
+  BlendBeanOrigin,
+} from "@/data/blendOrigins";
+import {
+  calculateCustomBlend,
+  CARDAMOM_OPTIONS,
+  ROAST_OPTIONS,
+  GRIND_OPTIONS,
+  ADDITIONS_LIST,
+  SelectedBlendComponent,
+} from "@/lib/blendPricing";
 import { trackContactClick } from "@/lib/analytics";
 import { generateOrderId } from "@/lib/orderId";
 import { WHATSAPP_NUMBER } from "@/config/whatsapp";
 import { buildWhatsAppLink } from "@/lib/whatsapp/buildWhatsAppLink";
-import { generateBlendWhatsAppMessage, CustomBlendOrder } from "@/lib/whatsapp/generateWhatsAppMessage";
+import {
+  generateBlendWhatsAppMessage,
+  CustomBlendOrder,
+} from "@/lib/whatsapp/generateWhatsAppMessage";
 import OrderPreviewModal from "@/components/OrderPreviewModal";
 import { CheckoutOrder } from "@/types/Order";
+import { Product } from "@/types/products";
 
-export default function BlendBuilder() {
+interface BlendBuilderProps {
+  onAddToCart?: (
+    item: Product,
+    selectedPrice: { unit: string; label: string; price: number },
+    quantity?: number
+  ) => void;
+  isEmbedded?: boolean;
+}
+
+export default function BlendBuilder({
+  onAddToCart,
+  isEmbedded = false,
+}: BlendBuilderProps) {
+  // Selected components: mapping bean.id -> grams
+  const [selectedGrams, setSelectedGrams] = useState<Record<string, number>>({
+    "hab-har": 150,
+    "br-san": 100,
+  });
+
+  const [activeCategory, setActiveCategory] = useState<string>("all");
+  const [searchQuery, setSearchQuery] = useState<string>("");
+
+  // Customization options
+  const [blendName, setBlendName] = useState<string>("");
   const [roast, setRoast] = useState<string>("وسط");
-  const [cardamom, setCardamom] = useState<string>("محوج وسط");
-  const [origin, setOrigin] = useState<string>("خلطة كولومبي وحبشي");
-  const [additions, setAdditions] = useState<string[]>(["مستكة يوناني"]);
-  
-  // Custom Grams State
-  const [isCustomGrams, setIsCustomGrams] = useState<boolean>(false);
-  const [customGrams, setCustomGrams] = useState<number>(250);
-  const [presetWeight, setPresetWeight] = useState<string>("ربع كيلو — 250 جم");
-
-  const [customerName, setCustomerName] = useState<string>("");
-  const [customerPhone, setCustomerPhone] = useState<string>("");
+  const [grind, setGrind] = useState<string>("تركي ناعم كلاسيكي (مع الوش)");
+  const [cardamom, setCardamom] = useState<string>("سادة");
+  const [additions, setAdditions] = useState<string[]>([]);
   const [notes, setNotes] = useState<string>("");
 
+  // WhatsApp Checkout Modal states
+  const [customerName, setCustomerName] = useState<string>("");
+  const [customerPhone, setCustomerPhone] = useState<string>("");
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [builtMessage, setBuiltMessage] = useState("");
-  const [checkoutOrderObj, setCheckoutOrderObj] = useState<CheckoutOrder | null>(null);
+  const [checkoutOrderObj, setCheckoutOrderObj] = useState<CheckoutOrder | null>(
+    null
+  );
+  const [addedAlert, setAddedAlert] = useState(false);
 
+  // Toggle bean selection
+  const handleToggleBean = (bean: BlendBeanOrigin) => {
+    setSelectedGrams((prev) => {
+      const next = { ...prev };
+      if (next[bean.id] !== undefined) {
+        delete next[bean.id];
+      } else {
+        next[bean.id] = 100; // default 100 grams
+      }
+      return next;
+    });
+  };
+
+  // Change grams for a selected bean
+  const handleGramsChange = (beanId: string, value: number) => {
+    const valid = Math.max(1, Math.min(5000, isNaN(value) ? 1 : value));
+    setSelectedGrams((prev) => ({
+      ...prev,
+      [beanId]: valid,
+    }));
+  };
+
+  // Step grams (+/- delta)
+  const handleStepGrams = (beanId: string, delta: number) => {
+    setSelectedGrams((prev) => {
+      const current = prev[beanId] || 100;
+      const nextVal = Math.max(1, Math.min(5000, current + delta));
+      return {
+        ...prev,
+        [beanId]: nextVal,
+      };
+    });
+  };
+
+  // Toggle addition
   const toggleAddition = (item: string) => {
     if (additions.includes(item)) {
       setAdditions(additions.filter((a) => a !== item));
@@ -37,75 +125,104 @@ export default function BlendBuilder() {
     }
   };
 
-  // Base price per kilo depending on coffee origin
-  const originKiloPrices: Record<string, number> = {
-    "خلطة كولومبي وحبشي": 760,
-    "بن يمني أصيل 100%": 1800,
-    "توليفة بن بدران الخاصة": 680,
-    "بن برازيلي سانتوس": 720,
-    "بن هندي بلانتيشن": 760,
+  // Filter beans
+  const filteredBeans = useMemo(() => {
+    const q = searchQuery.toLowerCase().trim();
+    return BLEND_COFFEE_BEANS.filter((b) => {
+      if (activeCategory !== "all" && b.category !== activeCategory) {
+        return false;
+      }
+      if (q) {
+        const matchName = b.name.toLowerCase().includes(q);
+        const matchDesc = b.description.toLowerCase().includes(q);
+        const matchFlavor = b.flavorNotes.some((fn) =>
+          fn.toLowerCase().includes(q)
+        );
+        return matchName || matchDesc || matchFlavor;
+      }
+      return true;
+    });
+  }, [activeCategory, searchQuery]);
+
+  // Selected components array for calculations
+  const selectedComponentsList: SelectedBlendComponent[] = useMemo(() => {
+    return Object.entries(selectedGrams)
+      .map(([beanId, grams]) => {
+        const bean = BLEND_COFFEE_BEANS.find((b) => b.id === beanId);
+        return bean ? { bean, grams } : null;
+      })
+      .filter(Boolean) as SelectedBlendComponent[];
+  }, [selectedGrams]);
+
+  // Dynamic price calculation
+  const blendResult = useMemo(() => {
+    return calculateCustomBlend(selectedComponentsList, cardamom, additions);
+  }, [selectedComponentsList, cardamom, additions]);
+
+  // Validation
+  const isValidBlend =
+    selectedComponentsList.length > 0 && blendResult.totalGrams >= 1;
+
+  // Add to Cart
+  const handleAddToCartClick = () => {
+    if (!isValidBlend) return;
+
+    const finalBlendName =
+      blendName.trim() ||
+      `توليفة خاصة (${selectedComponentsList.map((c) => c.bean.name.split(" ")[1] || c.bean.name).join(" + ")})`;
+
+    const customBlendProduct: Product = {
+      id: `custom-blend-${Date.now()}`,
+      name: finalBlendName,
+      category: "custom_blend",
+      description: blendResult.summaryRecipe,
+      badge: "توليفة على زوقك",
+      tier: 1,
+      variantType: "none",
+      basePrice: blendResult.totalPrice,
+      unitLabel: `${blendResult.totalGrams} جم`,
+    };
+
+    const detailsLabel = `${blendResult.summaryRecipe} | تحميص: ${roast} | طحن: ${grind} | ${cardamom}${
+      additions.length > 0 ? ` + ${additions.join("، ")}` : ""
+    }`;
+
+    if (onAddToCart) {
+      onAddToCart(
+        customBlendProduct,
+        {
+          unit: `${blendResult.totalGrams} جم`,
+          label: detailsLabel,
+          price: blendResult.totalPrice,
+        },
+        1
+      );
+
+      setAddedAlert(true);
+      setTimeout(() => setAddedAlert(false), 4000);
+    }
   };
 
-  // Cardamom additions per kilo
-  const cardamomAddonsPerKilo: Record<string, number> = {
-    "سادة": 0,
-    "محوج خفيف": 80,
-    "محوج وسط": 120,
-    "محوج رويال سوبر": 180,
-  };
-
-  // Active weight in grams
-  const effectiveGrams = isCustomGrams
-    ? customGrams
-    : presetWeight === "ثمن كيلو — 125 جم"
-    ? 125
-    : presetWeight === "ربع كيلو — 250 جم"
-    ? 250
-    : presetWeight === "نصف كيلو — 500 جم"
-    ? 500
-    : 1000;
-
-  const displayWeightLabel = isCustomGrams
-    ? `${customGrams} جرام (توليفة مخصصة)`
-    : presetWeight;
-
-  // Calculate dynamic price proportional to grams
-  const baseKilo = originKiloPrices[origin] || 680;
-  const cardamomKilo = cardamomAddonsPerKilo[cardamom] || 0;
-  const totalKiloPrice = baseKilo + cardamomKilo;
-
-  const weightRatio = effectiveGrams / 1000;
-  const coffeePrice = Math.round(totalKiloPrice * weightRatio);
-  const additionsPrice = additions.length * Math.round(15 * Math.max(weightRatio, 0.25));
-  const totalCalculated = Math.max(coffeePrice + additionsPrice, 20);
-
-  const handlePresetSelect = (w: string, grams: number) => {
-    setIsCustomGrams(false);
-    setPresetWeight(w);
-    setCustomGrams(grams);
-  };
-
-  const handleCustomGramsChange = (val: number) => {
-    const clamped = Math.max(50, Math.min(val || 50, 5000));
-    setCustomGrams(clamped);
-    setIsCustomGrams(true);
-  };
-
+  // Open Direct WhatsApp Preview Modal
   const handleOpenPreview = () => {
+    if (!isValidBlend) return;
     trackContactClick("whatsapp");
 
     const orderId = generateOrderId("BD");
+    const finalBlendName = blendName.trim() || "توليفتك على زوقك الخاصة";
 
     const blendOrder: CustomBlendOrder = {
       orderId,
       customerName,
       customerPhone,
+      blendName: finalBlendName,
       roast,
       cardamom,
-      origin,
+      recipeBreakdown: blendResult.summaryRecipe,
+      grind,
       additions,
-      weight: displayWeightLabel,
-      totalPrice: totalCalculated,
+      weight: `${blendResult.totalGrams} جم (سعر الكيلو التقديري: ${blendResult.weightedKiloPrice} ج.م)`,
+      totalPrice: blendResult.totalPrice,
       notes,
     };
 
@@ -120,17 +237,22 @@ export default function BlendBuilder() {
       orderType: "Pickup",
       items: [
         {
-          name: `خلطة بن خاصة (${origin}) - ${displayWeightLabel}`,
+          name: finalBlendName,
           quantity: 1,
           options: {
-            size: displayWeightLabel,
+            size: `${blendResult.totalGrams} جم`,
             sugar: cardamom,
-            extras: [`التحميص: ${roast}`, ...additions],
+            extras: [
+              `الخلطة: ${blendResult.summaryRecipe}`,
+              `التحميص: ${roast}`,
+              `الطحن: ${grind}`,
+              ...additions,
+            ],
           },
         },
       ],
-      subtotal: totalCalculated,
-      total: totalCalculated,
+      subtotal: blendResult.totalPrice,
+      total: blendResult.totalPrice,
       paymentMethod: "Cash",
       additionalNote: notes || undefined,
       currency: "ج.م",
@@ -153,12 +275,14 @@ export default function BlendBuilder() {
           const lastOrder = {
             orderId: checkoutOrderObj?.orderId,
             type: "Custom Blend",
+            blendName: blendName.trim() || "توليفتك الخاصة",
+            recipe: blendResult.summaryRecipe,
             roast,
             cardamom,
-            origin,
+            grind,
             additions,
-            weight: displayWeightLabel,
-            totalPrice: totalCalculated,
+            weight: `${blendResult.totalGrams} جم`,
+            totalPrice: blendResult.totalPrice,
             customerName,
             customerPhone,
             notes,
@@ -177,337 +301,541 @@ export default function BlendBuilder() {
     }
   };
 
+  const resetBlend = () => {
+    setSelectedGrams({});
+    setBlendName("");
+    setNotes("");
+    setAdditions([]);
+  };
+
   return (
-    <section id="blend-builder" className="py-6 md:py-10 px-4 max-w-7xl mx-auto">
-      <div className="framed-section p-5 sm:p-8 md:p-10 bg-white">
-        {/* Section Header */}
+    <section
+      id="blend-builder"
+      className={`max-w-7xl mx-auto ${
+        isEmbedded ? "py-2" : "py-6 md:py-12 px-3 sm:px-5"
+      }`}
+    >
+      <div className="framed-section p-4 sm:p-6 md:p-8 bg-white shadow-xs">
+        {/* Header */}
         <div className="text-center mb-6">
-          <span className="solid-badge text-xs md:text-sm mb-2 py-1 px-4">
+          <span className="solid-badge text-xs md:text-sm mb-2 py-1 px-4 inline-flex items-center gap-1.5 font-alexandria">
             <Sparkles className="w-4 h-4 text-[#C5A059]" />
-            <span>ازاي بتحب قهوتك؟ ركّب خلطتك بالجرام على مزاجك</span>
+            <span>صمم خلطتك بالجرام على مزاجك</span>
           </span>
-          <h3 className="font-amiri text-2xl sm:text-3xl md:text-4xl font-bold text-[#1A110B] mt-2">
-            مُصمم توليفات بن بدران الخاصة
-          </h3>
-          <p className="font-alexandria text-xs md:text-sm text-[#1A110A]/75 max-w-2xl mx-auto mt-2 font-light leading-relaxed">
-            اختار البن الأساسي ودرجة التحميص ونسبة الحبهان والإضافات، وحدد الجرامات بدقة حسب راحتك وسنحسب لك السعر الفوري ونطحنها لك طازجة في المحل.
+          <h2 className="font-amiri text-2xl sm:text-3xl md:text-4xl font-bold text-[#1A110B] mt-2">
+            توليفتك على زوقك — ركّب خلطة بن خاصة بك بالجرام
+          </h2>
+          <p className="font-alexandria text-xs sm:text-sm text-[#1A110A]/75 max-w-2xl mx-auto mt-2 font-light leading-relaxed">
+            اختار أي عدد من أنواع البن المتاحة، واكتب وزن كل نوع بالجرام بحرية تامة.
+            سنحسب لك السعر تلقائياً بالمتوسط المرجّح ونطحنها لك طازجة بالنسب المطلوبة.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          {/* Builder Controls */}
-          <div className="lg:col-span-8 space-y-6 font-alexandria">
-            {/* 1. Roast Selection */}
-            <div>
-              <label className="font-amiri text-lg font-bold text-[#1A110A] block mb-2">
-                1. درجة التحميص:
-              </label>
-              <div className="grid grid-cols-3 gap-2.5">
-                {["فاتح", "وسط", "غامق"].map((title) => (
-                  <button
-                    key={title}
-                    type="button"
-                    onClick={() => setRoast(title)}
-                    className={`p-3 rounded-xl border text-xs font-bold transition-all ${
-                      roast === title
-                        ? "bg-[#1A110A] text-[#C5A059] border-[#C5A059] shadow-xs"
-                        : "bg-white text-[#1A110A] border-[#1A110A]/15 hover:bg-[#1A110A]/5"
-                    }`}
-                  >
-                    {title}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* 2. Cardamom & Spices */}
-            <div>
-              <label className="font-amiri text-lg font-bold text-[#1A110A] block mb-2">
-                2. مستوى التحويج والحبهان:
-              </label>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-                {["سادة", "محوج خفيف", "محوج وسط", "محوج رويال سوبر"].map((item) => (
-                  <button
-                    key={item}
-                    type="button"
-                    onClick={() => setCardamom(item)}
-                    className={`p-2.5 rounded-xl border text-xs font-bold transition-all ${
-                      cardamom === item
-                        ? "bg-[#3D120E] text-white border-[#C5A059]/50 shadow-xs"
-                        : "bg-white text-[#1A110A] border-[#1A110A]/15 hover:bg-[#1A110A]/5"
-                    }`}
-                  >
-                    {item}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* 3. Base Coffee Origin */}
-            <div>
-              <label className="font-amiri text-lg font-bold text-[#1A110A] block mb-2">
-                3. نوع البن الأساسي:
-              </label>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-                {[
-                  "توليفة بن بدران الخاصة",
-                  "خلطة كولومبي وحبشي",
-                  "بن يمني أصيل 100%",
-                ].map((item) => (
-                  <button
-                    key={item}
-                    type="button"
-                    onClick={() => setOrigin(item)}
-                    className={`p-3 rounded-xl border text-xs font-bold transition-all ${
-                      origin === item
-                        ? "bg-[#1A110A] text-[#C5A059] border-[#C5A059] shadow-xs"
-                        : "bg-white text-[#1A110A] border-[#1A110A]/15 hover:bg-[#1A110A]/5"
-                    }`}
-                  >
-                    {item}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* 4. Special Additions */}
-            <div>
-              <label className="font-amiri text-lg font-bold text-[#1A110A] block mb-2">
-                4. الإضافات الخاصة:
-              </label>
-              <div className="flex flex-wrap gap-2.5">
-                {["مستكة يوناني", "زر ورد طبيعي", "جوزة الطيب", "قرفة خشابي"].map((item) => {
-                  const selected = additions.includes(item);
-                  return (
-                    <button
-                      key={item}
-                      type="button"
-                      onClick={() => toggleAddition(item)}
-                      className={`px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-all ${
-                        selected
-                          ? "bg-[#C5A059] text-white border border-[#C5A059] shadow-2xs"
-                          : "bg-white text-[#1A110A] border border-[#1A110A]/15 hover:bg-[#1A110A]/5"
-                      }`}
-                    >
-                      <CheckCircle className={`w-3.5 h-3.5 ${selected ? "text-white" : "opacity-30"}`} />
-                      <span>{item}</span>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* 5. Custom Grams & Weight Selection */}
-            <div className="p-4 bg-[#F7F4EF] rounded-2xl border border-[#C5A059]/40 space-y-3">
-              <div className="flex items-center justify-between">
-                <label className="font-amiri text-lg font-bold text-[#1A110A] flex items-center gap-2">
-                  <Scale className="w-5 h-5 text-[#C5A059]" />
-                  <span>5. تحديد الوزن والجرامات بدقة:</span>
-                </label>
-                <span className="text-xs font-bold font-price bg-[#1A110A] text-[#C5A059] px-3 py-1 rounded-lg">
-                  {effectiveGrams} جرام
-                </span>
-              </div>
-
-              {/* Quick Presets */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                {[
-                  { label: "ثمن كيلو — 125 جم", g: 125 },
-                  { label: "ربع كيلو — 250 جم", g: 250 },
-                  { label: "نصف كيلو — 500 جم", g: 500 },
-                  { label: "كيلو كامل — 1000 جم", g: 1000 },
-                ].map((w) => {
-                  const isSelected = !isCustomGrams && presetWeight === w.label;
-                  return (
-                    <button
-                      key={w.label}
-                      type="button"
-                      onClick={() => handlePresetSelect(w.label, w.g)}
-                      className={`p-2.5 rounded-xl border text-xs font-bold transition-all ${
-                        isSelected
-                          ? "bg-[#1A110A] text-[#C5A059] border-[#C5A059] shadow-xs"
-                          : "bg-white text-[#1A110A] border-[#1A110A]/15 hover:bg-[#1A110A]/5"
-                      }`}
-                    >
-                      {w.label}
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Custom Grams Manual Input & Range Slider */}
-              <div className="pt-3 border-t border-dashed border-[#C5A059]/30 space-y-2.5">
-                <div className="flex items-center justify-between text-xs font-bold text-[#1A110A]">
-                  <span>أو اكتب الجرامات يدوياً (حسب رغبتك):</span>
-                  <button
-                    type="button"
-                    onClick={() => setIsCustomGrams(true)}
-                    className={`text-[11px] px-2.5 py-0.5 rounded-md font-semibold transition-colors ${
-                      isCustomGrams
-                        ? "bg-[#C5A059] text-white"
-                        : "bg-[#1A110A]/10 text-[#1A110A] hover:bg-[#1A110A]/20"
-                    }`}
-                  >
-                    تفعيل الوزن الحر
-                  </button>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          {/* ================= LEFT / MAIN: BEAN SELECTOR & OPTIONS (8 COLS) ================= */}
+          <div className="lg:col-span-7 xl:col-span-8 space-y-6 font-alexandria">
+            {/* Step 1: Category Filter & Search Bar */}
+            <div className="space-y-3">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+                <div className="flex items-center gap-2">
+                  <span className="w-6 h-6 rounded-full bg-[#1A110B] text-[#C5A059] font-price font-bold text-xs flex items-center justify-center">
+                    1
+                  </span>
+                  <label className="font-amiri text-lg font-bold text-[#1A110A]">
+                    اختار أنواع البن وحدد وزن كل نوع بالجرام:
+                  </label>
                 </div>
 
-                <div className="flex items-center gap-3">
-                  {/* Minus button */}
+                {/* Reset button */}
+                {selectedComponentsList.length > 0 && (
                   <button
                     type="button"
-                    onClick={() => handleCustomGramsChange(effectiveGrams - 25)}
-                    className="p-2.5 bg-white border border-[#1A110A]/20 rounded-xl hover:bg-[#1A110A]/5 text-[#1A110A] transition-all shrink-0"
-                    title="تقليل 25 جرام"
+                    onClick={resetBlend}
+                    className="text-xs text-red-600 hover:text-red-700 flex items-center gap-1 cursor-pointer font-bold"
                   >
-                    <Minus className="w-4 h-4" />
+                    <RotateCcw className="w-3.5 h-3.5" />
+                    <span>تفريغ التوليفة</span>
                   </button>
+                )}
+              </div>
 
-                  {/* Range slider */}
-                  <input
-                    type="range"
-                    min="50"
-                    max="2000"
-                    step="25"
-                    value={effectiveGrams}
-                    onChange={(e) => handleCustomGramsChange(Number(e.target.value))}
-                    className="flex-1 accent-[#C5A059] h-2 bg-white rounded-lg cursor-pointer"
-                  />
-
-                  {/* Plus button */}
+              {/* Category Pills */}
+              <div className="flex flex-wrap gap-1.5">
+                {BLEND_ORIGIN_CATEGORIES.map((cat) => (
                   <button
+                    key={cat.id}
                     type="button"
-                    onClick={() => handleCustomGramsChange(effectiveGrams + 25)}
-                    className="p-2.5 bg-white border border-[#1A110A]/20 rounded-xl hover:bg-[#1A110A]/5 text-[#1A110A] transition-all shrink-0"
-                    title="زيادة 25 جرام"
+                    onClick={() => setActiveCategory(cat.id)}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer border ${
+                      activeCategory === cat.id
+                        ? "bg-[#1A110B] text-[#FAF8F5] border-[#C5A059] shadow-xs ring-1 ring-[#C5A059]"
+                        : "bg-[#FAF8F5] text-[#1A110A] border-[#1A110A]/15 hover:bg-[#1A110A]/5"
+                    }`}
                   >
-                    <Plus className="w-4 h-4" />
+                    {cat.label}
                   </button>
+                ))}
+              </div>
 
-                  {/* Number Input */}
-                  <div className="flex items-center gap-1 bg-white border border-[#C5A059] rounded-xl px-3 py-1.5 shrink-0 shadow-2xs">
-                    <input
-                      type="number"
-                      min="50"
-                      max="5000"
-                      step="10"
-                      value={customGrams}
-                      onChange={(e) => handleCustomGramsChange(Number(e.target.value))}
-                      className="w-16 font-price font-bold text-center text-sm text-[#1A110A] focus:outline-none"
-                    />
-                    <span className="text-xs font-alexandria text-[#C5A059] font-bold">جم</span>
+              {/* Search input */}
+              <div className="relative">
+                <Search className="w-4 h-4 text-[#1A110A]/40 absolute top-3 right-3 pointer-events-none" />
+                <input
+                  type="text"
+                  placeholder="ابحث عن نوع بن معين (مثال: هراري، سيرادو، بلانتيشن، يمني...)"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full py-2 pr-9 pl-3 bg-[#FAF8F5] border border-[#1A110A]/15 rounded-xl text-xs text-[#1A110A] focus:outline-none focus:border-[#C5A059]"
+                />
+              </div>
+            </div>
+
+            {/* Beans Cards Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[480px] overflow-y-auto p-1 pr-1.5 scrollbar-thin">
+              {filteredBeans.map((bean) => {
+                const isSelected = selectedGrams[bean.id] !== undefined;
+                const grams = selectedGrams[bean.id] || 100;
+                const percentage =
+                  blendResult.totalGrams > 0 && isSelected
+                    ? Math.round((grams / blendResult.totalGrams) * 100)
+                    : 0;
+
+                return (
+                  <div
+                    key={bean.id}
+                    className={`p-3 rounded-2xl border transition-all relative flex flex-col justify-between ${
+                      isSelected
+                        ? "bg-[#FAF8F5] border-[#C5A059] ring-1 ring-[#C5A059] shadow-xs"
+                        : "bg-white border-[#1A110A]/15 hover:border-[#C5A059]/60"
+                    }`}
+                  >
+                    {/* Header Row */}
+                    <div>
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="flex items-start gap-2">
+                          <input
+                            type="checkbox"
+                            checked={isSelected}
+                            onChange={() => handleToggleBean(bean)}
+                            id={`bean-${bean.id}`}
+                            className="mt-1 w-4 h-4 rounded accent-[#C5A059] cursor-pointer"
+                          />
+                          <label
+                            htmlFor={`bean-${bean.id}`}
+                            className="font-amiri text-base font-bold text-[#1A110A] cursor-pointer leading-tight"
+                          >
+                            {bean.name}
+                          </label>
+                        </div>
+
+                        {isSelected && (
+                          <span className="font-price font-bold text-[11px] bg-[#1A110B] text-[#C5A059] px-2 py-0.5 rounded-full shrink-0 shadow-2xs">
+                            {percentage}%
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Bean Description */}
+                      <p className="font-alexandria text-[11px] text-[#1A110A]/70 font-light mt-1 line-clamp-2 leading-relaxed">
+                        {bean.description}
+                      </p>
+
+                      {/* Flavor tags & Kilo Price */}
+                      <div className="flex items-center justify-between gap-1 mt-2 text-[10px] font-alexandria">
+                        <span className="font-price font-bold text-[#C5A059] text-xs">
+                          {bean.kiloPrice} ج.م / ك
+                        </span>
+                        <div className="flex items-center gap-1 text-[#1A110A]/55">
+                          {bean.flavorNotes.slice(0, 2).map((fn) => (
+                            <span
+                              key={fn}
+                              className="bg-white px-1.5 py-0.5 rounded border border-[#1A110A]/10 text-[9px]"
+                            >
+                              {fn}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Manual Grams Input Row (Shown only when selected) */}
+                    {isSelected && (
+                      <div className="mt-2.5 pt-2 border-t border-dashed border-[#C5A059]/40 flex items-center justify-between gap-2 animate-fadeIn">
+                        <span className="text-[11px] font-bold text-[#1A110A]/80">
+                          الوزن بالتوليفة:
+                        </span>
+
+                        <div className="flex items-center gap-1">
+                          <button
+                            type="button"
+                            onClick={() => handleStepGrams(bean.id, -25)}
+                            className="w-6 h-6 rounded-lg bg-white border border-[#1A110A]/20 hover:bg-[#1A110A]/5 text-[#1A110A] flex items-center justify-center cursor-pointer shadow-2xs text-xs"
+                            title="تقليل 25 جرام"
+                          >
+                            <Minus className="w-3 h-3" />
+                          </button>
+
+                          <div className="flex items-center gap-1 bg-white border border-[#C5A059] rounded-lg px-2 py-0.5 shadow-2xs">
+                            <input
+                              type="number"
+                              min="1"
+                              max="5000"
+                              step="5"
+                              value={grams}
+                              onChange={(e) =>
+                                handleGramsChange(
+                                  bean.id,
+                                  parseInt(e.target.value, 10)
+                                )
+                              }
+                              className="w-12 font-price font-bold text-center text-xs text-[#1A110A] focus:outline-none"
+                            />
+                            <span className="text-[10px] text-[#C5A059] font-bold">
+                              جم
+                            </span>
+                          </div>
+
+                          <button
+                            type="button"
+                            onClick={() => handleStepGrams(bean.id, 25)}
+                            className="w-6 h-6 rounded-lg bg-white border border-[#1A110A]/20 hover:bg-[#1A110A]/5 text-[#1A110A] flex items-center justify-center cursor-pointer shadow-2xs text-xs"
+                            title="زيادة 25 جرام"
+                          >
+                            <Plus className="w-3 h-3" />
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Step 2: Roast & Grind Customization */}
+            <div className="pt-4 border-t border-dashed border-[#1A110A]/15 space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {/* Roast Level */}
+                <div>
+                  <div className="flex items-center gap-1.5 mb-2">
+                    <Flame className="w-4 h-4 text-[#C5A059]" />
+                    <label className="font-amiri text-base font-bold text-[#1A110A]">
+                      2. درجة التحميص:
+                    </label>
+                  </div>
+                  <div className="grid grid-cols-4 gap-1.5">
+                    {ROAST_OPTIONS.map((r) => (
+                      <button
+                        key={r}
+                        type="button"
+                        onClick={() => setRoast(r)}
+                        className={`py-2 px-1 rounded-xl text-xs font-bold text-center transition-all cursor-pointer border ${
+                          roast === r
+                            ? "bg-[#1A110B] text-[#FAF8F5] border-[#C5A059] shadow-xs ring-1 ring-[#C5A059]"
+                            : "bg-white text-[#1A110A] border-[#1A110A]/15 hover:bg-[#1A110A]/5"
+                        }`}
+                      >
+                        {r}
+                      </button>
+                    ))}
                   </div>
                 </div>
 
-                <div className="flex justify-between text-[10px] text-[#1A110A]/60 font-price px-1">
-                  <span>50 جم (عينة خلطة)</span>
-                  <span>250 جم (ربع)</span>
-                  <span>500 جم (نصف)</span>
-                  <span>1000 جم (كيلو)</span>
-                  <span>2000 جم (2 ك)</span>
+                {/* Cardamom Level */}
+                <div>
+                  <div className="flex items-center gap-1.5 mb-2">
+                    <Sparkles className="w-4 h-4 text-[#C5A059]" />
+                    <label className="font-amiri text-base font-bold text-[#1A110A]">
+                      3. مستوى التحويج والحبهان:
+                    </label>
+                  </div>
+                  <div className="grid grid-cols-2 gap-1.5">
+                    {CARDAMOM_OPTIONS.map((c) => (
+                      <button
+                        key={c.id}
+                        type="button"
+                        onClick={() => setCardamom(c.id)}
+                        className={`py-1.5 px-2 rounded-xl text-[11px] font-bold text-center transition-all cursor-pointer border ${
+                          cardamom === c.id
+                            ? "bg-[#1A110B] text-[#FAF8F5] border-[#C5A059] shadow-xs ring-1 ring-[#C5A059]"
+                            : "bg-white text-[#1A110A] border-[#1A110A]/15 hover:bg-[#1A110A]/5"
+                        }`}
+                      >
+                        <span>{c.label}</span>
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
-            </div>
 
-            {/* 6. Customer Information (Optional) */}
-            <div className="pt-3 border-t border-dashed border-[#C5A059]/30 space-y-3">
-              <label className="font-amiri text-lg font-bold text-[#1A110A] block">
-                6. بياناتك للتأكيد (اختياري):
-              </label>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div className="relative">
-                  <User className="w-4 h-4 text-[#C5A059] absolute top-3 right-3" />
-                  <input
-                    type="text"
-                    value={customerName}
-                    onChange={(e) => setCustomerName(e.target.value)}
-                    placeholder="الاسم الكريم..."
-                    className="w-full py-2.5 pr-9 pl-3 bg-[#FAF8F5] border border-[#1A110A]/15 rounded-lg text-xs focus:outline-none focus:border-[#C5A059]"
-                  />
+              {/* Grind Degree */}
+              <div>
+                <div className="flex items-center gap-1.5 mb-2">
+                  <Sliders className="w-4 h-4 text-[#C5A059]" />
+                  <label className="font-amiri text-base font-bold text-[#1A110A]">
+                    4. درجة الطحن المفضلة:
+                  </label>
                 </div>
-                <div className="relative">
-                  <Phone className="w-4 h-4 text-[#C5A059] absolute top-3 right-3" />
-                  <input
-                    type="tel"
-                    value={customerPhone}
-                    onChange={(e) => setCustomerPhone(e.target.value)}
-                    placeholder="رقم الهاتف..."
-                    className="w-full py-2.5 pr-9 pl-3 bg-[#FAF8F5] border border-[#1A110A]/15 rounded-lg text-xs font-price focus:outline-none focus:border-[#C5A059]"
-                  />
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5">
+                  {GRIND_OPTIONS.map((g) => (
+                    <button
+                      key={g}
+                      type="button"
+                      onClick={() => setGrind(g)}
+                      className={`py-2 px-2.5 rounded-xl text-xs font-bold text-center transition-all cursor-pointer border truncate ${
+                        grind === g
+                          ? "bg-[#1A110B] text-[#FAF8F5] border-[#C5A059] shadow-xs ring-1 ring-[#C5A059]"
+                          : "bg-white text-[#1A110A] border-[#1A110A]/15 hover:bg-[#1A110A]/5"
+                      }`}
+                    >
+                      {g}
+                    </button>
+                  ))}
                 </div>
               </div>
-              <div className="relative">
-                <FileText className="w-4 h-4 text-[#C5A059] absolute top-3 right-3" />
+
+              {/* Optional Additions */}
+              <div>
+                <label className="font-amiri text-base font-bold text-[#1A110A] block mb-2">
+                  5. إضافات سرية خاصة (اختياري):
+                </label>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                  {ADDITIONS_LIST.map((add) => {
+                    const isChecked = additions.includes(add.id);
+                    return (
+                      <button
+                        key={add.id}
+                        type="button"
+                        onClick={() => toggleAddition(add.id)}
+                        className={`p-2 rounded-xl text-xs font-bold transition-all flex items-center justify-between gap-1 cursor-pointer border ${
+                          isChecked
+                            ? "bg-[#C5A059]/15 text-[#1A110B] border-[#C5A059] font-bold"
+                            : "bg-white text-[#1A110A] border-[#1A110A]/15 hover:bg-[#1A110A]/5"
+                        }`}
+                      >
+                        <span>{add.label}</span>
+                        {isChecked && (
+                          <Check className="w-3.5 h-3.5 text-[#C5A059]" />
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Blend Name (Optional) */}
+              <div>
+                <label className="font-amiri text-base font-bold text-[#1A110A] block mb-1">
+                  6. سمّي توليفك الخاصة (اختياري):
+                </label>
                 <input
                   type="text"
-                  value={notes}
-                  onChange={(e) => setNotes(e.target.value)}
-                  placeholder="أي ملاحظات إضافية للطحن، درجة النعومة أو التغليف..."
-                  className="w-full py-2.5 pr-9 pl-3 bg-[#FAF8F5] border border-[#1A110A]/15 rounded-lg text-xs focus:outline-none focus:border-[#C5A059]"
+                  placeholder="مثال: خلطة الصباح الملكية، قهوة ديوانية بدران..."
+                  value={blendName}
+                  onChange={(e) => setBlendName(e.target.value)}
+                  className="w-full py-2.5 px-3.5 bg-[#FAF8F5] border border-[#1A110A]/15 rounded-xl text-xs text-[#1A110A] focus:outline-none focus:border-[#C5A059]"
                 />
               </div>
             </div>
           </div>
 
-          {/* Live Order Summary Card */}
-          <div className="lg:col-span-4 bg-[#1A110A] text-[#FAF8F5] p-5 rounded-2xl border-2 border-[#C5A059] shadow-xl sticky top-24 font-alexandria space-y-4">
-            <h4 className="font-amiri text-xl text-[#C5A059] border-b border-dashed border-[#C5A059]/30 pb-2.5 flex items-center gap-2">
-              <Coffee className="w-5 h-5 text-[#C5A059]" />
-              <span>ملخص خلطتك الخاصة</span>
-            </h4>
+          {/* ================= RIGHT: LIVE RATIO BAR & SUMMARY STICKY BOX (4 COLS) ================= */}
+          <div className="lg:col-span-5 xl:col-span-4 sticky top-24 space-y-4 font-alexandria">
+            <div className="bg-[#FAF8F5] border-2 border-[#C5A059] rounded-2xl p-4 sm:p-5 shadow-sm space-y-4">
+              <div className="flex items-center justify-between border-b border-dashed border-[#C5A059]/40 pb-3">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-full bg-[#1A110B] text-[#C5A059] flex items-center justify-center shadow-xs">
+                    <Scale className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h4 className="font-amiri text-lg font-bold text-[#1A110B]">
+                      ملخص التوليفة المباشر
+                    </h4>
+                    <span className="text-[10px] text-[#1A110A]/60">
+                      {selectedComponentsList.length} أنواع بن مختارة
+                    </span>
+                  </div>
+                </div>
 
-            <div className="space-y-2 text-xs text-[#FAF8F5]/90">
-              <div className="flex justify-between border-b border-dashed border-[#C5A059]/20 pb-1.5">
-                <span className="text-[#C5A059]">التحميص:</span>
-                <span className="font-bold">{roast}</span>
+                {isValidBlend && (
+                  <span className="font-price font-bold text-sm bg-[#C5A059] text-white px-2.5 py-1 rounded-lg">
+                    {blendResult.totalGrams} جم
+                  </span>
+                )}
               </div>
-              <div className="flex justify-between border-b border-dashed border-[#C5A059]/20 pb-1.5">
-                <span className="text-[#C5A059]">التحويج:</span>
-                <span className="font-bold">{cardamom}</span>
+
+              {/* Visual Multi-Bean Color Ratio Bar */}
+              {blendResult.totalGrams > 0 ? (
+                <div className="space-y-1.5">
+                  <span className="text-[11px] font-bold text-[#1A110A]/80 block">
+                    نسب الخلطة في الفنجان:
+                  </span>
+                  <div className="h-3.5 w-full rounded-full overflow-hidden flex bg-gray-200 shadow-inner">
+                    {blendResult.componentsRatio.map((comp) => (
+                      <div
+                        key={comp.bean.id}
+                        style={{
+                          width: `${comp.percentage}%`,
+                          backgroundColor: comp.bean.color,
+                        }}
+                        title={`${comp.bean.name}: ${comp.grams} جم (${comp.percentage}%)`}
+                        className="h-full transition-all"
+                      />
+                    ))}
+                  </div>
+
+                  {/* Ratio Legend Tags */}
+                  <div className="flex flex-wrap gap-1 pt-1">
+                    {blendResult.componentsRatio.map((comp) => (
+                      <span
+                        key={comp.bean.id}
+                        className="inline-flex items-center gap-1 text-[10px] bg-white border border-[#1A110A]/10 px-2 py-0.5 rounded-md font-price font-semibold"
+                      >
+                        <span
+                          className="w-2 h-2 rounded-full shrink-0"
+                          style={{ backgroundColor: comp.bean.color }}
+                        />
+                        <span className="font-alexandria truncate max-w-[90px]">
+                          {comp.bean.name.replace("بن ", "")}
+                        </span>
+                        <strong className="text-[#C5A059]">
+                          {comp.percentage}%
+                        </strong>
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl text-center text-amber-800 text-xs flex items-center gap-2">
+                  <Info className="w-4 h-4 text-amber-600 shrink-0" />
+                  <span>اختار نوع بن واحد على الأقل واكتب وزنه للبدء</span>
+                </div>
+              )}
+
+              {/* Recipe Breakdown List */}
+              {blendResult.componentsRatio.length > 0 && (
+                <div className="space-y-1.5 max-h-36 overflow-y-auto pr-1 text-xs border-y border-dashed border-[#1A110A]/10 py-2.5">
+                  {blendResult.componentsRatio.map((comp) => (
+                    <div
+                      key={comp.bean.id}
+                      className="flex items-center justify-between text-[#1A110A]"
+                    >
+                      <span className="truncate max-w-[170px] text-[11px]">
+                        {comp.bean.name}
+                      </span>
+                      <div className="flex items-center gap-2 font-price text-xs">
+                        <span className="text-[#1A110A]/60">
+                          {comp.grams} جم
+                        </span>
+                        <span className="font-bold text-[#1A110A]">
+                          {comp.subtotal} ج.م
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+
+                  {cardamom !== "سادة" && (
+                    <div className="flex items-center justify-between text-xs text-[#C5A059] font-bold pt-1">
+                      <span>تحويج: {cardamom}</span>
+                      <span className="font-price">
+                        +{blendResult.cardamomPrice} ج.م
+                      </span>
+                    </div>
+                  )}
+
+                  {blendResult.additionsPrice > 0 && (
+                    <div className="flex items-center justify-between text-xs text-[#C5A059] font-bold">
+                      <span>إضافات خاصة ({additions.length})</span>
+                      <span className="font-price">
+                        +{blendResult.additionsPrice} ج.م
+                      </span>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Pricing Cards */}
+              <div className="space-y-2 pt-1">
+                <div className="flex items-baseline justify-between text-xs text-[#1A110A]/70">
+                  <span>سعر الكيلو المرجّح للتوليفة:</span>
+                  <strong className="font-price text-sm text-[#1A110A]">
+                    {blendResult.weightedKiloPrice} ج.م / ك
+                  </strong>
+                </div>
+
+                <div className="flex items-center justify-between bg-white p-3 rounded-xl border border-[#C5A059] shadow-2xs">
+                  <div>
+                    <span className="text-xs font-bold text-[#1A110A] block">
+                      الإجمالي المستحق للطلب:
+                    </span>
+                    <span className="text-[10px] text-[#1A110A]/60">
+                      شامل الطحن والتغليف الطازج
+                    </span>
+                  </div>
+                  <div className="font-price font-bold text-2xl text-[#C5A059]">
+                    {blendResult.totalPrice}{" "}
+                    <span className="text-xs font-alexandria text-[#1A110A]">
+                      ج.م
+                    </span>
+                  </div>
+                </div>
               </div>
-              <div className="flex justify-between border-b border-dashed border-[#C5A059]/20 pb-1.5">
-                <span className="text-[#C5A059]">نوع البن:</span>
-                <span className="font-bold">{origin}</span>
-              </div>
-              <div className="flex justify-between border-b border-dashed border-[#C5A059]/20 pb-1.5">
-                <span className="text-[#C5A059]">الإضافات:</span>
-                <span className="font-bold text-[#C5A059]">
-                  {additions.length > 0 ? additions.join("، ") : "بدون إضافات"}
-                </span>
-              </div>
-              <div className="flex justify-between border-b border-dashed border-[#C5A059]/20 pb-1.5">
-                <span className="text-[#C5A059]">الوزن المطلوب:</span>
-                <span className="font-bold text-white bg-[#C5A059]/30 px-2 py-0.5 rounded">
-                  {displayWeightLabel}
-                </span>
+
+              {/* Added to Cart Notification Alert */}
+              {addedAlert && (
+                <div className="p-2.5 bg-emerald-50 border border-emerald-300 rounded-xl text-emerald-800 text-xs text-center font-bold flex items-center justify-center gap-1.5 animate-fadeIn">
+                  <CheckCircle className="w-4 h-4 text-emerald-600" />
+                  <span>تمت إضافة التوليفة بنجاح إلى سلة المشتريات!</span>
+                </div>
+              )}
+
+              {/* Action Buttons */}
+              <div className="space-y-2 pt-2">
+                {/* 1. Add to Cart Button */}
+                <button
+                  type="button"
+                  disabled={!isValidBlend}
+                  onClick={handleAddToCartClick}
+                  className={`w-full py-3 px-4 rounded-xl font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all shadow-md cursor-pointer ${
+                    isValidBlend
+                      ? "bg-[#1A110B] hover:bg-[#2A1D15] text-[#FAF8F5] border border-[#C5A059]"
+                      : "bg-gray-200 text-gray-400 border border-gray-300 cursor-not-allowed shadow-none"
+                  }`}
+                >
+                  <ShoppingBag className="w-4 h-4 text-[#C5A059]" />
+                  <span>
+                    {isValidBlend
+                      ? `أضف التوليفة للسلة (${blendResult.totalPrice} ج.م)`
+                      : "حدد نوع بن ووزنه للتفعيل"}
+                  </span>
+                </button>
+
+                {/* 2. Direct WhatsApp Order Button */}
+                <button
+                  type="button"
+                  disabled={!isValidBlend}
+                  onClick={handleOpenPreview}
+                  className={`w-full py-2.5 px-4 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 transition-all border cursor-pointer ${
+                    isValidBlend
+                      ? "bg-white hover:bg-emerald-50 text-emerald-800 border-emerald-600 shadow-2xs"
+                      : "bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed"
+                  }`}
+                >
+                  <MessageSquare className="w-4 h-4 text-emerald-600" />
+                  <span>طلب مباشر بالخلطة عبر الواتساب</span>
+                </button>
               </div>
             </div>
-
-            <div className="pt-2 border-t border-dashed border-[#C5A059]/40 flex items-baseline justify-between">
-              <span className="font-alexandria text-xs text-[#FAF8F5]/80">السعر التقديري:</span>
-              <span className="font-price font-bold text-2xl text-[#C5A059]">
-                {totalCalculated} <span className="text-xs text-[#FAF8F5]">ج.م</span>
-              </span>
-            </div>
-
-            <button
-              type="button"
-              onClick={handleOpenPreview}
-              className="w-full bg-[#25D366] hover:bg-[#1ebd59] text-white font-alexandria font-bold text-sm py-3 rounded-xl transition-all shadow-md flex items-center justify-center gap-2 mt-3 cursor-pointer active:scale-98"
-            >
-              <MessageSquare className="w-4 h-4" />
-              <span>اطلب الخلطة عبر الواتساب</span>
-            </button>
           </div>
         </div>
       </div>
 
-      {checkoutOrderObj && (
+      {/* WhatsApp Order Preview Modal */}
+      {isPreviewOpen && checkoutOrderObj && (
         <OrderPreviewModal
           isOpen={isPreviewOpen}
+          onClose={() => setIsPreviewOpen(false)}
           message={builtMessage}
           order={checkoutOrderObj}
-          onClose={() => setIsPreviewOpen(false)}
           onSend={handleSendViaWhatsApp}
         />
       )}

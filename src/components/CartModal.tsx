@@ -190,7 +190,7 @@ export default function CartModal({
                         {itemName}
                       </h5>
                       {itemVariant && (
-                        <span className="inline-block mt-1 px-2 py-0.5 bg-[#FAF7F2] text-[#7F3A35] rounded-md font-semibold text-[11px] border border-[#5C2A26]/10">
+                        <span className="block mt-1 px-2.5 py-1 bg-[#FAF7F2] text-[#7F3A35] rounded-md font-semibold text-[11px] border border-[#5C2A26]/10 break-words leading-relaxed">
                           {itemVariant}
                         </span>
                       )}

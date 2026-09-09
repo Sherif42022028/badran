@@ -5,9 +5,12 @@ export interface CustomBlendOrder {
   orderId?: string;
   customerName?: string;
   customerPhone?: string;
+  blendName?: string;
   roast: string;
   cardamom: string;
-  origin: string;
+  origin?: string;
+  recipeBreakdown?: string;
+  grind?: string;
   additions: string[];
   weight: string;
   totalPrice: number;
@@ -21,7 +24,7 @@ export function generateBlendWhatsAppMessage(order: CustomBlendOrder): string {
   const lines: string[] = [];
 
   lines.push("مرحبا *بن بدران* ☕");
-  lines.push("أريد طلب الخلطة التالية:");
+  lines.push(`أريد طلب خلطة خاصة بي *(${order.blendName || "توليفتك على زوقك"})*:`);
   lines.push("");
   lines.push(MESSAGE_DIVIDER);
 
@@ -36,18 +39,32 @@ export function generateBlendWhatsAppMessage(order: CustomBlendOrder): string {
   }
 
   lines.push("");
-  lines.push("☕ *تفاصيل الخلطة:*");
-  lines.push(`• *التحميص:* ${order.roast}`);
-  lines.push(`• *التحويج:* ${order.cardamom}`);
-  lines.push(`• *البن الأساسي:* ${order.origin}`);
-  lines.push(`• *الإضافات:* ${order.additions.length > 0 ? order.additions.join(" + ") : "بدون إضافات"}`);
-  lines.push(`• *الوزن:* ${order.weight}`);
+  lines.push("☕ *تركيبة ومكونات الخلطة المخصصة:*");
+  if (order.recipeBreakdown) {
+    lines.push(`• *توزيع الأنواع والأوزان:*\n  ${order.recipeBreakdown}`);
+  } else if (order.origin) {
+    lines.push(`• *البن الأساسي:* ${order.origin}`);
+  }
+
+  lines.push(`• *درجة التحميص:* ${order.roast}`);
+  if (order.grind) {
+    lines.push(`• *درجة الطحن:* ${order.grind}`);
+  }
+  lines.push(`• *مستوى التحويج:* ${order.cardamom}`);
+  lines.push(
+    `• *الإضافات:* ${
+      order.additions && order.additions.length > 0
+        ? order.additions.join(" + ")
+        : "بدون إضافات"
+    }`
+  );
+  lines.push(`• *إجمالي وزن التوليفة:* ${order.weight}`);
   lines.push("");
-  lines.push(`💵 *السعر التقديري:* ${order.totalPrice} ج.م`);
+  lines.push(`💵 *السعر الإجمالي:* ${order.totalPrice} ج.م`);
 
   if (order.notes && order.notes.trim()) {
     lines.push("");
-    lines.push("📝 *ملاحظات إضافية:*");
+    lines.push("📝 *ملاحظات التحضير:*");
     lines.push(order.notes.trim());
   }
 

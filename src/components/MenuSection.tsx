@@ -41,6 +41,7 @@ import {
   Minus,
 } from "lucide-react";
 import SpotlightCard from "@/components/reactbits/SpotlightCard";
+import BlendBuilder from "@/components/BlendBuilder";
 
 interface MenuSectionProps {
   onAddToCart: (
@@ -526,28 +527,9 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
                   </p>
                 </div>
 
-                {/* Special Callout Card for Custom Blend Section */}
+                {/* Embedded Custom Blend Builder Section */}
                 {cat.id === "custom_blend" ? (
-                  <div className="bg-[#FAF8F5] border-2 border-dashed border-[#C5A059] rounded-2xl p-6 sm:p-10 text-center space-y-4 max-w-2xl mx-auto my-4 shadow-xs">
-                    <div className="w-16 h-16 mx-auto rounded-full bg-[#1A110B] flex items-center justify-center text-[#C5A059] shadow-sm">
-                      <Sparkles className="w-8 h-8" />
-                    </div>
-                    <h3 className="font-amiri text-2xl sm:text-3xl font-bold text-[#1A110B]">
-                      توليفتك على زوقك — ركّب خلطتك الخاصة بالجرام
-                    </h3>
-                    <p className="font-alexandria text-xs sm:text-sm text-[#1A110B]/80 max-w-lg mx-auto leading-relaxed">
-                      اختار نوع البن الأساسي ودرجة التحميص ونسبة الحبهان والمستكة والإضافات، وحدد الجرامات بدقة وسنحسب لك السعر فورياً ونطحنها لك طازجة في المحل.
-                    </p>
-                    <div className="pt-2">
-                      <a
-                        href="#blend-builder"
-                        className="inline-flex items-center gap-2 bg-[#1A110B] hover:bg-[#2A1D15] text-[#FAF8F5] px-6 py-3 rounded-xl font-alexandria text-xs sm:text-sm font-bold shadow-md transition-all border border-[#C5A059]/50 cursor-pointer"
-                      >
-                        <Sparkles className="w-4 h-4 text-[#C5A059]" />
-                        <span>ابدأ تركيب خلطتك الآن</span>
-                      </a>
-                    </div>
-                  </div>
+                  <BlendBuilder onAddToCart={onAddToCart} isEmbedded={true} />
                 ) : (
                   /* 2-Column Responsive Product Card Grid */
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-5">

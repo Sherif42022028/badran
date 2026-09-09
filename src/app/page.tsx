@@ -5,7 +5,6 @@ import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import AboutSection from "@/components/AboutSection";
 import MenuSection from "@/components/MenuSection";
-import BlendBuilder from "@/components/BlendBuilder";
 import ReviewsSection from "@/components/ReviewsSection";
 import LocationContact from "@/components/LocationContact";
 import Footer from "@/components/Footer";
@@ -89,7 +88,6 @@ export default function Home() {
         <Hero />
         <AboutSection />
         <MenuSection onAddToCart={handleAddToCart} />
-        <BlendBuilder />
         <ReviewsSection />
         <LocationContact />
       </div>
