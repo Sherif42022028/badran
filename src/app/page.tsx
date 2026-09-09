@@ -22,20 +22,22 @@ export default function Home() {
 
   const handleAddToCart = (
     item: Product | MenuItem,
-    selectedPriceOrVariant: { unit?: string; label?: string; price: number }
+    selectedPriceOrVariant: { unit?: string; label?: string; price: number },
+    quantity: number = 1
   ) => {
     const itemName = item.name;
     const variantLabel =
       selectedPriceOrVariant.label || selectedPriceOrVariant.unit || "سعر موحد";
     const unitPrice = selectedPriceOrVariant.price;
     const cartLineId = `${item.id}-${variantLabel.replace(/[\s|]+/g, "_")}`;
+    const qtyToAdd = Math.max(1, quantity);
 
     setCartItems((prev) => {
       const existingIndex = prev.findIndex((ci) => ci.id === cartLineId);
 
       if (existingIndex > -1) {
         const updated = [...prev];
-        updated[existingIndex].quantity += 1;
+        updated[existingIndex].quantity += qtyToAdd;
         return updated;
       }
 
@@ -45,7 +47,7 @@ export default function Home() {
         category: item.category,
         selectedVariant: variantLabel,
         unitPrice,
-        quantity: 1,
+        quantity: qtyToAdd,
         item,
         selectedPrice: { unit: variantLabel, price: unitPrice },
       };

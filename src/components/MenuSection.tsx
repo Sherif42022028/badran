@@ -35,36 +35,52 @@ import {
   Scale,
   MapPin,
   CheckCircle2,
-  SlidersHorizontal,
   ArrowUpDown,
   RotateCcw,
+  Plus,
+  Minus,
 } from "lucide-react";
 import SpotlightCard from "@/components/reactbits/SpotlightCard";
 
 interface MenuSectionProps {
   onAddToCart: (
     item: Product,
-    selectedPrice: { unit: string; label: string; price: number }
+    selectedPrice: { unit: string; label: string; price: number },
+    quantity?: number
   ) => void;
 }
 
 type SortOption = "popular" | "price-asc" | "price-desc" | "alpha";
-type QuickFilterOption =
-  | "all"
-  | "light"
-  | "med"
-  | "dark"
-  | "mohawaj"
-  | "sada"
-  | "quarter"
-  | "half";
 
 export default function MenuSection({ onAddToCart }: MenuSectionProps) {
   const [activeTab, setActiveTab] = useState<"digital" | "printed">("digital");
   const [selectedCategory, setSelectedCategory] = useState<string>("basics");
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [quickFilter, setQuickFilter] = useState<QuickFilterOption>("all");
   const [sortBy, setSortBy] = useState<SortOption>("popular");
+
+  // Track product quantities: { [productId]: quantity }
+  const [productQuantities, setProductQuantities] = useState<
+    Record<string, number>
+  >({});
+
+  const getProductQuantity = (productId: string): number => {
+    return productQuantities[productId] || 1;
+  };
+
+  const handleUpdateProductQuantity = (productId: string, delta: number) => {
+    setProductQuantities((prev) => {
+      const current = prev[productId] || 1;
+      const next = Math.max(1, current + delta);
+      return { ...prev, [productId]: next };
+    });
+  };
+
+  const handleResetProductQuantity = (productId: string) => {
+    setProductQuantities((prev) => ({
+      ...prev,
+      [productId]: 1,
+    }));
+  };
 
   // Track which product has custom grams input box expanded
   const [customWeightExpanded, setCustomWeightExpanded] = useState<
@@ -125,6 +141,7 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
     variantId: string,
     variantLabel: string
   ) => {
+    handleResetProductQuantity(product.id);
     setProductOptions((prev) => ({
       ...prev,
       [product.id]: {
@@ -136,6 +153,7 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
   };
 
   const handleGramsSelect = (product: Product, customGrams: number) => {
+    handleResetProductQuantity(product.id);
     const current = getProductSelection(product);
     setProductOptions((prev) => ({
       ...prev,
@@ -151,6 +169,7 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
     optionKey: "matrixOption1" | "matrixOption2",
     value: string
   ) => {
+    handleResetProductQuantity(product.id);
     const current = getProductSelection(product);
     setProductOptions((prev) => ({
       ...prev,
@@ -170,14 +189,12 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
 
   const handleResetFilters = () => {
     setSearchQuery("");
-    setQuickFilter("all");
     setSelectedCategory("basics");
     setSortBy("popular");
   };
 
   const isFiltered =
     searchQuery.trim() !== "" ||
-    quickFilter !== "all" ||
     selectedCategory !== "basics" ||
     sortBy !== "popular";
 
@@ -228,8 +245,7 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
         const isPopular =
           Boolean(item.badge) ||
           item.id === "basic-plain-matrix" ||
-          item.id === "basic-mohawaj-matrix" ||
-          item.id === "basic-cafe-variants";
+          item.id === "basic-mohawaj-matrix";
         if (!isPopular) return false;
       } else if (selectedCategory !== "all") {
         if (item.category !== selectedCategory) return false;
@@ -241,48 +257,6 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
         const matchDesc = item.description?.toLowerCase().includes(q) || false;
         const matchBadge = item.badge?.toLowerCase().includes(q) || false;
         if (!matchName && !matchDesc && !matchBadge) return false;
-      }
-
-      // Quick attribute filter
-      if (quickFilter !== "all") {
-        if (quickFilter === "light") {
-          const hasLight =
-            item.matrix?.option1Values.includes("فاتح") ||
-            item.variants?.some((v) => v.label.includes("فاتح")) ||
-            item.description?.includes("فاتح");
-          if (!hasLight) return false;
-        } else if (quickFilter === "med") {
-          const hasMed =
-            item.matrix?.option1Values.includes("وسط") ||
-            item.variants?.some((v) => v.label.includes("وسط")) ||
-            item.description?.includes("وسط");
-          if (!hasMed) return false;
-        } else if (quickFilter === "dark") {
-          const hasDark =
-            item.matrix?.option1Values.includes("غامق") ||
-            item.matrix?.option1Values.includes("محروق") ||
-            item.variants?.some(
-              (v) => v.label.includes("غامق") || v.label.includes("محروق")
-            ) ||
-            item.description?.includes("غامق");
-          if (!hasDark) return false;
-        } else if (quickFilter === "mohawaj") {
-          const isMohawaj =
-            item.name.includes("محوج") ||
-            item.badge?.includes("محوج") ||
-            item.badge?.includes("خلطة") ||
-            item.description?.includes("حبهان");
-          if (!isMohawaj) return false;
-        } else if (quickFilter === "sada") {
-          const isSada =
-            item.name.includes("ساده") ||
-            item.variants?.some((v) => v.label.includes("ساده")) ||
-            item.description?.includes("النقي");
-          if (!isSada) return false;
-        } else if (quickFilter === "quarter" || quickFilter === "half") {
-          const isWeightEligible = isProductEligibleForGrams(item);
-          if (!isWeightEligible) return false;
-        }
       }
 
       return true;
@@ -307,7 +281,7 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
       }
       return 0;
     });
-  }, [searchQuery, selectedCategory, quickFilter, sortBy]);
+  }, [searchQuery, selectedCategory, sortBy]);
 
   // Group filtered products by Category
   const groupedCategories = useMemo(() => {
@@ -329,7 +303,7 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
       return CATEGORIES_LIST.map((cat) => ({
         ...cat,
         items: filteredProducts.filter((p) => p.category === cat.id),
-      })).filter((cat) => cat.items.length > 0);
+      })).filter((cat) => cat.items.length > 0 || cat.id === "custom_blend");
     }
 
     const currentCat = CATEGORIES_LIST.find((c) => c.id === selectedCategory);
@@ -481,46 +455,7 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
               </div>
             </div>
 
-            {/* الصف الثاني: الفلاتر السريعة */}
-            <div className="pt-2 border-t border-dashed border-[#1A110B]/10 space-y-1.5">
-              <div className="flex items-center gap-1.5 text-xs font-bold font-alexandria text-[#1A110B]">
-                <SlidersHorizontal className="w-3.5 h-3.5 text-[#C5A059]" />
-                <span>فلترة حسب:</span>
-              </div>
-              <div className="overflow-x-auto pb-1 pt-0.5 scrollbar-thin">
-                <div className="flex items-center gap-1.5 min-w-max">
-                  {[
-                    { id: "all", label: "الكل" },
-                    { id: "light", label: "تحميص فاتح" },
-                    { id: "med", label: "تحميص وسط" },
-                    { id: "dark", label: "تحميص غامق" },
-                    { id: "mohawaj", label: "محوج ومميز" },
-                    { id: "sada", label: "بن ساده" },
-                    { id: "quarter", label: "ربع كيلو (250 جم)" },
-                    { id: "half", label: "نصف كيلو (500 جم)" },
-                  ].map((opt) => {
-                    const isSel = quickFilter === opt.id;
-                    return (
-                      <button
-                        key={opt.id}
-                        onClick={() =>
-                          setQuickFilter(opt.id as QuickFilterOption)
-                        }
-                        className={`px-2.5 py-1 rounded-md text-[11px] font-alexandria font-semibold transition-all cursor-pointer ${
-                          isSel
-                            ? "bg-[#C5A059] text-white font-bold shadow-2xs"
-                            : "bg-[#F7F4EF] text-[#1A110B] hover:bg-[#1A110B]/10 border border-[#1A110B]/10"
-                        }`}
-                      >
-                        {opt.label}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
-
-            {/* الصف الثالث: الترتيب وعدد النتائج */}
+            {/* الصف الثاني: الترتيب وعدد النتائج */}
             <div className="pt-2 border-t border-dashed border-[#1A110B]/10 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-xs font-alexandria">
               <div className="flex items-center gap-2">
                 <span className="text-gray-500 font-medium">
@@ -537,7 +472,7 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
                     className="inline-flex items-center gap-1 text-red-600 hover:text-red-800 bg-red-50 hover:bg-red-100/70 border border-red-200 px-2.5 py-0.5 rounded-md text-[11px] font-bold transition-all cursor-pointer"
                   >
                     <RotateCcw className="w-3 h-3" />
-                    <span>مسح الفلاتر</span>
+                    <span>إعادة ضبط العرض</span>
                   </button>
                 )}
               </div>
@@ -564,7 +499,7 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
 
           {/* ================= 3. SECTIONS & STANDARDIZED PRODUCT CARDS ================= */}
           {groupedCategories.map((cat) => {
-            if (cat.items.length === 0) return null;
+            if (cat.items.length === 0 && cat.id !== "custom_blend") return null;
 
             return (
               <div
@@ -591,22 +526,47 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
                   </p>
                 </div>
 
-                {/* 2-Column Responsive Product Card Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                  {cat.items.map((product) => {
-                    const currentSelection = getProductSelection(product);
-                    const { price: currentPrice, label: currentLabel } =
-                      calculateProductPrice(product, currentSelection);
-                    const baseKilo = getBaseKiloPrice(product, currentSelection);
-                    const weightPresets = isProductEligibleForGrams(product)
-                      ? getQuickWeightPresets(product, currentSelection)
-                      : [];
-                    const summaryText = formatProductSelectionSummary(
-                      product,
-                      currentSelection
-                    );
-                    const isCustomWeightOpen =
-                      customWeightExpanded[product.id] || false;
+                {/* Special Callout Card for Custom Blend Section */}
+                {cat.id === "custom_blend" ? (
+                  <div className="bg-[#FAF8F5] border-2 border-dashed border-[#C5A059] rounded-2xl p-6 sm:p-10 text-center space-y-4 max-w-2xl mx-auto my-4 shadow-xs">
+                    <div className="w-16 h-16 mx-auto rounded-full bg-[#1A110B] flex items-center justify-center text-[#C5A059] shadow-sm">
+                      <Sparkles className="w-8 h-8" />
+                    </div>
+                    <h3 className="font-amiri text-2xl sm:text-3xl font-bold text-[#1A110B]">
+                      توليفتك على زوقك — ركّب خلطتك الخاصة بالجرام
+                    </h3>
+                    <p className="font-alexandria text-xs sm:text-sm text-[#1A110B]/80 max-w-lg mx-auto leading-relaxed">
+                      اختار نوع البن الأساسي ودرجة التحميص ونسبة الحبهان والمستكة والإضافات، وحدد الجرامات بدقة وسنحسب لك السعر فورياً ونطحنها لك طازجة في المحل.
+                    </p>
+                    <div className="pt-2">
+                      <a
+                        href="#blend-builder"
+                        className="inline-flex items-center gap-2 bg-[#1A110B] hover:bg-[#2A1D15] text-[#FAF8F5] px-6 py-3 rounded-xl font-alexandria text-xs sm:text-sm font-bold shadow-md transition-all border border-[#C5A059]/50 cursor-pointer"
+                      >
+                        <Sparkles className="w-4 h-4 text-[#C5A059]" />
+                        <span>ابدأ تركيب خلطتك الآن</span>
+                      </a>
+                    </div>
+                  </div>
+                ) : (
+                  /* 2-Column Responsive Product Card Grid */
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    {cat.items.map((product) => {
+                      const currentSelection = getProductSelection(product);
+                      const { price: currentPrice, label: currentLabel } =
+                        calculateProductPrice(product, currentSelection);
+                      const productQuantity = getProductQuantity(product.id);
+                      const lineTotalPrice = currentPrice * productQuantity;
+                      const baseKilo = getBaseKiloPrice(product, currentSelection);
+                      const weightPresets = isProductEligibleForGrams(product)
+                        ? getQuickWeightPresets(product, currentSelection)
+                        : [];
+                      const summaryText = formatProductSelectionSummary(
+                        product,
+                        currentSelection
+                      );
+                      const isCustomWeightOpen =
+                        customWeightExpanded[product.id] || false;
 
                     return (
                       <SpotlightCard
@@ -749,87 +709,7 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
                             </div>
                           )}
 
-                          {/* 5B. Cafe Badran: 2-Column Options Grid */}
-                          {product.id === "basic-cafe-variants" &&
-                            product.variants && (
-                              <div className="my-2.5 p-3 bg-[#FAF8F5] rounded-xl border border-[#1A110A]/10 space-y-2">
-                                <span className="text-xs font-bold font-alexandria text-[#1A110A]/80 block">
-                                  اختر توليفة الكافيه:
-                                </span>
-                                <div className="grid grid-cols-2 gap-2">
-                                  {product.variants.map((v) => {
-                                    const isSelected =
-                                      (currentSelection.variantId ||
-                                        product.variants?.[0].id) === v.id;
-                                    return (
-                                      <button
-                                        key={v.id}
-                                        onClick={() =>
-                                          handleVariantSelect(
-                                            product,
-                                            v.id,
-                                            v.label
-                                          )
-                                        }
-                                        className={`p-2 rounded-xl text-right transition-all border cursor-pointer ${
-                                          isSelected
-                                            ? "bg-white border-[#C5A059] ring-2 ring-[#C5A059]/40 shadow-xs"
-                                            : "bg-white/80 border-[#1A110B]/15 hover:border-[#C5A059]/50"
-                                        }`}
-                                      >
-                                        <span className="block text-xs font-bold font-alexandria text-[#1A110A]">
-                                          {v.label}
-                                        </span>
-                                        <span className="font-price font-bold text-xs text-[#C5A059] mt-0.5 block">
-                                          {v.price} ج.م
-                                        </span>
-                                      </button>
-                                    );
-                                  })}
-                                </div>
-                              </div>
-                            )}
-
-                          {/* 5C. Supplies (مستلزمات بدران): Clean List */}
-                          {product.id === "basic-supplies-cups" &&
-                            product.variants && (
-                              <div className="my-2.5 p-3 bg-[#FAF8F5] rounded-xl border border-[#1A110A]/10 space-y-1.5">
-                                <span className="text-xs font-bold font-alexandria text-[#1A110A]/80 block mb-1">
-                                  اختر الصنف المطلوب:
-                                </span>
-                                {product.variants.map((v) => {
-                                  const isSelected =
-                                    (currentSelection.variantId ||
-                                      product.variants?.[0].id) === v.id;
-                                  return (
-                                    <button
-                                      key={v.id}
-                                      onClick={() =>
-                                        handleVariantSelect(
-                                          product,
-                                          v.id,
-                                          v.label
-                                        )
-                                      }
-                                      className={`w-full p-2 rounded-xl flex items-center justify-between text-right transition-all border cursor-pointer ${
-                                        isSelected
-                                          ? "bg-white border-[#C5A059] ring-1 ring-[#C5A059] shadow-xs"
-                                          : "bg-white/80 border-[#1A110B]/15 hover:bg-white"
-                                      }`}
-                                    >
-                                      <span className="text-xs font-alexandria font-bold text-[#1A110A]">
-                                        {v.label}
-                                      </span>
-                                      <span className="font-price text-xs font-bold text-[#C5A059]">
-                                        {v.price} ج.م
-                                      </span>
-                                    </button>
-                                  );
-                                })}
-                              </div>
-                            )}
-
-                          {/* 5D. Tier 2: Preparation Toggle (ساده / محوج) */}
+                          {/* 5B. Tier 2: Preparation Toggle (ساده / محوج) */}
                           {product.tier === 2 &&
                             product.variants &&
                             product.variants.length > 0 && (
@@ -869,12 +749,10 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
                               </div>
                             )}
 
-                          {/* 5E. Weighted Products: 4 Quick Weight Buttons + Optional Custom Grams */}
+                          {/* 5C. Weighted Products: 4 Quick Weight Buttons + Optional Custom Grams */}
                           {isProductEligibleForGrams(product) &&
                             product.id !== "basic-plain-matrix" &&
-                            product.id !== "basic-mohawaj-matrix" &&
-                            product.id !== "basic-cafe-variants" &&
-                            product.id !== "basic-supplies-cups" && (
+                            product.id !== "basic-mohawaj-matrix" && (
                               <div className="my-2.5 p-3 bg-[#FAF8F5] rounded-xl border border-[#1A110A]/10 space-y-2">
                                 <div className="flex items-center justify-between">
                                   <span className="text-xs font-bold font-alexandria text-[#1A110A] flex items-center gap-1.5">
@@ -970,12 +848,10 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
                               </div>
                             )}
 
-                          {/* 5F. Tier 4 Other items (Honey & Spices with preset variants) */}
+                          {/* 5D. Tier 4 Other items (Honey with preset variants) */}
                           {product.tier === 4 &&
                             product.variants &&
-                            !isProductEligibleForGrams(product) &&
-                            product.id !== "basic-cafe-variants" &&
-                            product.id !== "basic-supplies-cups" && (
+                            !isProductEligibleForGrams(product) && (
                               <div className="my-2.5 p-3 bg-[#FAF8F5] rounded-xl border border-[#1A110A]/10 space-y-2">
                                 <span className="text-xs font-bold font-alexandria text-[#1A110A]/80 block">
                                   اختر العبوة أو الحجم:
@@ -1011,27 +887,70 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
                         </div>
 
                         {/* ================= PART 6: ACTION & SUMMARY ================= */}
-                        <div className="mt-4 pt-3 border-t border-dashed border-[#1A110A]/15 space-y-2">
+                        <div className="mt-4 pt-3 border-t border-dashed border-[#1A110A]/15 space-y-2.5">
+                          {/* Quantity Selector */}
+                          <div className="flex items-center justify-between bg-[#FAF8F5] px-3 py-1.5 rounded-xl border border-[#1A110A]/10">
+                            <span className="text-xs font-bold font-alexandria text-[#1A110A]">
+                              الكمية:
+                            </span>
+                            <div className="flex items-center gap-2">
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  handleUpdateProductQuantity(product.id, -1)
+                                }
+                                disabled={productQuantity <= 1}
+                                aria-label="تقليل الكمية"
+                                className={`w-7 h-7 rounded-lg flex items-center justify-center border transition-all cursor-pointer ${
+                                  productQuantity <= 1
+                                    ? "border-gray-200 text-gray-300 bg-gray-50 cursor-not-allowed"
+                                    : "border-[#1A110B]/20 text-[#1A110B] bg-white hover:bg-[#1A110B] hover:text-white"
+                                }`}
+                              >
+                                <Minus className="w-3.5 h-3.5" />
+                              </button>
+                              <span className="font-price font-bold text-sm min-w-[22px] text-center text-[#1A110B]">
+                                {productQuantity}
+                              </span>
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  handleUpdateProductQuantity(product.id, 1)
+                                }
+                                aria-label="زيادة الكمية"
+                                className="w-7 h-7 rounded-lg flex items-center justify-center border border-[#1A110B]/20 text-[#1A110B] bg-white hover:bg-[#1A110B] hover:text-white transition-all cursor-pointer"
+                              >
+                                <Plus className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
+                          </div>
+
                           {/* Live Selection Summary Line */}
                           <div className="text-[11px] font-alexandria font-semibold text-[#1A110B]/85 bg-[#FAF8F5] py-1.5 px-3 rounded-lg border border-[#C5A059]/30 truncate text-center shadow-2xs">
-                            {summaryText}
+                            {summaryText}{" "}
+                            {productQuantity > 1 &&
+                              `× ${productQuantity} (الإجمالي: ${lineTotalPrice} ج.م)`}
                           </div>
 
                           {/* Add to Cart Primary Button */}
                           <button
                             onClick={() =>
-                              onAddToCart(product, {
-                                unit: currentLabel,
-                                label: currentLabel,
-                                price: currentPrice,
-                              })
+                              onAddToCart(
+                                product,
+                                {
+                                  unit: currentLabel,
+                                  label: currentLabel,
+                                  price: currentPrice,
+                                },
+                                productQuantity
+                              )
                             }
                             className="w-full bg-[#1A110B] hover:bg-[#2A1D15] text-[#FAF8F5] py-2.5 px-4 rounded-xl text-xs sm:text-sm font-bold font-alexandria flex items-center justify-center gap-2 transition-all border border-[#C5A059]/40 active:scale-[0.98] shadow-sm hover:shadow-md cursor-pointer group"
                           >
                             <ShoppingBag className="w-4 h-4 text-[#C5A059] group-hover:scale-110 transition-transform" />
                             <span>أضف للسلة</span>
                             <span className="font-price text-xs text-[#C5A059] mr-1">
-                              ({currentPrice} ج.م)
+                              ({lineTotalPrice} ج.م)
                             </span>
                           </button>
                         </div>
@@ -1039,9 +958,10 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
                     );
                   })}
                 </div>
-              </div>
-            );
-          })}
+              )}
+            </div>
+          );
+        })}
 
           {/* Fallback if search returns nothing */}
           {filteredProducts.length === 0 && (

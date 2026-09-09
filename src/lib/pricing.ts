@@ -6,10 +6,12 @@ import { Product, SelectedProductOptions } from "@/types/products";
 export function isProductEligibleForGrams(product: Product): boolean {
   if (
     product.category === "arabicas" ||
+    product.category === "habashi" ||
     product.category === "brazilian" ||
     product.category === "indian" ||
     product.category === "blends" ||
-    product.category === "french"
+    product.category === "french" ||
+    product.category === "custom_blend"
   ) {
     return true;
   }
@@ -19,10 +21,6 @@ export function isProductEligibleForGrams(product: Product): boolean {
   }
 
   if (product.unitLabel?.includes("كيلو") || product.unitLabel?.includes("ك")) {
-    return true;
-  }
-
-  if (product.category === "spices" && product.basePrice && product.basePrice >= 50) {
     return true;
   }
 
