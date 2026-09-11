@@ -3,6 +3,7 @@ import { BlendBeanOrigin } from "@/data/blendOrigins";
 export interface SelectedBlendComponent {
   bean: BlendBeanOrigin;
   grams: number; // >= 1
+  preparation?: "sada" | "mohawaj";
 }
 
 export interface BlendCalculationResult {
@@ -15,6 +16,8 @@ export interface BlendCalculationResult {
   componentsRatio: Array<{
     bean: BlendBeanOrigin;
     grams: number;
+    preparation: "sada" | "mohawaj";
+    unitKiloPrice: number;
     percentage: number;
     subtotal: number;
   }>;
@@ -22,10 +25,10 @@ export interface BlendCalculationResult {
 }
 
 export const CARDAMOM_OPTIONS = [
-  { id: "سادة", label: "سادة بدون حبهان", grams: 0, pricePerKilo: 0 },
-  { id: "محوج خفيف", label: "محوج خفيف (10 جم)", grams: 10, pricePerKilo: 80 },
-  { id: "محوج وسط", label: "محوج وسط (20 جم)", grams: 20, pricePerKilo: 120 },
-  { id: "محوج رويال", label: "محوج رويال سوبر (35 جم)", grams: 35, pricePerKilo: 180 },
+  { id: "سادة", label: "سادة بدون حبهان إضافي", grams: 0, pricePerKilo: 0 },
+  { id: "محوج خفيف", label: "تحويجة إضافية خفيفة (10 جم)", grams: 10, pricePerKilo: 80 },
+  { id: "محوج وسط", label: "تحويجة إضافية وسط (20 جم)", grams: 20, pricePerKilo: 120 },
+  { id: "محوج رويال", label: "تحويجة إضافية رويال سوبر (35 جم)", grams: 35, pricePerKilo: 180 },
 ] as const;
 
 export const ROAST_OPTIONS = ["فاتح", "وسط", "غامق", "محروق"] as const;
@@ -71,15 +74,24 @@ export function calculateCustomBlend(
     };
   }
 
-  // 1. Raw Coffee Price: sum of (kiloPrice * grams / 1000)
+  // 1. Raw Coffee Price: sum of (effectiveKiloPrice * grams / 1000)
   let coffeePrice = 0;
   const componentsRatio = validComponents.map((c) => {
-    const subtotal = Math.round((c.bean.kiloPrice * c.grams) / 1000);
-    coffeePrice += (c.bean.kiloPrice * c.grams) / 1000;
+    const prep = c.preparation || "sada";
+    const isMohawaj = prep === "mohawaj";
+    const unitKiloPrice = isMohawaj
+      ? (c.bean.mohawajPrice || c.bean.kiloPrice + 120)
+      : (c.bean.sadaPrice || c.bean.kiloPrice);
+
+    const subtotal = Math.round((unitKiloPrice * c.grams) / 1000);
+    coffeePrice += (unitKiloPrice * c.grams) / 1000;
     const percentage = Math.round((c.grams / totalGrams) * 100);
+
     return {
       bean: c.bean,
       grams: c.grams,
+      preparation: prep,
+      unitKiloPrice,
       percentage,
       subtotal,
     };
@@ -87,12 +99,11 @@ export function calculateCustomBlend(
 
   coffeePrice = Math.round(coffeePrice);
 
-  // 2. Cardamom adjustment
+  // 2. Extra Cardamom adjustment (if explicitly requested on top)
   let cardamomPrice = 0;
-  if (cardamomGramsOverride !== undefined) {
-    // Direct grams for cardamom (e.g. 2.2 EGP per gram of premium green cardamom)
+  if (cardamomGramsOverride !== undefined && cardamomGramsOverride > 0) {
     cardamomPrice = Math.round(cardamomGramsOverride * 2.2);
-  } else {
+  } else if (cardamomId && cardamomId !== "سادة") {
     const cardamomOpt =
       CARDAMOM_OPTIONS.find((c) => c.id === cardamomId) || CARDAMOM_OPTIONS[0];
     cardamomPrice = Math.round((cardamomOpt.pricePerKilo * totalGrams) / 1000);
@@ -125,7 +136,7 @@ export function calculateCustomBlend(
 
   // 4. Detailed Recipe Summary String
   const parts = componentsRatio.map(
-    (c) => `${c.grams}جم ${c.bean.name} (${c.percentage}%)`
+    (c) => `${c.grams}جم ${c.bean.name} (${c.preparation === "mohawaj" ? "محوج" : "ساده"} - ${c.percentage}%)`
   );
   const summaryRecipe = parts.join(" + ");
 
