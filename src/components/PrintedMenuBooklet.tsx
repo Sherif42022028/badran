@@ -12,18 +12,13 @@ import {
   CheckCircle2,
   ChevronLeft,
   ChevronRight,
-  Maximize2,
   Grid,
   BookOpen,
-  Image as ImageIcon,
-  X,
 } from "lucide-react";
-import { PRINTED_MENU_PAGES } from "@/data/products";
 
 export default function PrintedMenuBooklet() {
-  const [viewMode, setViewMode] = useState<"booklet" | "all" | "scanned">("booklet");
+  const [viewMode, setViewMode] = useState<"booklet" | "all">("booklet");
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [selectedScanImage, setSelectedScanImage] = useState<string | null>(null);
   const totalPages = 8;
 
   const nextPage = useCallback(() => {
@@ -96,19 +91,6 @@ export default function PrintedMenuBooklet() {
             >
               <Grid className="w-3.5 h-3.5 text-[#C5A059]" />
               <span>عرض الكتالوج كاملاً</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setViewMode("scanned")}
-              className={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all cursor-pointer ${
-                viewMode === "scanned"
-                  ? "bg-[#1A110B] text-white shadow-xs"
-                  : "text-[#1A110B] hover:bg-[#1A110A]/10"
-              }`}
-            >
-              <ImageIcon className="w-3.5 h-3.5 text-[#C5A059]" />
-              <span>المنيو الورقي المصور</span>
             </button>
           </div>
 
@@ -185,55 +167,7 @@ export default function PrintedMenuBooklet() {
         </div>
       )}
 
-      {/* ========================================================
-          MODE 3: SCANNED ORIGINAL MENU PHOTOS (7 PAGES)
-          ======================================================== */}
-      {viewMode === "scanned" && (
-        <div className="space-y-6 animate-fadeIn">
-          <div className="p-4 bg-[#FAF8F5] rounded-xl border border-[#C5A059]/40 text-center">
-            <h4 className="font-amiri text-xl font-bold text-[#1A110B]">
-              صور الكتالوج الورقي المطبوع الأصلي (7 صفحات)
-            </h4>
-            <p className="text-xs text-[#1A110A]/70 mt-1">
-              انقر على أي صفحة لتكبيرها واستعراض تفاصيلها الأصلية بدقة عالية.
-            </p>
-          </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {PRINTED_MENU_PAGES.map((page) => (
-              <div
-                key={page.id}
-                onClick={() => setSelectedScanImage(page.src)}
-                className="group relative bg-white rounded-2xl border-2 border-[#1A110A]/12 hover:border-[#C5A059] p-3 shadow-xs hover:shadow-lg transition-all cursor-pointer overflow-hidden flex flex-col justify-between"
-              >
-                <div className="relative w-full aspect-3/4 rounded-xl overflow-hidden bg-gray-100">
-                  <Image
-                    src={page.src}
-                    alt={page.title}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors flex items-center justify-center">
-                    <span className="opacity-0 group-hover:opacity-100 transition-opacity p-2 bg-[#1A110B]/90 text-[#C5A059] rounded-xl shadow-md flex items-center gap-1.5 text-xs font-bold">
-                      <Maximize2 className="w-4 h-4" />
-                      <span>تكبير الصفحة</span>
-                    </span>
-                  </div>
-                </div>
-
-                <div className="mt-3 text-center">
-                  <span className="text-[11px] font-bold text-[#C5A059] block">
-                    صفحة {page.id}
-                  </span>
-                  <h5 className="font-amiri text-sm font-bold text-[#1A110B] truncate mt-0.5">
-                    {page.title}
-                  </h5>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
 
       {/* ========================================================
           MODE 1 & 2: INTERACTIVE DIGITAL BOOKLET PAGES
@@ -1025,40 +959,7 @@ export default function PrintedMenuBooklet() {
         </div>
       )}
 
-      {/* Lightbox Zoom Modal for Scanned Page Inspection */}
-      {selectedScanImage && (
-        <div
-          className="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 animate-fadeIn"
-          onClick={() => setSelectedScanImage(null)}
-        >
-          <div
-            className="relative max-w-4xl w-full max-h-[90vh] bg-white rounded-2xl overflow-hidden shadow-2xl p-2"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-center justify-between p-3 border-b border-gray-200">
-              <span className="font-amiri font-bold text-lg text-[#1A110B]">
-                معاينة الصفحة الأصلية عالية الدقة
-              </span>
-              <button
-                type="button"
-                onClick={() => setSelectedScanImage(null)}
-                className="p-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 cursor-pointer transition-colors"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
 
-            <div className="relative w-full h-[75vh]">
-              <Image
-                src={selectedScanImage}
-                alt="معاينة الصفحة المكبرة"
-                fill
-                className="object-contain"
-              />
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

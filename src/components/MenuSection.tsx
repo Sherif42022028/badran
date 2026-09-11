@@ -101,6 +101,7 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
       return {
         matrixOption1: product.matrix.option1Values[0],
         matrixOption2: product.matrix.option2Values[0],
+        customGrams: 250,
       };
     }
 
@@ -156,6 +157,7 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
       ...prev,
       [product.id]: {
         ...current,
+        ...(product.matrix ? { matrixOption2: "كيلو" } : {}),
         customGrams,
       },
     }));
@@ -173,6 +175,11 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
       [product.id]: {
         ...current,
         [optionKey]: value,
+        ...(optionKey === "matrixOption2" && !value.includes("كيلو")
+          ? { customGrams: undefined }
+          : optionKey === "matrixOption2" && value.includes("كيلو")
+          ? { customGrams: current.customGrams || 250 }
+          : {}),
       },
     }));
   };
@@ -653,55 +660,63 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
                                 </div>
                               </div>
 
-                              {/* Packaging Options */}
-                              <div>
-                                <span className="text-xs font-bold font-alexandria text-[#1A110A]/80 block mb-1">
-                                  نوع العبوة والحجم:
-                                </span>
-                                <div className="flex flex-wrap gap-1.5">
-                                  {product.matrix.option2Values.map((pack) => {
-                                    const isSelected =
-                                      (currentSelection.matrixOption2 ||
-                                        product.matrix?.option2Values[0]) ===
-                                      pack;
-                                    const comboKey = `${
-                                      currentSelection.matrixOption1 ||
-                                      product.matrix?.option1Values[0]
-                                    }|${pack}`;
-                                    const comboPrice =
-                                      product.matrix?.prices[comboKey];
-                                    const isAvailable = comboPrice !== undefined;
+                              {/* Packaging Options - Only shown if there are special packages beyond standard kilo */}
+                              {product.matrix.option2Values.filter((p) => p !== "100 جم").length > 1 && (
+                                <div>
+                                  <span className="text-xs font-bold font-alexandria text-[#1A110A]/80 block mb-1">
+                                    نوع العبوة / التجهيز:
+                                  </span>
+                                  <div className="flex flex-wrap gap-1.5">
+                                    {product.matrix.option2Values
+                                      .filter((pack) => pack !== "100 جم")
+                                      .map((pack) => {
+                                        const isSelected =
+                                          (currentSelection.matrixOption2 ||
+                                            product.matrix?.option2Values[0]) ===
+                                          pack;
+                                        const comboKey = `${
+                                          currentSelection.matrixOption1 ||
+                                          product.matrix?.option1Values[0]
+                                        }|${pack}`;
+                                        const comboPrice =
+                                          product.matrix?.prices[comboKey];
+                                        const isAvailable = comboPrice !== undefined;
+                                        const displayPackLabel =
+                                          pack === "كيلو"
+                                            ? "بالوزن الحر (جرامات)"
+                                            : pack;
 
-                                    return (
-                                      <button
-                                        key={pack}
-                                        disabled={!isAvailable}
-                                        onClick={() =>
-                                          handleMatrixSelect(
-                                            product,
-                                            "matrixOption2",
-                                            pack
-                                          )
-                                        }
-                                        className={`px-2.5 py-1.5 rounded-lg text-xs font-alexandria transition-all flex items-center gap-1 cursor-pointer ${
-                                          isSelected
-                                            ? "bg-[#C5A059] text-white font-bold shadow-xs"
-                                            : isAvailable
-                                            ? "bg-white text-[#1A110A] border border-[#1A110A]/15 hover:bg-[#1A110A]/5 font-medium"
-                                            : "bg-gray-100 text-gray-400 border border-gray-200 opacity-50 cursor-not-allowed text-[11px]"
-                                        }`}
-                                      >
-                                        <span>{pack}</span>
-                                        {comboPrice && (
-                                          <span className="font-price text-[10px] opacity-85">
-                                            ({comboPrice} ج.م)
-                                          </span>
-                                        )}
-                                      </button>
-                                    );
-                                  })}
+                                        return (
+                                          <button
+                                            key={pack}
+                                            disabled={!isAvailable}
+                                            onClick={() =>
+                                              handleMatrixSelect(
+                                                product,
+                                                "matrixOption2",
+                                                pack
+                                              )
+                                            }
+                                            className={`px-2.5 py-1.5 rounded-lg text-xs font-alexandria transition-all flex items-center gap-1 cursor-pointer ${
+                                              isSelected
+                                                ? "bg-[#C5A059] text-white font-bold shadow-xs"
+                                                : isAvailable
+                                                ? "bg-white text-[#1A110A] border border-[#1A110A]/15 hover:bg-[#1A110A]/5 font-medium"
+                                                : "bg-gray-100 text-gray-400 border border-gray-200 opacity-50 cursor-not-allowed text-[11px]"
+                                            }`}
+                                          >
+                                            <span>{displayPackLabel}</span>
+                                            {comboPrice && pack !== "كيلو" && (
+                                              <span className="font-price text-[10px] opacity-85">
+                                                ({comboPrice} ج.م)
+                                              </span>
+                                            )}
+                                          </button>
+                                        );
+                                      })}
+                                  </div>
                                 </div>
-                              </div>
+                              )}
                             </div>
                           )}
 
@@ -780,8 +795,8 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
 
                           {/* 5C. Weighted Products: Free Weight Slider Counter & Presets */}
                           {isProductEligibleForGrams(product) &&
-                            product.id !== "basic-plain-matrix" &&
-                            product.id !== "basic-mohawaj-matrix" && (
+                            (!currentSelection.matrixOption2 ||
+                              currentSelection.matrixOption2.includes("كيلو")) && (
                               <div className="my-2.5 p-3 bg-[#FAF8F5] rounded-xl border border-[#C5A059]/30 space-y-2.5 shadow-2xs">
                                 <div className="flex items-center justify-between gap-2">
                                   <div className="flex items-center gap-1.5 font-bold text-xs font-alexandria text-[#1A110A]">

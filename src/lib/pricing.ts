@@ -11,12 +11,13 @@ export function isProductEligibleForGrams(product: Product): boolean {
     product.category === "indian" ||
     product.category === "blends" ||
     product.category === "french" ||
-    product.category === "custom_blend"
+    product.category === "custom_blend" ||
+    product.category === "basics"
   ) {
     return true;
   }
 
-  if (product.tier === 2) {
+  if (product.tier === 2 || product.tier === 5) {
     return true;
   }
 
@@ -129,6 +130,21 @@ export function calculateProductPrice(
   if (product.tier === 5 && product.matrix) {
     const opt1 = options.matrixOption1 || product.matrix.option1Values[0];
     const opt2 = options.matrixOption2 || product.matrix.option2Values[0];
+
+    // If custom grams are selected and user is on kilo/weight selection
+    if (customGrams && customGrams > 0 && (!opt2 || opt2.includes("كيلو"))) {
+      const kiloKey = `${opt1}|كيلو`;
+      const kiloPrice =
+        product.matrix.prices[kiloKey] ||
+        Object.values(product.matrix.prices)[0] ||
+        0;
+      const calculated = Math.round((kiloPrice * customGrams) / 1000);
+      return {
+        price: Math.max(calculated, 10),
+        label: `${opt1} - ${formatGramLabel(customGrams)}`,
+      };
+    }
+
     const key = `${opt1}|${opt2}`;
     const price = product.matrix.prices[key];
 
@@ -247,6 +263,13 @@ export function getQuickWeightPresets(
     } else {
       kiloPrice = product.variants[0].price;
     }
+  } else if (product.tier === 5 && product.matrix) {
+    const opt1 = options?.matrixOption1 || product.matrix.option1Values[0];
+    const kiloKey = `${opt1}|كيلو`;
+    kiloPrice =
+      product.matrix.prices[kiloKey] ||
+      Object.values(product.matrix.prices)[0] ||
+      0;
   }
 
   return presets.map((p) => ({
@@ -269,7 +292,22 @@ export function formatProductSelectionSummary(
   if (product.matrix) {
     const roast = options.matrixOption1 || product.matrix.option1Values[0];
     const pack = options.matrixOption2 || product.matrix.option2Values[0];
-    parts.push(roast, pack);
+    if (options.customGrams && (!pack || pack.includes("كيلو"))) {
+      const g = options.customGrams;
+      const gLabel =
+        g === 125
+          ? "ثمن كيلو (125 جم)"
+          : g === 250
+          ? "ربع كيلو (250 جم)"
+          : g === 500
+          ? "نصف كيلو (500 جم)"
+          : g === 1000
+          ? "كيلو كامل (1000 جم)"
+          : `${g} جم`;
+      parts.push(roast, gLabel);
+    } else {
+      parts.push(roast, pack);
+    }
   } else if (product.tier === 2) {
     const chosen = product.variants?.find((v) => v.id === options.variantId) || product.variants?.[0];
     if (chosen) parts.push(chosen.label);
@@ -336,6 +374,7 @@ export function getDefaultProductOptions(product: Product): SelectedProductOptio
     return {
       matrixOption1: product.matrix.option1Values[0],
       matrixOption2: product.matrix.option2Values[0],
+      customGrams: 250,
     };
   }
 
