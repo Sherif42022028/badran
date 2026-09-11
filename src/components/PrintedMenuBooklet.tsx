@@ -178,21 +178,27 @@ export default function PrintedMenuBooklet() {
           {(viewMode === "all" || currentPage === 1) && (
             <div className="relative bg-[#1A110B] text-[#FAF8F5] rounded-2xl md:rounded-3xl border-2 border-[#C5A059] p-6 sm:p-10 md:p-14 shadow-xl overflow-hidden min-h-[580px] flex flex-col justify-between">
               <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#C5A059_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none" />
-              <div className="absolute top-0 right-0 w-64 h-64 bg-[#C5A059]/10 rounded-full blur-3xl pointer-events-none" />
-              <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#C5A059]/10 rounded-full blur-3xl pointer-events-none" />
+              
+              {/* Animated Floating Moving Golden Circles (الدواير الدهبية المتحركة) */}
+              <div className="absolute -top-12 -right-12 w-72 h-72 sm:w-96 sm:h-96 bg-[#C5A059]/25 rounded-full blur-3xl pointer-events-none animate-float-circle-1" />
+              <div className="absolute -bottom-16 -left-12 w-80 h-80 sm:w-96 sm:h-96 bg-[#C5A059]/25 rounded-full blur-3xl pointer-events-none animate-float-circle-2" />
+              <div className="absolute top-1/3 left-1/4 w-48 h-48 sm:w-64 sm:h-64 bg-[#C5A059]/20 rounded-full blur-2xl pointer-events-none animate-float-circle-3" />
+              <div className="absolute bottom-1/4 right-1/4 w-40 h-40 bg-[#C5A059]/18 rounded-full blur-xl pointer-events-none animate-float-circle-1 [animation-delay:4s]" />
+
               <div className="absolute inset-3 sm:inset-4 border border-[#C5A059]/40 rounded-xl md:rounded-2xl pointer-events-none" />
 
               <div className="relative z-10 flex items-center justify-between border-b border-[#C5A059]/30 pb-4">
                 <div className="flex items-center gap-2">
-                  <span className="px-3 py-1 bg-[#C5A059] text-[#1A110B] rounded-full text-[11px] font-bold font-alexandria">
+                  <span className="px-3 py-1 bg-[#C5A059] text-[#1A110B] rounded-full text-[11px] font-bold font-alexandria shadow-xs">
                     طبعة رسمية معتمدة
                   </span>
-                  <span className="text-xs text-[#FAF8F5]/70 font-alexandria">
+                  <span className="text-xs text-[#FAF8F5]/80 font-alexandria font-medium">
                     2026 — 1447 هـ
                   </span>
                 </div>
-                <div className="text-left font-alexandria text-xs text-[#C5A059] font-semibold">
-                  بيت البن الأصيل بميت غمر
+                <div className="text-left font-alexandria text-xs sm:text-sm text-[#C5A059] font-bold flex items-center gap-1.5">
+                  <Sparkles className="w-3.5 h-3.5 text-[#C5A059]" />
+                  <span>بيت البن الأصيل بميت غمر</span>
                 </div>
               </div>
 
@@ -206,21 +212,21 @@ export default function PrintedMenuBooklet() {
                   />
                 </div>
 
-                <div className="space-y-2">
-                  <span className="text-xs sm:text-sm font-alexandria tracking-widest text-[#C5A059] uppercase block">
-                    Badran Artisan Coffee Roastery
+                <div className="space-y-2.5">
+                  <span className="text-xs sm:text-sm font-alexandria tracking-[0.25em] text-[#C5A059] uppercase block font-semibold">
+                    BADRAN ARTISAN COFFEE ROASTERY
                   </span>
-                  <h1 className="font-amiri text-4xl sm:text-5xl md:text-6xl font-bold text-[#FAF8F5] drop-shadow-md">
-                    بُـــن بَــــدْرَان
+                  <h1 className="font-amiri text-5xl sm:text-6xl md:text-7xl font-bold text-[#FAF8F5] drop-shadow-md my-1 leading-tight tracking-normal">
+                    بن بدران
                   </h1>
-                  <p className="font-amiri text-lg sm:text-2xl text-[#C5A059] font-medium">
+                  <p className="font-amiri text-xl sm:text-2xl text-[#C5A059] font-medium tracking-wide">
                     طعم يميّزك ... وجودة تثق بها
                   </p>
                 </div>
 
-                <div className="w-32 h-0.5 bg-gradient-to-r from-transparent via-[#C5A059] to-transparent mx-auto" />
+                <div className="w-36 h-0.5 bg-gradient-to-r from-transparent via-[#C5A059] to-transparent mx-auto my-3" />
 
-                <p className="font-alexandria text-xs sm:text-sm text-[#FAF8F5]/85 max-w-lg mx-auto font-light leading-relaxed">
+                <p className="font-alexandria text-xs sm:text-sm text-[#FAF8F5]/90 max-w-lg mx-auto font-normal leading-relaxed">
                   قائمة الأسعار الشاملة والكتالوج الرسمي لأرقى أنواع البن العالمي المحمص طازجاً على أصوله، والتوليفات الحصرية المبتكرة.
                 </p>
               </div>
@@ -951,7 +957,7 @@ export default function PrintedMenuBooklet() {
                 </p>
                 <div className="pt-2 flex flex-wrap items-center justify-between text-[11px] text-[#C5A059] font-alexandria border-t border-[#C5A059]/30">
                   <span>فرع ميت غمر — خدمة العملاء والطلبات عبر الواتساب</span>
-                  <span>بُـــن بَـــدْرَان 🤎 طعم يميّزك ... وجودة تثق بها</span>
+                  <span>بن بدران 🤎 طعم يميّزك ... وجودة تثق بها</span>
                 </div>
               </div>
             </div>

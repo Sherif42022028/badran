@@ -161,3 +161,57 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #1A110B;
 }
+
+/* Floating Golden Circles Animations */
+@keyframes float-circle-1 {
+  0%, 100% {
+    transform: translate(0px, 0px) scale(1);
+    opacity: 0.22;
+  }
+  33% {
+    transform: translate(-35px, 28px) scale(1.18);
+    opacity: 0.42;
+  }
+  66% {
+    transform: translate(22px, -25px) scale(0.92);
+    opacity: 0.28;
+  }
+}
+
+@keyframes float-circle-2 {
+  0%, 100% {
+    transform: translate(0px, 0px) scale(1);
+    opacity: 0.25;
+  }
+  33% {
+    transform: translate(40px, -35px) scale(1.15);
+    opacity: 0.38;
+  }
+  66% {
+    transform: translate(-28px, 18px) scale(0.9);
+    opacity: 0.2;
+  }
+}
+
+@keyframes float-circle-3 {
+  0%, 100% {
+    transform: translate(0px, 0px) scale(0.95);
+    opacity: 0.18;
+  }
+  50% {
+    transform: translate(-25px, -25px) scale(1.22);
+    opacity: 0.38;
+  }
+}
+
+.animate-float-circle-1 {
+  animation: float-circle-1 8s ease-in-out infinite;
+}
+
+.animate-float-circle-2 {
+  animation: float-circle-2 11s ease-in-out infinite;
+}
+
+.animate-float-circle-3 {
+  animation: float-circle-3 7s ease-in-out infinite;
+}
