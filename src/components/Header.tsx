@@ -42,7 +42,7 @@ export default function Header({ cartCount, onOpenCart }: HeaderProps) {
         </Link>
 
         {/* Desktop Navigation Links */}
-        <nav className="hidden md:flex items-center gap-7 font-tajawal text-sm font-bold text-[#1A110B]/85">
+        <nav className="hidden md:flex items-center gap-8 font-tajawal text-sm font-bold text-[#1A110B]/85">
           <a
             href="#hero"
             className="hover:text-[#C5A059] transition-colors py-1"
@@ -54,13 +54,6 @@ export default function Header({ cartCount, onOpenCart }: HeaderProps) {
             className="hover:text-[#C5A059] transition-colors py-1"
           >
             عن المحل
-          </a>
-          <a
-            href="#blend-finder"
-            className="text-[#C5A059] hover:text-[#9E7A32] transition-colors py-1 flex items-center gap-1.5"
-          >
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>مش لاقي توليفتك؟</span>
           </a>
           <a
             href="#blend-builder"
@@ -134,14 +127,6 @@ export default function Header({ cartCount, onOpenCart }: HeaderProps) {
             className="block py-2 text-[#1A110B] font-semibold border-b border-dashed border-[#1A110B]/10"
           >
             عن المحل
-          </a>
-          <a
-            href="#blend-finder"
-            onClick={() => setMobileMenuOpen(false)}
-            className="py-2 text-[#C5A059] font-bold border-b border-dashed border-[#1A110B]/10 flex items-center justify-center gap-1.5"
-          >
-            <Sparkles className="w-4 h-4 text-[#C5A059]" />
-            <span>مش لاقي توليفتك؟ (اكتشف خلطتك)</span>
           </a>
           <a
             href="#blend-builder"

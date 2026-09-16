@@ -16,6 +16,7 @@ import {
   Trash2,
   AlertCircle,
   Flame,
+  Compass,
 } from "lucide-react";
 import {
   Card,
@@ -458,6 +459,14 @@ export default function BlendBuilder({
                 {selectedComponentsList.length} أصناف
               </strong>
             </div>
+
+            <a
+              href="#blend-finder"
+              className="inline-flex items-center gap-1.5 bg-[#FAF8F5] hover:bg-[#F3EFE9] border border-[#C5A059]/40 py-1 px-3 rounded-full text-[#1A110B] hover:text-[#C5A059] transition-colors shadow-2xs cursor-pointer"
+            >
+              <Compass className="w-3.5 h-3.5 text-[#C5A059]" />
+              <span>مش لاقي توليفتك؟ اضغط هنا</span>
+            </a>
 
             {selectedComponentsList.length > 0 && (
               <Button

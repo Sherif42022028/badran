@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import {
   Sparkles,
   Coffee,
@@ -12,6 +12,16 @@ import {
   CheckCircle2,
   HelpCircle,
   Flame,
+  Scale,
+  Clock,
+  Feather,
+  Sun,
+  Droplets,
+  Gauge,
+  Zap,
+  Heart,
+  Check,
+  Compass,
 } from "lucide-react";
 import {
   FINDER_QUESTIONS,
@@ -34,6 +44,28 @@ interface BlendFinderProps {
 }
 
 type QuizStep = "intro" | "questions" | "calculating" | "result";
+
+// Authentic, restrained SVG micro-icons matching Badran's heritage design
+const OPTION_ICONS: Record<string, React.ReactNode> = {
+  light: <Feather className="w-4 h-4 text-[#C5A059]" />,
+  medium: <Scale className="w-4 h-4 text-[#C5A059]" />,
+  dark: <Flame className="w-4 h-4 text-[#C5A059]" />,
+  choco: <Coffee className="w-4 h-4 text-[#C5A059]" />,
+  fruity: <Sparkles className="w-4 h-4 text-[#C5A059]" />,
+  spice: <Flame className="w-4 h-4 text-[#C5A059]" />,
+  smoky: <Flame className="w-4 h-4 text-[#C5A059]" />,
+  no_acidity: <CheckCircle2 className="w-4 h-4 text-[#C5A059]" />,
+  mild_acidity: <Sun className="w-4 h-4 text-[#C5A059]" />,
+  high_acidity: <Sparkles className="w-4 h-4 text-[#C5A059]" />,
+  sada: <Coffee className="w-4 h-4 text-[#C5A059]" />,
+  mohawaj: <Sparkles className="w-4 h-4 text-[#C5A059]" />,
+  turkish: <Coffee className="w-4 h-4 text-[#C5A059]" />,
+  filter: <Droplets className="w-4 h-4 text-[#C5A059]" />,
+  espresso: <Gauge className="w-4 h-4 text-[#C5A059]" />,
+  high_caff: <Zap className="w-4 h-4 text-[#C5A059]" />,
+  med_caff: <Scale className="w-4 h-4 text-[#C5A059]" />,
+  low_caff: <Heart className="w-4 h-4 text-[#C5A059]" />,
+};
 
 export default function BlendFinder({
   onApplyToBuilder,
@@ -70,26 +102,24 @@ export default function BlendFinder({
     };
     setAnswers(updatedAnswers);
 
-    // Smooth delay for visual tap confirmation before advancing
+    // Subtle tactile delay before advancing
     setTimeout(() => {
       setJustSelectedOption(null);
       if (currentQuestionIndex < totalQuestions - 1) {
         setCurrentQuestionIndex((prev) => prev + 1);
       } else {
-        // Last question completed -> show calculating screen
         setStep("calculating");
         const computedResult = calculateBlendRecommendation(updatedAnswers);
         setResult(computedResult);
 
-        // 1.2s realistic calculating delay for psychological trust
         setTimeout(() => {
           setStep("result");
-        }, 1200);
+        }, 1100);
       }
-    }, 220);
+    }, 200);
   };
 
-  // Go Back to Previous Question
+  // Back Button
   const handleBack = () => {
     if (currentQuestionIndex > 0) {
       setCurrentQuestionIndex((prev) => prev - 1);
@@ -106,7 +136,7 @@ export default function BlendFinder({
     setStep("intro");
   };
 
-  // 1. Apply to manual BlendBuilder
+  // Apply to Builder
   const handleApplyToBuilderClick = () => {
     if (!result) return;
 
@@ -126,14 +156,13 @@ export default function BlendFinder({
       });
     }
 
-    // Smooth scroll down to the manual builder
     const builderEl = document.getElementById("blend-builder");
     if (builderEl) {
       builderEl.scrollIntoView({ behavior: "smooth" });
     }
   };
 
-  // 2. Add directly to Shopping Cart
+  // Add to Cart Directly
   const handleAddToCartDirectly = () => {
     if (!result || !onAddToCart) return;
 
@@ -165,55 +194,56 @@ export default function BlendFinder({
   return (
     <section
       id="blend-finder"
-      className="py-8 md:py-14 px-3 sm:px-5 max-w-5xl mx-auto scroll-mt-20"
+      className="py-4 md:py-8 px-4 max-w-7xl mx-auto scroll-mt-24"
       aria-label="قسم مش لاقي توليفتك"
     >
-      <div className="relative rounded-2xl border border-[#C5A059]/40 bg-[#FAF8F5] shadow-xl overflow-hidden p-5 sm:p-8 md:p-10 transition-all duration-300">
+      <div className="framed-section p-5 sm:p-8 md:p-10 bg-white">
         
-        {/* Subtle Decorative Background Accents */}
-        <div className="absolute top-0 right-0 w-72 h-72 bg-[#C5A059]/5 rounded-full blur-3xl pointer-events-none -mr-20 -mt-20" />
-        <div className="absolute bottom-0 left-0 w-72 h-72 bg-[#3D120E]/5 rounded-full blur-3xl pointer-events-none -ml-20 -mb-20" />
+        {/* ================= SECTION HEADER ================= */}
+        <div className="text-center mb-8 border-b border-dashed border-[#C5A059]/40 pb-6">
+          <span className="solid-badge text-xs md:text-sm mb-3 py-1 px-4 inline-flex items-center gap-2">
+            <Compass className="w-4 h-4 text-[#C5A059]" />
+            <span>مش لاقي توليفتك؟</span>
+          </span>
+
+          <h2 className="font-calligraphy font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-[#1A110B] leading-tight mt-1">
+            دليل الذوق البلدي.. نجمعلك أقرب توليفة لمزاجك
+          </h2>
+
+          <p className="font-alexandria text-xs sm:text-sm text-[#1A110A]/75 max-w-2xl mx-auto mt-2.5 font-light leading-relaxed">
+            جاوب على 6 أسئلة حسّية بسيطة وواضحة، وخبرة مطحنة بدران هتجمعلك نسب
+            الخلطة المظبوطة بدقة بالجرام، مع التحويجة الأصلية اللي تظبط وش فنجانك.
+          </p>
+        </div>
 
         {/* ================= SCREEN 1: INTRO ================= */}
         {step === "intro" && (
-          <div className="relative z-10 text-center py-4 sm:py-6">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#1A110B]/5 border border-[#C5A059]/30 text-xs sm:text-sm font-tajawal font-bold text-[#C5A059] mb-4">
-              <Sparkles className="w-4 h-4 text-[#C5A059]" />
-              <span>مساعد الذوق الشخصي من بن بدران</span>
+          <div className="max-w-2xl mx-auto text-center py-4">
+            {/* 3 Authentic Badges */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-8 text-center font-alexandria text-xs text-[#1A110B]">
+              <div className="flex items-center justify-center gap-2 p-3 bg-[#FAF8F5] rounded-lg border border-[#1A110B]/10">
+                <Scale className="w-4 h-4 text-[#C5A059] shrink-0" />
+                <span className="font-semibold">وزن دقيق لأعلى صنفين</span>
+              </div>
+              <div className="flex items-center justify-center gap-2 p-3 bg-[#FAF8F5] rounded-lg border border-[#1A110B]/10">
+                <Flame className="w-4 h-4 text-[#C5A059] shrink-0" />
+                <span className="font-semibold">على أصول التحميص البلدي</span>
+              </div>
+              <div className="flex items-center justify-center gap-2 p-3 bg-[#FAF8F5] rounded-lg border border-[#1A110B]/10">
+                <Clock className="w-4 h-4 text-[#C5A059] shrink-0" />
+                <span className="font-semibold">في أقل من دقيقة واحدة</span>
+              </div>
             </div>
 
-            <h2 className="font-amiri text-3xl sm:text-4xl md:text-5xl font-bold text-[#1A110B] mb-4 leading-snug">
-              مش لاقي توليفتك؟ سيبها على خبرتنا
-            </h2>
-
-            <p className="font-tajawal text-base sm:text-lg text-[#1A110B]/80 max-w-2xl mx-auto mb-8 leading-relaxed">
-              جاوب على 6 أسئلة حسّية بسيطة واحد ورا التاني، ونجمعلك أقرب توليفة
-              تفصيلية لذوقك ومزاجك مع نسب الجرامات وطريقة التحويج الأنسب لفنجانك.
-            </p>
-
-            <div className="flex flex-wrap justify-center items-center gap-4 sm:gap-6 text-xs sm:text-sm font-tajawal text-[#1A110B]/70 mb-8">
-              <span className="inline-flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4 text-[#C5A059]" />
-                بدون كتابة أو مصطلحات معقدة
-              </span>
-              <span className="inline-flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4 text-[#C5A059]" />
-                تاخد أقل من دقيقة واحدة
-              </span>
-              <span className="inline-flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4 text-[#C5A059]" />
-                مبنية على أصول التحميص البلدي
-              </span>
-            </div>
-
-            <div className="flex justify-center">
+            {/* Action CTA */}
+            <div>
               <button
                 onClick={handleStart}
-                className="w-full sm:w-auto bg-[#1A110B] hover:bg-[#2A1D15] text-[#FAF8F5] font-alexandria font-bold text-base sm:text-lg px-9 py-4 rounded-xl border border-[#C5A059]/50 transition-all duration-200 shadow-md hover:shadow-lg active:scale-95 flex items-center justify-center gap-3 cursor-pointer group"
+                className="w-full sm:w-auto bg-[#1A110B] hover:bg-[#2A1D15] text-[#FAF8F5] font-alexandria font-bold text-sm sm:text-base px-9 py-3.5 rounded-lg border border-[#C5A059]/50 transition-all duration-200 shadow-xs active:scale-95 inline-flex items-center justify-center gap-2.5 cursor-pointer"
               >
-                <Coffee className="w-5 h-5 text-[#C5A059] group-hover:rotate-12 transition-transform" />
+                <Coffee className="w-4 h-4 text-[#C5A059]" />
                 <span>ابدأ وجمّع توليفتك الآن</span>
-                <ArrowLeft className="w-5 h-5 text-[#C5A059] group-hover:-translate-x-1 transition-transform" />
+                <ArrowLeft className="w-4 h-4 text-[#C5A059]" />
               </button>
             </div>
           </div>
@@ -221,48 +251,46 @@ export default function BlendFinder({
 
         {/* ================= SCREEN 2: QUESTIONS ================= */}
         {step === "questions" && currentQuestion && (
-          <div className="relative z-10">
-            {/* Top Navigation & Progress Header */}
-            <div className="flex items-center justify-between gap-4 mb-5">
+          <div className="max-w-2xl mx-auto">
+            {/* Navigation & Progress Header */}
+            <div className="flex items-center justify-between gap-4 mb-3">
               <button
                 onClick={handleBack}
-                className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-tajawal font-bold text-[#1A110B]/70 hover:text-[#1A110B] hover:bg-black/5 px-2.5 py-1.5 rounded-lg transition-colors cursor-pointer"
+                className="inline-flex items-center gap-1.5 text-xs font-alexandria font-semibold text-[#1A110B]/60 hover:text-[#1A110B] transition-colors cursor-pointer py-1"
                 aria-label="الرجوع للسؤال السابق"
               >
-                <ArrowRight className="w-4 h-4" />
-                <span>رجوع</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+                <span>السابق</span>
               </button>
 
-              <div className="flex items-center gap-2">
-                <span className="text-xs sm:text-sm font-tajawal font-bold text-[#C5A059] bg-[#1A110B]/5 px-3 py-1 rounded-full border border-[#C5A059]/25">
-                  سؤال {currentQuestionIndex + 1} من {totalQuestions}
-                </span>
-              </div>
+              <span className="font-alexandria text-xs font-bold text-[#C5A059]">
+                سؤال {currentQuestionIndex + 1} من {totalQuestions}
+              </span>
             </div>
 
-            {/* Progress Bar */}
-            <div className="w-full bg-[#1A110B]/10 h-2 rounded-full overflow-hidden mb-8">
+            {/* Progress Gauge */}
+            <div className="w-full bg-[#FAF8F5] border border-[#1A110B]/10 h-2 rounded-full overflow-hidden mb-8">
               <div
-                className="bg-gradient-to-l from-[#C5A059] to-[#9E7A32] h-full rounded-full transition-all duration-300 ease-out"
+                className="bg-[#C5A059] h-full transition-all duration-300 ease-out rounded-full"
                 style={{ width: `${progressPercent}%` }}
               />
             </div>
 
-            {/* Question Title & Subtitle */}
-            <div className="text-center mb-8 max-w-2xl mx-auto">
-              <h3 className="font-amiri text-2xl sm:text-3xl md:text-4xl font-bold text-[#1A110B] mb-2 leading-snug">
+            {/* Question Title */}
+            <div className="text-center mb-7">
+              <h3 className="font-amiri text-2xl sm:text-3xl font-bold text-[#1A110B] mb-1.5 leading-snug">
                 {currentQuestion.text}
               </h3>
               {currentQuestion.subtitle && (
-                <p className="font-tajawal text-sm sm:text-base text-[#1A110B]/70">
+                <p className="font-tajawal text-xs sm:text-sm text-[#1A110B]/65">
                   {currentQuestion.subtitle}
                 </p>
               )}
             </div>
 
-            {/* Options Cards (3-4 Cards per Question) */}
+            {/* Option Cards (Craft Tasting Cards) */}
             <div
-              className={`grid gap-3.5 sm:gap-4 max-w-2xl mx-auto ${
+              className={`grid gap-3 ${
                 currentQuestion.options.length === 2
                   ? "grid-cols-1 sm:grid-cols-2"
                   : currentQuestion.options.length === 4
@@ -275,36 +303,47 @@ export default function BlendFinder({
                   justSelectedOption === option.id ||
                   answers[currentQuestion.id] === option.id;
 
+                const icon = OPTION_ICONS[option.id] || (
+                  <Coffee className="w-4 h-4 text-[#C5A059]" />
+                );
+
                 return (
                   <button
                     key={option.id}
                     onClick={() => handleSelectOption(option.id)}
-                    className={`text-right p-4 sm:p-5 rounded-xl border transition-all duration-200 cursor-pointer flex flex-col justify-between gap-2.5 text-right relative overflow-hidden group ${
+                    className={`text-right p-4 rounded-xl border transition-all duration-200 cursor-pointer flex flex-col justify-between gap-3 relative ${
                       isSelected
-                        ? "bg-[#1A110B] text-white border-[#C5A059] shadow-md scale-[1.02]"
-                        : "bg-white hover:bg-[#F3EFE9] text-[#1A110B] border-[#1A110B]/12 hover:border-[#C5A059]/60 shadow-xs hover:shadow-sm"
+                        ? "bg-[#1A110B] text-white border-[#C5A059] shadow-sm"
+                        : "bg-[#FAF8F5] hover:bg-[#F3EFE9] text-[#1A110B] border-[#1A110B]/12 hover:border-[#C5A059]/50 shadow-2xs"
                     }`}
                   >
-                    {/* Top row: Emoji & Selection Indicator */}
+                    {/* Top Row: Refined Micro-icon & Check Indicator */}
                     <div className="flex items-center justify-between w-full">
-                      <span className="text-2xl sm:text-3xl filter drop-shadow-xs group-hover:scale-110 transition-transform">
-                        {option.emoji || "☕"}
-                      </span>
                       <div
-                        className={`w-5 h-5 rounded-full border flex items-center justify-center transition-colors ${
+                        className={`w-8 h-8 rounded-lg border flex items-center justify-center transition-colors ${
                           isSelected
-                            ? "border-[#C5A059] bg-[#C5A059] text-white"
-                            : "border-[#1A110B]/20 group-hover:border-[#C5A059]"
+                            ? "border-[#C5A059]/60 bg-white/10"
+                            : "border-[#1A110B]/10 bg-white"
                         }`}
                       >
-                        {isSelected && <CheckCircle2 className="w-3.5 h-3.5 text-white" />}
+                        {icon}
+                      </div>
+
+                      <div
+                        className={`w-4 h-4 rounded-full border flex items-center justify-center ${
+                          isSelected
+                            ? "border-[#C5A059] bg-[#C5A059] text-white"
+                            : "border-[#1A110B]/20"
+                        }`}
+                      >
+                        {isSelected && <Check className="w-2.5 h-2.5 text-white" />}
                       </div>
                     </div>
 
-                    {/* Bottom row: Text & Sublabel */}
-                    <div className="mt-1">
+                    {/* Text Details */}
+                    <div>
                       <h4
-                        className={`font-alexandria font-bold text-sm sm:text-base leading-snug mb-1 ${
+                        className={`font-alexandria font-bold text-sm leading-snug mb-1 ${
                           isSelected ? "text-white" : "text-[#1A110B]"
                         }`}
                       >
@@ -313,7 +352,7 @@ export default function BlendFinder({
                       {option.sublabel && (
                         <p
                           className={`font-tajawal text-xs leading-relaxed ${
-                            isSelected ? "text-white/80" : "text-[#1A110B]/60"
+                            isSelected ? "text-white/75" : "text-[#1A110B]/60"
                           }`}
                         >
                           {option.sublabel}
@@ -325,57 +364,55 @@ export default function BlendFinder({
               })}
             </div>
 
-            {/* Quick helper footer */}
-            <div className="text-center mt-6 text-[11px] sm:text-xs font-tajawal text-[#1A110B]/50">
-              اضغط على أي اختيار للانتقال مباشرة للسؤال التالي
+            <div className="text-center mt-5 text-[11px] font-tajawal text-[#1A110B]/45">
+              اضغط على أي خيار للانتقال المباشر للسؤال التالي
             </div>
           </div>
         )}
 
         {/* ================= SCREEN 3: CALCULATING ================= */}
         {step === "calculating" && (
-          <div className="relative z-10 text-center py-12 sm:py-16">
-            <div className="relative mx-auto w-20 h-20 mb-6 flex items-center justify-center">
-              <div className="absolute inset-0 rounded-full border-4 border-[#C5A059]/20 border-t-[#C5A059] animate-spin" />
-              <Coffee className="w-8 h-8 text-[#C5A059] animate-pulse" />
+          <div className="max-w-md mx-auto text-center py-10">
+            <div className="relative mx-auto w-14 h-14 mb-4 flex items-center justify-center">
+              <div className="absolute inset-0 rounded-full border-2 border-[#C5A059]/30 border-t-[#C5A059] animate-spin" />
+              <Coffee className="w-6 h-6 text-[#C5A059]" />
             </div>
 
-            <h3 className="font-amiri text-2xl sm:text-3xl font-bold text-[#1A110B] mb-2">
-              بنجمعلك توليفتك المثالية...
+            <h3 className="font-amiri text-xl sm:text-2xl font-bold text-[#1A110B] mb-1.5">
+              جاري موازنة حبوب البن وحساب النسب...
             </h3>
-            <p className="font-tajawal text-sm sm:text-base text-[#1A110B]/70 max-w-md mx-auto">
-              بنطابق إجاباتك مع حبوب البن ونسب التحميص البلدية لنوصل لأعلى فنجان
-              يظبط مزاجك.
+            <p className="font-tajawal text-xs sm:text-sm text-[#1A110B]/65">
+              بنطابق إجاباتك مع حبوب البن ونسب التحميص البلدية بمطحنة بدران.
             </p>
           </div>
         )}
 
-        {/* ================= SCREEN 4: RESULT REVEAL ================= */}
+        {/* ================= SCREEN 4: RESULT SPEC SHEET ================= */}
         {step === "result" && result && (
-          <div className="relative z-10">
-            {/* Header Badge */}
+          <div className="max-w-2xl mx-auto">
+            {/* Header */}
             <div className="text-center mb-6">
-              <span className="inline-flex items-center gap-1.5 bg-[#C5A059]/15 text-[#8C6D2B] border border-[#C5A059]/40 text-xs sm:text-sm font-tajawal font-bold px-3.5 py-1 rounded-full mb-3">
-                <Sparkles className="w-4 h-4 text-[#C5A059]" />
-                توليفة مقترحة مفصلة على ذوقك
+              <span className="solid-badge text-xs py-0.5 px-3 mb-2 inline-flex items-center gap-1.5">
+                <CheckCircle2 className="w-3.5 h-3.5 text-[#C5A059]" />
+                <span>توليفة معتمدة وموزونة لمزاجك</span>
               </span>
-              <h3 className="font-amiri text-3xl sm:text-4xl md:text-5xl font-bold text-[#1A110B] mb-2 leading-tight">
+              <h3 className="font-calligraphy text-2xl sm:text-3xl md:text-4xl font-bold text-[#1A110B] mb-1">
                 دي توليفتك المقترحة
               </h3>
-              <p className="font-tajawal text-sm sm:text-base text-[#1A110B]/75 max-w-xl mx-auto">
+              <p className="font-alexandria text-xs sm:text-sm text-[#C5A059] font-semibold">
                 {result.recipeSummary}
               </p>
             </div>
 
-            {/* Blend Visual Ratio Meter */}
-            <div className="bg-white rounded-xl border border-[#1A110B]/10 p-5 sm:p-6 mb-6 shadow-xs max-w-2xl mx-auto">
-              <div className="flex items-center justify-between text-xs font-tajawal font-bold text-[#1A110B]/70 mb-2">
-                <span>توزيع نسب الخلطة (إجمالي {result.totalGrams} جم)</span>
-                <span>النوع: {result.preparation === "mohawaj" ? "محوج بالحبهان والمستكة" : "ساده صافي"}</span>
+            {/* Spec Card */}
+            <div className="bg-[#FAF8F5] rounded-xl border border-[#1A110B]/12 p-4 sm:p-5 mb-5 shadow-2xs">
+              <div className="flex items-center justify-between text-xs font-alexandria font-semibold text-[#1A110B]/75 mb-2.5">
+                <span>توزيع النسب المئوية (إجمالي {result.totalGrams} جم)</span>
+                <span>{result.preparation === "mohawaj" ? "محوج بالحبهان والمستكة" : "ساده صافي"}</span>
               </div>
 
-              {/* Multi-color ratio bar */}
-              <div className="w-full h-5 rounded-lg overflow-hidden flex shadow-inner mb-4 bg-gray-100">
+              {/* Segmented Ratio Bar */}
+              <div className="w-full h-4 rounded-md overflow-hidden flex mb-4 bg-gray-200">
                 {result.components.map((comp, idx) => (
                   <div
                     key={comp.bean.id}
@@ -384,22 +421,21 @@ export default function BlendFinder({
                       width: `${comp.percentage}%`,
                       backgroundColor: comp.bean.color || (idx === 0 ? "#1A110B" : "#C5A059"),
                     }}
-                    title={`${comp.bean.name}: ${comp.percentage}%`}
                   >
-                    {comp.percentage >= 15 ? `${comp.percentage}%` : ""}
+                    {comp.percentage >= 18 ? `${comp.percentage}%` : ""}
                   </div>
                 ))}
               </div>
 
-              {/* Components Cards Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-dashed border-[#1A110B]/10">
+              {/* Components Cards */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-2 border-t border-dashed border-[#1A110B]/10">
                 {result.components.map((comp) => (
                   <div
                     key={comp.bean.id}
-                    className="p-3 rounded-lg bg-[#FAF8F5] border border-[#1A110B]/8 flex items-start gap-3"
+                    className="p-3 rounded-lg bg-white border border-[#1A110B]/8 flex items-start gap-2.5"
                   >
                     <div
-                      className="w-3.5 h-3.5 rounded-full shrink-0 mt-1"
+                      className="w-3 h-3 rounded-full shrink-0 mt-1"
                       style={{ backgroundColor: comp.bean.color || "#C5A059" }}
                     />
                     <div className="flex-1 min-w-0">
@@ -411,7 +447,7 @@ export default function BlendFinder({
                           {comp.percentage}% ({comp.grams} جم)
                         </span>
                       </div>
-                      <p className="font-tajawal text-[11px] text-[#1A110B]/60 mt-0.5 leading-snug line-clamp-2">
+                      <p className="font-tajawal text-[11px] text-[#1A110B]/60 mt-0.5 leading-snug">
                         {comp.bean.blendRole}
                       </p>
                     </div>
@@ -420,29 +456,29 @@ export default function BlendFinder({
               </div>
             </div>
 
-            {/* Why this blend? (Personalized Rationale) */}
-            <div className="bg-[#FAF8F5] border-r-4 border-r-[#C5A059] border border-[#1A110B]/10 rounded-xl p-4 sm:p-5 mb-6 max-w-2xl mx-auto text-right">
-              <h4 className="font-alexandria text-xs sm:text-sm font-bold text-[#1A110B] mb-1 flex items-center gap-1.5">
-                <HelpCircle className="w-4 h-4 text-[#C5A059]" />
-                ليه التوليفة دي معمولة على مقاسك؟
+            {/* Why This Blend Box */}
+            <div className="bg-[#F7F4EF] border-r-3 border-r-[#C5A059] border border-[#1A110B]/10 rounded-lg p-3.5 sm:p-4 mb-5 text-right">
+              <h4 className="font-alexandria text-xs font-bold text-[#1A110B] mb-1 flex items-center gap-1.5">
+                <HelpCircle className="w-3.5 h-3.5 text-[#C5A059]" />
+                <span>ليه التوليفة دي معمولة على مقاسك؟</span>
               </h4>
-              <p className="font-tajawal text-xs sm:text-sm text-[#1A110B]/80 leading-relaxed">
+              <p className="font-tajawal text-xs leading-relaxed text-[#1A110B]/80">
                 {result.explanation}
               </p>
             </div>
 
-            {/* Price & Weight Overview Banner */}
-            <div className="max-w-2xl mx-auto flex items-center justify-between p-4 rounded-xl bg-white border border-[#C5A059]/30 mb-6 shadow-xs">
+            {/* Price Overview Banner */}
+            <div className="flex items-center justify-between p-3.5 rounded-lg bg-[#FAF8F5] border border-[#C5A059]/30 mb-5">
               <div>
-                <span className="font-tajawal text-xs text-[#1A110B]/70 block">
-                  الوزن والسعر التقديري للتوليفة
+                <span className="font-alexandria text-xs text-[#1A110B]/70 block">
+                  الوزن والسعر التقديري
                 </span>
-                <span className="font-alexandria text-sm font-bold text-[#1A110B]">
+                <span className="font-alexandria text-xs font-bold text-[#1A110B]">
                   عبوة {result.totalGrams} جم طازة
                 </span>
               </div>
               <div className="text-left">
-                <span className="font-price text-2xl sm:text-3xl font-bold text-[#1A110B]">
+                <span className="font-price text-xl sm:text-2xl font-bold text-[#1A110B]">
                   {result.pricing.totalPrice}
                 </span>
                 <span className="font-tajawal text-xs text-[#1A110B]/70 mr-1 font-bold">
@@ -451,40 +487,38 @@ export default function BlendFinder({
               </div>
             </div>
 
-            {/* Added Directly Success Alert */}
+            {/* Direct Added Success Alert */}
             {addedDirectlyAlert && (
-              <div className="max-w-2xl mx-auto mb-5 p-3 rounded-lg bg-[#25D366]/10 border border-[#25D366]/30 text-[#1B7F3D] font-tajawal text-xs sm:text-sm font-bold flex items-center justify-center gap-2 text-center animate-fade-in">
+              <div className="mb-4 p-2.5 rounded-lg bg-[#25D366]/10 border border-[#25D366]/30 text-[#1B7F3D] font-tajawal text-xs font-bold flex items-center justify-center gap-2 text-center">
                 <CheckCircle2 className="w-4 h-4 text-[#25D366]" />
-                <span>تمت إضافة توليفتك المقترحة إلى سلة الطلبات بنجاح!</span>
+                <span>تمت إضافة التوليفة إلى سلة الطلبات بنجاح!</span>
               </div>
             )}
 
-            {/* Action Buttons */}
-            <div className="max-w-2xl mx-auto flex flex-col sm:flex-row gap-3 items-stretch justify-center mb-5">
-              {/* Button 1: Modify in BlendBuilder */}
+            {/* Actions */}
+            <div className="flex flex-col sm:flex-row gap-3 items-stretch justify-center mb-4 font-alexandria text-xs">
               <button
                 onClick={handleApplyToBuilderClick}
-                className="flex-1 bg-[#FAF8F5] hover:bg-white text-[#1A110B] font-alexandria font-bold text-xs sm:text-sm px-5 py-3.5 rounded-xl border border-[#C5A059] hover:border-[#1A110B] transition-all shadow-xs active:scale-95 flex items-center justify-center gap-2 cursor-pointer group"
+                className="flex-1 bg-white hover:bg-[#FAF8F5] text-[#1A110B] font-bold py-3 px-4 rounded-lg border border-[#C5A059] transition-all shadow-2xs active:scale-95 flex items-center justify-center gap-2 cursor-pointer"
               >
-                <Sliders className="w-4 h-4 text-[#C5A059] group-hover:rotate-45 transition-transform" />
+                <Sliders className="w-4 h-4 text-[#C5A059]" />
                 <span>أضفها لتوليفتك على مزاجك (تعديل)</span>
               </button>
 
-              {/* Button 2: Add to Cart directly */}
               <button
                 onClick={handleAddToCartDirectly}
-                className="flex-1 bg-[#1A110B] hover:bg-[#2A1D15] text-[#FAF8F5] font-alexandria font-bold text-xs sm:text-sm px-5 py-3.5 rounded-xl border border-[#C5A059]/60 transition-all shadow-md active:scale-95 flex items-center justify-center gap-2 cursor-pointer group"
+                className="flex-1 bg-[#1A110B] hover:bg-[#2A1D15] text-[#FAF8F5] font-bold py-3 px-4 rounded-lg border border-[#C5A059]/50 transition-all shadow-2xs active:scale-95 flex items-center justify-center gap-2 cursor-pointer"
               >
-                <ShoppingBag className="w-4 h-4 text-[#C5A059] group-hover:scale-110 transition-transform" />
-                <span>أضيفها للسلة على طول (شراء مباشر)</span>
+                <ShoppingBag className="w-4 h-4 text-[#C5A059]" />
+                <span>أضيفها للسلة فوراً (شراء مباشر)</span>
               </button>
             </div>
 
-            {/* Retake Link */}
+            {/* Retake */}
             <div className="text-center">
               <button
                 onClick={handleReset}
-                className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-tajawal font-bold text-[#1A110B]/60 hover:text-[#C5A059] transition-colors cursor-pointer py-1"
+                className="inline-flex items-center gap-1.5 text-xs font-tajawal text-[#1A110B]/55 hover:text-[#C5A059] transition-colors cursor-pointer py-1"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
                 <span>إعادة الاختبار والبدء من جديد</span>
@@ -492,6 +526,7 @@ export default function BlendFinder({
             </div>
           </div>
         )}
+
       </div>
     </section>
   );
