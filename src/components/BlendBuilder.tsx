@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import {
   Sparkles,
   Coffee,
@@ -46,6 +46,13 @@ import OrderPreviewModal from "@/components/OrderPreviewModal";
 import { CheckoutOrder } from "@/types/Order";
 import { Product } from "@/types/products";
 
+export interface BlendPreset {
+  grams: Record<string, number>;
+  preps?: Record<string, "sada" | "mohawaj">;
+  name?: string;
+  timestamp?: number;
+}
+
 interface BlendBuilderProps {
   onAddToCart?: (
     item: Product,
@@ -53,11 +60,13 @@ interface BlendBuilderProps {
     quantity?: number
   ) => void;
   isEmbedded?: boolean;
+  presetBlend?: BlendPreset | null;
 }
 
 export default function BlendBuilder({
   onAddToCart,
   isEmbedded = false,
+  presetBlend,
 }: BlendBuilderProps) {
   // Selected coffee beans: defaults to Santos (150g) + Harari (100g)
   const [selectedGrams, setSelectedGrams] = useState<Record<string, number>>({
@@ -88,6 +97,23 @@ export default function BlendBuilder({
   const [builtMessage, setBuiltMessage] = useState("");
   const [checkoutOrderObj, setCheckoutOrderObj] = useState<CheckoutOrder | null>(null);
   const [addedAlert, setAddedAlert] = useState(false);
+  const [presetLoadedAlert, setPresetLoadedAlert] = useState<string | null>(null);
+
+  // Sync preset blend from BlendFinder
+  useEffect(() => {
+    if (presetBlend && presetBlend.grams && Object.keys(presetBlend.grams).length > 0) {
+      setSelectedGrams(presetBlend.grams);
+      if (presetBlend.preps) {
+        setSelectedPreps(presetBlend.preps);
+      }
+      if (presetBlend.name) {
+        setBlendName(presetBlend.name);
+      }
+      setPresetLoadedAlert("✨ تم نقل توليفتك المقترحة بنجاح! تقدر تعدل النسب والجرامات من هنا زي ما تحب.");
+      const timer = setTimeout(() => setPresetLoadedAlert(null), 8000);
+      return () => clearTimeout(timer);
+    }
+  }, [presetBlend]);
 
   // Add bean with default 100g or toggle
   const handleToggleBean = (bean: BlendBeanOrigin) => {
@@ -383,6 +409,23 @@ export default function BlendBuilder({
       }`}
     >
       <div className="framed-section p-4 sm:p-7 md:p-9 bg-white">
+        {/* Preset Loaded Notification Banner */}
+        {presetLoadedAlert && (
+          <div className="mb-6 p-4 rounded-xl bg-[#C5A059]/15 border border-[#C5A059]/50 text-[#1A110B] font-tajawal text-sm font-bold flex items-center justify-between gap-3 shadow-xs">
+            <div className="flex items-center gap-2.5">
+              <Sparkles className="w-5 h-5 text-[#C5A059] shrink-0" />
+              <span>{presetLoadedAlert}</span>
+            </div>
+            <button
+              onClick={() => setPresetLoadedAlert(null)}
+              className="text-xs text-[#1A110B]/60 hover:text-[#1A110B] px-2 py-1 rounded-md hover:bg-black/5 cursor-pointer"
+              aria-label="إغلاق التنبيه"
+            >
+              ✕
+            </button>
+          </div>
+        )}
+
         {/* ================= 1. HERITAGE SECTION HEADER ================= */}
         <div className="text-center mb-8 border-b border-dashed border-[#C5A059]/40 pb-6">
           <span className="solid-badge text-xs md:text-sm mb-3 py-1 px-4 inline-flex items-center gap-2">

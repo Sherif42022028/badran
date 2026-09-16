@@ -4,7 +4,8 @@ import { useState } from "react";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import AboutSection from "@/components/AboutSection";
-import BlendBuilder from "@/components/BlendBuilder";
+import BlendFinder from "@/components/BlendFinder";
+import BlendBuilder, { BlendPreset } from "@/components/BlendBuilder";
 import MenuSection from "@/components/MenuSection";
 import ReviewsSection from "@/components/ReviewsSection";
 import LocationContact from "@/components/LocationContact";
@@ -19,6 +20,18 @@ import { MenuItem } from "@/data/menu";
 export default function Home() {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState<boolean>(false);
+  const [builderPreset, setBuilderPreset] = useState<BlendPreset | null>(null);
+
+  const handleApplyPreset = (preset: {
+    grams: Record<string, number>;
+    preps: Record<string, "sada" | "mohawaj">;
+    name: string;
+  }) => {
+    setBuilderPreset({
+      ...preset,
+      timestamp: Date.now(),
+    });
+  };
 
   const handleAddToCart = (
     item: Product | MenuItem,
@@ -88,7 +101,14 @@ export default function Home() {
       <div className="flex-1">
         <Hero />
         <AboutSection />
-        <BlendBuilder onAddToCart={handleAddToCart} />
+        <BlendFinder
+          onApplyToBuilder={handleApplyPreset}
+          onAddToCart={handleAddToCart}
+        />
+        <BlendBuilder
+          onAddToCart={handleAddToCart}
+          presetBlend={builderPreset}
+        />
         <MenuSection onAddToCart={handleAddToCart} />
         <ReviewsSection />
         <LocationContact />
