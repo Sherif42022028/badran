@@ -42,59 +42,66 @@ export default function Header({ cartCount, onOpenCart }: HeaderProps) {
         </Link>
 
         {/* Desktop Navigation Links */}
-        <nav className="hidden md:flex items-center gap-8 font-tajawal text-sm font-bold text-[#1A110B]/85">
+        <nav className="hidden md:flex items-center gap-5 lg:gap-7 font-tajawal text-xs lg:text-sm font-bold text-[#1A110B]/85">
           <a
             href="#hero"
-            className="hover:text-[#C5A059] transition-colors py-1"
+            className="hover:text-[#C5A059] transition-colors py-1 whitespace-nowrap"
           >
             الرئيسية
           </a>
           <a
             href="#about"
-            className="hover:text-[#C5A059] transition-colors py-1"
+            className="hover:text-[#C5A059] transition-colors py-1 whitespace-nowrap"
           >
             عن المحل
           </a>
           <a
+            href="#blend-finder"
+            className="hover:text-[#C5A059] text-[#1A110B] transition-colors py-1 whitespace-nowrap"
+          >
+            مش لاقي توليفتك؟
+          </a>
+          <a
             href="#blend-builder"
-            className="hover:text-[#C5A059] transition-colors py-1"
+            className="hover:text-[#C5A059] transition-colors py-1 whitespace-nowrap"
           >
             توليفتك على مزاجك
           </a>
           <a
             href="#menu"
-            className="hover:text-[#C5A059] transition-colors py-1"
+            className="hover:text-[#C5A059] transition-colors py-1 whitespace-nowrap"
           >
             أسعار المنيو
           </a>
           <a
             href="#contact"
-            className="hover:text-[#C5A059] transition-colors py-1"
+            className="hover:text-[#C5A059] transition-colors py-1 whitespace-nowrap"
           >
             موقعنا وتواصلنا
           </a>
         </nav>
 
         {/* Action Buttons */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2.5 sm:gap-3">
           <a
             href={PHONE_TEL_LINK}
             onClick={() => trackContactClick("call")}
-            className="hidden sm:inline-flex items-center gap-2 border border-[#1A110B]/20 px-3.5 py-1.5 rounded-lg text-xs font-bold text-[#1A110B] hover:border-[#1A110B] hover:bg-[#1A110B] hover:text-[#FAF8F5] transition-all"
+            className="hidden lg:inline-flex items-center gap-1.5 border border-[#1A110B]/15 px-3 py-1.5 rounded-lg text-xs font-bold text-[#1A110B] hover:border-[#C5A059] hover:text-[#C5A059] transition-all whitespace-nowrap"
+            title={`اتصل الآن: ${PHONE_DISPLAY}`}
           >
             <Phone className="w-3.5 h-3.5 text-[#C5A059]" />
-            <span className="font-price text-xs">اتصل الآن ({PHONE_DISPLAY})</span>
+            <span>اتصل بنا</span>
           </a>
 
           <button
             onClick={onOpenCart}
-            className="relative bg-[#1A110B] hover:bg-[#2A1D15] text-[#FAF8F5] px-4 py-2 rounded-lg text-xs font-bold font-alexandria flex items-center gap-2 transition-all shadow-xs active:scale-95 border border-[#C5A059]/40"
+            className="relative bg-[#1A110B] hover:bg-[#2A1D15] text-[#FAF8F5] px-3 sm:px-3.5 py-1.5 rounded-lg text-xs font-bold font-alexandria flex items-center gap-1.5 sm:gap-2 transition-all shadow-2xs active:scale-95 border border-[#C5A059]/40 cursor-pointer"
             aria-label="فتح سلة الطلبات"
           >
-            <ShoppingBag className="w-4 h-4 text-[#C5A059]" />
-            <span className="hidden sm:inline">سلة الطلبات</span>
+            <ShoppingBag className="w-3.5 h-3.5 text-[#C5A059]" />
+            <span>السلة</span>
             {cartCount > 0 && (
-              <span className="bg-[#C5A059] text-white font-price text-xs rounded-md px-1.5 py-0.2 font-bold">
+              <span className="bg-[#C5A059] text-white font-price text-[11px] rounded px-1.5 py-0.2 font-bold leading-tight">
                 {cartCount}
               </span>
             )}
@@ -113,7 +120,7 @@ export default function Header({ cartCount, onOpenCart }: HeaderProps) {
 
       {/* Mobile Menu Drawer */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-t border-[#1A110B]/10 bg-[#FAF8F5] px-6 py-6 space-y-3.5 font-alexandria text-center animate-fadeIn shadow-lg">
+        <div className="md:hidden border-t border-[#1A110B]/10 bg-[#FAF8F5] px-6 py-6 space-y-3 font-alexandria text-center animate-fadeIn shadow-lg">
           <a
             href="#hero"
             onClick={() => setMobileMenuOpen(false)}
@@ -127,6 +134,13 @@ export default function Header({ cartCount, onOpenCart }: HeaderProps) {
             className="block py-2 text-[#1A110B] font-semibold border-b border-dashed border-[#1A110B]/10"
           >
             عن المحل
+          </a>
+          <a
+            href="#blend-finder"
+            onClick={() => setMobileMenuOpen(false)}
+            className="block py-2 text-[#1A110B] font-semibold border-b border-dashed border-[#1A110B]/10"
+          >
+            مش لاقي توليفتك؟ (دليل الذوق)
           </a>
           <a
             href="#blend-builder"
