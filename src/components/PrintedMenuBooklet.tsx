@@ -617,8 +617,8 @@ export default function PrintedMenuBooklet() {
                       <tr className="hover:bg-white transition-colors">
                         <td className="p-2.5 font-bold">هندي بلانتيشن أرابيكا (Plantation)</td>
                         <td className="p-2.5 text-gray-600 text-[11px]">مغسول من المرتفعات، حموضة خفيفة وتوابل</td>
-                        <td className="p-2.5 font-bold text-[#C5A059]">760 ج.م</td>
-                        <td className="p-2.5 font-bold text-[#1A110B]">880 ج.م</td>
+                        <td className="p-2.5 font-bold text-[#C5A059]">840 ج.م</td>
+                        <td className="p-2.5 font-bold text-[#1A110B]">960 ج.م</td>
                       </tr>
                       <tr className="hover:bg-white transition-colors">
                         <td className="p-2.5 font-bold">هندي أرابيكا أصيل (Arabica)</td>

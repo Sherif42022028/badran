@@ -287,8 +287,8 @@ export const PRODUCTS_CATALOG: Product[] = [
     tier: 2,
     variantType: "preparation",
     variants: [
-      { id: "in-plan-sada", label: "ساده (760 ج.م)", price: 760 },
-      { id: "in-plan-mohawaj", label: "محوج بالحبهان (880 ج.م)", price: 880 },
+      { id: "in-plan-sada", label: "ساده (840 ج.م)", price: 840 },
+      { id: "in-plan-mohawaj", label: "محوج بالحبهان (960 ج.م)", price: 960 },
     ],
   },
   {

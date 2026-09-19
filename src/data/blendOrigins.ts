@@ -195,9 +195,9 @@ export const BLEND_COFFEE_BEANS: BlendBeanOrigin[] = [
     category: "indian",
     categoryLabel: "البن الهندي",
     blendRole: "توابل شرقية خفيفة وتوازن",
-    sadaPrice: 760,
-    mohawajPrice: 880,
-    kiloPrice: 760,
+    sadaPrice: 840,
+    mohawajPrice: 960,
+    kiloPrice: 840,
     description: "أرابيكا هندية مغسولة من المرتفعات، تضيف للتوليفة لمسة توابل ناعمة وتوازناً راقياً.",
     flavorNotes: ["توابل خفيفة", "شوكولاتة بالحليب", "حموضة متزنة"],
     color: "#D97706", // amber-600
