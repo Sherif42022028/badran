@@ -1,7 +1,7 @@
 export interface BlendBeanOrigin {
   id: string;
   name: string;
-  category: "basics" | "brazilian" | "indian" | "habashi" | "world";
+  category: "basics" | "brazilian" | "signature_blends" | "indian" | "habashi" | "world";
   categoryLabel: string;
   blendRole: string; // الدور الأساسي للصنف في التوليفة
   sadaPrice: number; // سعر الكيلو ساده
@@ -108,7 +108,74 @@ export const BLEND_COFFEE_BEANS: BlendBeanOrigin[] = [
     color: "#14532D", // green-900
   },
 
-  // ================= 3. البن الهندي (الوش والرغوة المتماسكة والنكهة) =================
+  // ================= 3. توليفات بدران الخاصة الحصرية (العميد، السلطان، اسبيشيال...) =================
+  {
+    id: "blend-special-badran",
+    name: "توليفة اسبيشيال بدران الملكية",
+    category: "signature_blends",
+    categoryLabel: "توليفات بدران الخاصة",
+    blendRole: "سر عائلة بدران: مزيج سحري متوازن من 4 أصناف أرابيكا عالمية",
+    sadaPrice: 760,
+    mohawajPrice: 880,
+    kiloPrice: 760,
+    description: "سر الصنعة المتوارث في عائلة بدران: مزيج متناغم من 4 محاصيل أرابيكا عالمية منتقاة لتحقيق فنجان غني النكهة ذو رغوة متماسكة.",
+    flavorNotes: ["سر الصنعة", "أرابيكا عالمية", "قوام مخملي", "رغوة متماسكة"],
+    color: "#D97706", // amber-600
+  },
+  {
+    id: "blend-sultan",
+    name: "توليفة السلطان الفاخرة",
+    category: "signature_blends",
+    categoryLabel: "توليفات بدران الخاصة",
+    blendRole: "توليفة ملوكية بنكهة عميقة وقوام غني لصفوة الذواقة",
+    sadaPrice: 760,
+    mohawajPrice: 880,
+    kiloPrice: 760,
+    description: "توليفة ملكية خاصة تمزج بين كثافة البن البرازيلي الفاخر ونكهة الأرابيكا المركزة لتمنحك فنجاناً سلطانياً فخماً.",
+    flavorNotes: ["قوام ملوكي", "نكهة عميقة", "توازن فاخر", "كثافة ممتازة"],
+    color: "#B45309", // amber-700
+  },
+  {
+    id: "blend-ameed",
+    name: "توليفة العميد الخاصة",
+    category: "signature_blends",
+    categoryLabel: "توليفات بدران الخاصة",
+    blendRole: "توليفة ثقيلة لتركيز عالي ووش كثيف متماسك",
+    sadaPrice: 1000,
+    mohawajPrice: 1120,
+    kiloPrice: 1000,
+    description: "توليفة العميد الأكثر ثقلاً وتركيزاً، محمصة بحرفية لعشاق القهوة الثقيلة ذات الوش الذهبي العريض والتركيز العالي.",
+    flavorNotes: ["تركيز عالي", "وش كثيف جداً", "قوام ثقيل", "مزاج عالي"],
+    color: "#78350F", // amber-900
+  },
+  {
+    id: "blend-malaki",
+    name: "توليفة الملكي الراقية",
+    category: "signature_blends",
+    categoryLabel: "توليفات بدران الخاصة",
+    blendRole: "مزيج ثلاثي كولومبي وهندي وبرازيلي بلمسة تحميص خاصة",
+    sadaPrice: 800,
+    mohawajPrice: 920,
+    kiloPrice: 800,
+    description: "توليفة ثلاثية متقنة تجمع بين حموضة الكولومبي الناعمة، وش الروبوستا الهندي، وقوام البرازيلي الكلاسيكي.",
+    flavorNotes: ["توليفة ثلاثية", "كولومبي وبرازيلي", "وش هندي", "نكهة راقية"],
+    color: "#854D0E", // yellow-800
+  },
+  {
+    id: "blend-asli",
+    name: "توليفة الأصلي التراثية",
+    category: "signature_blends",
+    categoryLabel: "توليفات بدران الخاصة",
+    blendRole: "خلطة الأجداد التراثية التي انطلق بها محل بدران منذ عقود",
+    sadaPrice: 880,
+    mohawajPrice: 1000,
+    kiloPrice: 880,
+    description: "الخلطة التراثية الأصلية التي عُرف بها بن بدران في ميت غمر، تحميصة متوازنة تجمع عبق الماضي وجودة الحاضر.",
+    flavorNotes: ["تراث بدران", "خلطة الأجداد", "نكهة أصيلة", "تحميصة ميت غمر"],
+    color: "#C2410C", // orange-700
+  },
+
+  // ================= 4. البن الهندي (الوش والرغوة المتماسكة والنكهة) =================
   {
     id: "in-rob",
     name: "بن هندي روبوستا شيري",
@@ -339,6 +406,7 @@ export const BLEND_COFFEE_BEANS: BlendBeanOrigin[] = [
 export const BLEND_ORIGIN_CATEGORIES = [
   { id: "basics", label: "الأساسيات والتحميص (فاتح، وسط، غامق)" },
   { id: "brazilian", label: "البن البرازيلي (الأساس والقوام)" },
+  { id: "signature_blends", label: "توليفات بدران الخاصة (اسبيشيال، السلطان، العميد...)" },
   { id: "indian", label: "البن الهندي (الوش والرغوة)" },
   { id: "habashi", label: "البن الحبشي (العطرية والفاكهية)" },
   { id: "world", label: "أرابيكات العالم الفاخرة (كولومبي، يمني، جواتيمالا...)" },

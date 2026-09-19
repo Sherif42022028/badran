@@ -2,6 +2,7 @@
 
 import { CheckCircle, ShieldCheck, Flame, Store } from "lucide-react";
 import TiltedCard from "@/components/reactbits/TiltedCard";
+import AuthenticPouchesShowcase from "@/components/AuthenticPouchesShowcase";
 
 export default function AboutSection() {
   return (
@@ -42,7 +43,6 @@ export default function AboutSection() {
           {/* Genuine Local Story */}
           <div className="lg:col-span-7 space-y-3.5 font-tajawal text-[#1A110B]">
             <h3 className="font-amiri text-2xl md:text-3xl font-bold text-[#1A110B] border-b border-dashed border-[#C5A059]/30 pb-2">
-
               من المحل لفنجانك.. السر في تحميصة بدران
             </h3>
             
@@ -75,6 +75,9 @@ export default function AboutSection() {
           </div>
 
         </div>
+
+        {/* Authentic Badran Coffee Pouches Showcase */}
+        <AuthenticPouchesShowcase />
 
       </div>
     </section>

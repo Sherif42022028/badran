@@ -41,6 +41,7 @@ import {
 } from "lucide-react";
 import SpotlightCard from "@/components/reactbits/SpotlightCard";
 import PrintedMenuBooklet from "@/components/PrintedMenuBooklet";
+import HoneyHeaderShowcase from "@/components/HoneyHeaderShowcase";
 
 interface MenuSectionProps {
   onAddToCart: (
@@ -496,8 +497,10 @@ export default function MenuSection({ onAddToCart }: MenuSectionProps) {
                 id={cat.id}
                 className="framed-section p-4 sm:p-6 md:p-8 bg-white"
               >
-                {/* Category Hero Banner with Representing Photo */}
-                {cat.image ? (
+                {/* Category Hero Banner with Representing Photo / Honey Header Showcase */}
+                {cat.id === "honey_tahina" ? (
+                  <HoneyHeaderShowcase />
+                ) : cat.image ? (
                   <div className="relative overflow-hidden rounded-2xl mb-6 shadow-md border border-[#C5A059]/40 h-44 sm:h-52 md:h-64 group bg-[#1A110B]">
                     <Image
                       src={cat.image}
