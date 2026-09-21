@@ -1,9 +1,18 @@
+export type BlendCategoryType =
+  | "brazilian"
+  | "indian"
+  | "habashi"
+  | "latin_arabicas"
+  | "afro_asian_arabicas"
+  | "signature_blends";
+
 export interface BlendBeanOrigin {
   id: string;
   name: string;
-  category: "basics" | "brazilian" | "signature_blends" | "indian" | "habashi" | "world";
+  category: BlendCategoryType;
   categoryLabel: string;
   blendRole: string; // الدور الأساسي للصنف في التوليفة
+  roleBadge?: "crema" | "chocolate" | "aromatic" | "royal"; // شارة الهدف السريع (وش، شوكولاتة، عطرية، ملوكي)
   sadaPrice: number; // سعر الكيلو ساده
   mohawajPrice: number; // سعر الكيلو محوج بالحبهان
   kiloPrice: number; // السعر الافتراضي (ساده)
@@ -12,68 +21,68 @@ export interface BlendBeanOrigin {
   color: string; // Color tag for the visual blend ratio chart
 }
 
-export const BLEND_COFFEE_BEANS: BlendBeanOrigin[] = [
-  // ================= 1. الأساسيات ودرجات التحميص التقليدية =================
-  {
-    id: "base-light",
-    name: "بن فاتح بدران الأصلي",
-    category: "basics",
-    categoryLabel: "الأساسيات والتحميص",
-    blendRole: "حموضة منعشة ونكهة كلاسيكية خفيفة",
-    sadaPrice: 520,
-    mohawajPrice: 600,
-    kiloPrice: 520,
-    description: "تحميص فاتح نقي يحتفظ بكامل خواص الحبة الطبيعية، يمنح التوليفة إشراقة كلاسيكية وحموضة ناعمة محبوبة.",
-    flavorNotes: ["تحميص خفيف", "حموضة ناعمة", "طعم نقي"],
-    color: "#EAB308", // yellow-500
-  },
-  {
-    id: "base-med",
-    name: "بن وسط بدران الموزون",
-    category: "basics",
-    categoryLabel: "الأساسيات والتحميص",
-    blendRole: "التوازن المثالي والقوام المعتدل",
-    sadaPrice: 520,
-    mohawajPrice: 600,
-    kiloPrice: 520,
-    description: "التحميص الذهبي الأكثر شعبية، يجمع بين نعومة الطعم وحلاوة الكراميل بدون أي مرارة حادة.",
-    flavorNotes: ["توازن كلاسيكي", "قوام معتدل", "حلاوة خفيفة"],
-    color: "#B45309", // amber-700
-  },
-  {
-    id: "base-dark",
-    name: "بن غامق بدران الثقيل",
-    category: "basics",
-    categoryLabel: "الأساسيات والتحميص",
-    blendRole: "ثقل وقوة المزاج ومرارة محببة",
-    sadaPrice: 540,
-    mohawajPrice: 620,
-    kiloPrice: 540,
-    description: "تحميص داكن عميق يمنح الفنجان قواماً مخملياً ثقيلاً ونكهة تحميص شرقية قوية لأصحاب المزاج العالي.",
-    flavorNotes: ["تحميص غامق", "قوام ثقيل", "نكهة قوية"],
-    color: "#451A03", // amber-950
-  },
-  {
-    id: "base-double",
-    name: "بن محروق (دبل روست) بدران",
-    category: "basics",
-    categoryLabel: "الأساسيات والتحميص",
-    blendRole: "مرارة مكثفة وحدّة استثنائية",
-    sadaPrice: 580,
-    mohawajPrice: 680,
-    kiloPrice: 580,
-    description: "درجة تحميص فرنسية شديدة لعشاق المرارة العالية واللون الداكن جداً والرائحة الدخانية النفاذة.",
-    flavorNotes: ["دبل روست", "مرارة شديدة", "دخان محبب"],
-    color: "#18181B", // zinc-900
-  },
+export interface BlendOriginCategoryInfo {
+  id: BlendCategoryType;
+  label: string;
+  sublabel: string;
+  iconName: string;
+  advice: string;
+}
 
-  // ================= 2. البن البرازيلي (قاعدة التوليفات والنعومة) =================
+export const BLEND_ORIGIN_CATEGORIES: BlendOriginCategoryInfo[] = [
+  {
+    id: "brazilian",
+    label: "البن البرازيلي",
+    sublabel: "حجر الأساس والنعومة",
+    iconName: "Sun",
+    advice: "حجر الأساس لأي توليفة؛ يمنح فنجانك قواماً مخملياً متوازناً ونعومة كلاسيكية بدون مرارة حادة. (النسبة المقترحة: 30% - 60%)",
+  },
+  {
+    id: "indian",
+    label: "البن الهندي",
+    sublabel: "سر الوش والرغوة والكافيين",
+    iconName: "Globe",
+    advice: "سر الرغوة الذهبية الكثيفة؛ يضمن وشاً عريضاً متماسكاً يدوم حتى آخر قطرة مع دفعة كافيين ممتازة. (النسبة المقترحة: 15% - 25%)",
+  },
+  {
+    id: "habashi",
+    label: "البن الحبشي الإثيوبي",
+    sublabel: "العطرية والفاكهية الأسطورية",
+    iconName: "Coffee",
+    advice: "تاج العطرية والروائح الزكية؛ يضفي على الخلطة نفحات زهرية وفاكهية نبيذية تعبّأ المكان. (النسبة المقترحة: 20% - 40%)",
+  },
+  {
+    id: "latin_arabicas",
+    label: "أرابيكات أمريكا اللاتينية",
+    sublabel: "الشوكولاتة، الكراميل، والمكسرات",
+    iconName: "Compass",
+    advice: "أجود محاصيل الأنديز والبراكين (كولومبي، جواتيمالا، مكسيكي) لإضافة طعم الشوكولاتة والكراميل والبندق. (النسبة المقترحة: 20% - 50%)",
+  },
+  {
+    id: "afro_asian_arabicas",
+    label: "أرابيكات أفريقيا وآسيا النادرة",
+    sublabel: "النوادر والمذاقات الإقليمية الفريدة",
+    iconName: "Sparkles",
+    advice: "أندر المحاصيل العالمية المعتمدة (يمني مطري، كيني، سومطرة) لتحويل فنجانك إلى تحفة خاصة بالغة الفخامة. (النسبة المقترحة: 10% - 30%)",
+  },
+  {
+    id: "signature_blends",
+    label: "توليفات بدران الملكية",
+    sublabel: "خلطات متكاملة كأساس للتعديل",
+    iconName: "Flame",
+    advice: "خلطات عائلة بدران المتوارثة (اسبيشيال، السلطان، العميد)؛ يمكنك استخدامها كقاعدة وإضافة لمستك الخاصة عليها.",
+  },
+];
+
+export const BLEND_COFFEE_BEANS: BlendBeanOrigin[] = [
+  // ================= 1. البن البرازيلي (حجر الأساس والنعومة) =================
   {
     id: "br-san",
     name: "بن برازيلي سانتوس الفاخر",
     category: "brazilian",
     categoryLabel: "البن البرازيلي",
     blendRole: "قاعدة التوليفة ونعومة القوام",
+    roleBadge: "chocolate",
     sadaPrice: 720,
     mohawajPrice: 840,
     kiloPrice: 720,
@@ -87,10 +96,11 @@ export const BLEND_COFFEE_BEANS: BlendBeanOrigin[] = [
     category: "brazilian",
     categoryLabel: "البن البرازيلي",
     blendRole: "نكهة مكسرات وشوكولاتة غنية",
+    roleBadge: "chocolate",
     sadaPrice: 880,
     mohawajPrice: 1000,
     kiloPrice: 880,
-    description: "أرابيكا برازيلية نقية تعطي التوليفة بعداً غنياً بنكهات المكسرات المحمصة والشوكولاتة.",
+    description: "أرابيكا برازيلية نقية تعطي التوليفة بعداً غنياً بنكهات المكسرات المحمصة والشوكولاتة وقوام كامل.",
     flavorNotes: ["مكسرات محمصة", "شوكولاتة داكنة", "قوام كامل"],
     color: "#16A34A", // green-600
   },
@@ -100,6 +110,7 @@ export const BLEND_COFFEE_BEANS: BlendBeanOrigin[] = [
     category: "brazilian",
     categoryLabel: "البن البرازيلي",
     blendRole: "قوام ثقيل ومزاج تقليدي عريق",
+    roleBadge: "crema",
     sadaPrice: 600,
     mohawajPrice: 720,
     kiloPrice: 600,
@@ -108,93 +119,28 @@ export const BLEND_COFFEE_BEANS: BlendBeanOrigin[] = [
     color: "#14532D", // green-900
   },
 
-  // ================= 3. توليفات بدران الخاصة الحصرية (العميد، السلطان، اسبيشيال...) =================
-  {
-    id: "blend-special-badran",
-    name: "توليفة اسبيشيال بدران الملكية",
-    category: "signature_blends",
-    categoryLabel: "توليفات بدران الخاصة",
-    blendRole: "سر عائلة بدران: مزيج سحري متوازن من 4 أصناف أرابيكا عالمية",
-    sadaPrice: 760,
-    mohawajPrice: 880,
-    kiloPrice: 760,
-    description: "سر الصنعة المتوارث في عائلة بدران: مزيج متناغم من 4 محاصيل أرابيكا عالمية منتقاة لتحقيق فنجان غني النكهة ذو رغوة متماسكة.",
-    flavorNotes: ["سر الصنعة", "أرابيكا عالمية", "قوام مخملي", "رغوة متماسكة"],
-    color: "#D97706", // amber-600
-  },
-  {
-    id: "blend-sultan",
-    name: "توليفة السلطان الفاخرة",
-    category: "signature_blends",
-    categoryLabel: "توليفات بدران الخاصة",
-    blendRole: "توليفة ملوكية بنكهة عميقة وقوام غني لصفوة الذواقة",
-    sadaPrice: 760,
-    mohawajPrice: 880,
-    kiloPrice: 760,
-    description: "توليفة ملكية خاصة تمزج بين كثافة البن البرازيلي الفاخر ونكهة الأرابيكا المركزة لتمنحك فنجاناً سلطانياً فخماً.",
-    flavorNotes: ["قوام ملوكي", "نكهة عميقة", "توازن فاخر", "كثافة ممتازة"],
-    color: "#B45309", // amber-700
-  },
-  {
-    id: "blend-ameed",
-    name: "توليفة العميد الخاصة",
-    category: "signature_blends",
-    categoryLabel: "توليفات بدران الخاصة",
-    blendRole: "توليفة ثقيلة لتركيز عالي ووش كثيف متماسك",
-    sadaPrice: 1000,
-    mohawajPrice: 1120,
-    kiloPrice: 1000,
-    description: "توليفة العميد الأكثر ثقلاً وتركيزاً، محمصة بحرفية لعشاق القهوة الثقيلة ذات الوش الذهبي العريض والتركيز العالي.",
-    flavorNotes: ["تركيز عالي", "وش كثيف جداً", "قوام ثقيل", "مزاج عالي"],
-    color: "#78350F", // amber-900
-  },
-  {
-    id: "blend-malaki",
-    name: "توليفة الملكي الراقية",
-    category: "signature_blends",
-    categoryLabel: "توليفات بدران الخاصة",
-    blendRole: "مزيج ثلاثي كولومبي وهندي وبرازيلي بلمسة تحميص خاصة",
-    sadaPrice: 800,
-    mohawajPrice: 920,
-    kiloPrice: 800,
-    description: "توليفة ثلاثية متقنة تجمع بين حموضة الكولومبي الناعمة، وش الروبوستا الهندي، وقوام البرازيلي الكلاسيكي.",
-    flavorNotes: ["توليفة ثلاثية", "كولومبي وبرازيلي", "وش هندي", "نكهة راقية"],
-    color: "#854D0E", // yellow-800
-  },
-  {
-    id: "blend-asli",
-    name: "توليفة الأصلي التراثية",
-    category: "signature_blends",
-    categoryLabel: "توليفات بدران الخاصة",
-    blendRole: "خلطة الأجداد التراثية التي انطلق بها محل بدران منذ عقود",
-    sadaPrice: 880,
-    mohawajPrice: 1000,
-    kiloPrice: 880,
-    description: "الخلطة التراثية الأصلية التي عُرف بها بن بدران في ميت غمر، تحميصة متوازنة تجمع عبق الماضي وجودة الحاضر.",
-    flavorNotes: ["تراث بدران", "خلطة الأجداد", "نكهة أصيلة", "تحميصة ميت غمر"],
-    color: "#C2410C", // orange-700
-  },
-
-  // ================= 4. البن الهندي (الوش والرغوة المتماسكة والنكهة) =================
+  // ================= 2. البن الهندي (الوش والرغوة والكريمة) =================
   {
     id: "in-rob",
     name: "بن هندي روبوستا شيري",
     category: "indian",
     categoryLabel: "البن الهندي",
     blendRole: "سر الوش الكثيف والرغوة المتماسكة",
+    roleBadge: "crema",
     sadaPrice: 560,
     mohawajPrice: 680,
     kiloPrice: 560,
-    description: "الحبة السحرية لضبط وش الفنجان؛ تمنح التوليفة رغوة كثيفة متماسكة وقوة كافيين ممتازة.",
+    description: "الحبة السحرية لضبط وش الفنجان؛ تمنح التوليفة رغوة ذهبية متماسكة وقوة كافيين ممتازة.",
     flavorNotes: ["وش كريمي متماسك", "كافيين عالي", "ثقل القوام"],
     color: "#78350F", // amber-900
   },
   {
     id: "in-plan",
-    name: "بن هندي بلانتيشن أرابيكا",
+    name: "بن هندي بلانتيشن أرابيكا فاخر",
     category: "indian",
     categoryLabel: "البن الهندي",
-    blendRole: "توابل شرقية خفيفة وتوازن",
+    blendRole: "توابل شرقية خفيفة وتوازن راقي",
+    roleBadge: "aromatic",
     sadaPrice: 840,
     mohawajPrice: 960,
     kiloPrice: 840,
@@ -207,7 +153,8 @@ export const BLEND_COFFEE_BEANS: BlendBeanOrigin[] = [
     name: "بن هندي أرابيكا أصيل",
     category: "indian",
     categoryLabel: "البن الهندي",
-    blendRole: "عطرية مميزة وقوام كريمي",
+    blendRole: "عطرية مميزة وقوام مخملي",
+    roleBadge: "aromatic",
     sadaPrice: 840,
     mohawajPrice: 960,
     kiloPrice: 840,
@@ -216,13 +163,14 @@ export const BLEND_COFFEE_BEANS: BlendBeanOrigin[] = [
     color: "#92400E", // amber-800
   },
 
-  // ================= 4. البن الحبشي الإثيوبي (العطرية والفاكهية) =================
+  // ================= 3. البن الحبشي الإثيوبي (العطرية والفاكهية) =================
   {
     id: "hab-har",
     name: "بن حبشي هراري إثيوبي عريق",
     category: "habashi",
     categoryLabel: "البن الحبشي",
     blendRole: "عطرية فخمة وإيحاءات فاكهية نبيذية",
+    roleBadge: "aromatic",
     sadaPrice: 960,
     mohawajPrice: 1080,
     kiloPrice: 960,
@@ -236,6 +184,7 @@ export const BLEND_COFFEE_BEANS: BlendBeanOrigin[] = [
     category: "habashi",
     categoryLabel: "البن الحبشي",
     blendRole: "نكهات زهرية ياسمينية وحموضة ناعمة",
+    roleBadge: "aromatic",
     sadaPrice: 920,
     mohawajPrice: 1040,
     kiloPrice: 920,
@@ -249,6 +198,7 @@ export const BLEND_COFFEE_BEANS: BlendBeanOrigin[] = [
     category: "habashi",
     categoryLabel: "البن الحبشي",
     blendRole: "إيحاءات فاكهية نبيذية وحلاوة سكرية",
+    roleBadge: "aromatic",
     sadaPrice: 1080,
     mohawajPrice: 1200,
     kiloPrice: 1080,
@@ -262,6 +212,7 @@ export const BLEND_COFFEE_BEANS: BlendBeanOrigin[] = [
     category: "habashi",
     categoryLabel: "البن الحبشي",
     blendRole: "نكهة بلدية وقوام خفيف معتدل",
+    roleBadge: "aromatic",
     sadaPrice: 680,
     mohawajPrice: 800,
     kiloPrice: 680,
@@ -275,6 +226,7 @@ export const BLEND_COFFEE_BEANS: BlendBeanOrigin[] = [
     category: "habashi",
     categoryLabel: "البن الحبشي",
     blendRole: "عمق بري ونكهة بلدية أصيلة",
+    roleBadge: "aromatic",
     sadaPrice: 800,
     mohawajPrice: 920,
     kiloPrice: 800,
@@ -283,13 +235,14 @@ export const BLEND_COFFEE_BEANS: BlendBeanOrigin[] = [
     color: "#991B1B", // red-800
   },
 
-  // ================= 5. أرابيكات العالم الفاخرة (كولومبي، يمني، جواتيمالا...) =================
+  // ================= 4. أرابيكات أمريكا اللاتينية (الشوكولاتة والمكسرات) =================
   {
     id: "ar-col-dark",
-    name: "بن كولومبي غامق فاخر",
-    category: "world",
-    categoryLabel: "أرابيكات العالم الفاخرة",
+    name: "بن كولومبي سوبريمو غامق فاخر",
+    category: "latin_arabicas",
+    categoryLabel: "أرابيكات أمريكا اللاتينية",
     blendRole: "شوكولاتة داكنة وقوام مخملي مكثف",
+    roleBadge: "chocolate",
     sadaPrice: 1040,
     mohawajPrice: 1160,
     kiloPrice: 1040,
@@ -300,9 +253,10 @@ export const BLEND_COFFEE_BEANS: BlendBeanOrigin[] = [
   {
     id: "ar-col-med",
     name: "بن كولومبي سوبريمو وسط",
-    category: "world",
-    categoryLabel: "أرابيكات العالم الفاخرة",
+    category: "latin_arabicas",
+    categoryLabel: "أرابيكات أمريكا اللاتينية",
     blendRole: "نعومة شوكولاتة وتوازن حريري نقي",
+    roleBadge: "chocolate",
     sadaPrice: 1000,
     mohawajPrice: 1120,
     kiloPrice: 1000,
@@ -311,24 +265,26 @@ export const BLEND_COFFEE_BEANS: BlendBeanOrigin[] = [
     color: "#EA580C", // orange-600
   },
   {
-    id: "ar-yem",
-    name: "بن يمني مطري أصيل",
-    category: "world",
-    categoryLabel: "أرابيكات العالم الفاخرة",
-    blendRole: "اللمسة الملكية للتوليفات الخاصة",
-    sadaPrice: 1880,
-    mohawajPrice: 2000,
-    kiloPrice: 1880,
-    description: "أندر وأعرق حبوب البن عالمياً؛ إضافة 10% إلى 20% منه تحول أي توليفة إلى خلطة ملوك وأمراء.",
-    flavorNotes: ["توابل ملكية", "شوكولاتة معقدة", "عطرية استثنائية"],
-    color: "#C5A059", // badran gold
+    id: "ar-col-light",
+    name: "بن كولومبي سوبريمو تحت الوسط",
+    category: "latin_arabicas",
+    categoryLabel: "أرابيكات أمريكا اللاتينية",
+    blendRole: "حلاوة سكرية مع حموضة ناعمة منعشة",
+    roleBadge: "chocolate",
+    sadaPrice: 1000,
+    mohawajPrice: 1120,
+    kiloPrice: 1000,
+    description: "تحميصة هادئة تبرز الحلاوة السكرية الطبيعية لحبوب كولومبيا وتضفي إشراقة ناعمة للتوليفة.",
+    flavorNotes: ["حلاوة قصب السكر", "حموضة ناعمة", "سلاسة فائقة"],
+    color: "#F97316", // orange-500
   },
   {
     id: "ar-gua",
     name: "بن جواتيمالا أنتيجوا بركاني",
-    category: "world",
-    categoryLabel: "أرابيكات العالم الفاخرة",
+    category: "latin_arabicas",
+    categoryLabel: "أرابيكات أمريكا اللاتينية",
     blendRole: "نكهة كاكاو ودخان بركاني فاخر",
+    roleBadge: "chocolate",
     sadaPrice: 1040,
     mohawajPrice: 1160,
     kiloPrice: 1040,
@@ -339,9 +295,10 @@ export const BLEND_COFFEE_BEANS: BlendBeanOrigin[] = [
   {
     id: "ar-peru",
     name: "بن بيرو عضوي فاخر",
-    category: "world",
-    categoryLabel: "أرابيكات العالم الفاخرة",
+    category: "latin_arabicas",
+    categoryLabel: "أرابيكات أمريكا اللاتينية",
     blendRole: "نقاء جبلي وشوكولاتة بالحليب",
+    roleBadge: "chocolate",
     sadaPrice: 1040,
     mohawajPrice: 1160,
     kiloPrice: 1040,
@@ -350,37 +307,68 @@ export const BLEND_COFFEE_BEANS: BlendBeanOrigin[] = [
     color: "#0284C7", // sky-600
   },
   {
-    id: "ar-mex",
-    name: "بن مكسيكي مرتفعات فاخر",
-    category: "world",
-    categoryLabel: "أرابيكات العالم الفاخرة",
-    blendRole: "نكهة غنية وإيحاءات بندق وكراميل",
+    id: "ar-mex-med",
+    name: "بن مكسيكي مرتفعات وسط",
+    category: "latin_arabicas",
+    categoryLabel: "أرابيكات أمريكا اللاتينية",
+    blendRole: "نكهة بندق دافئ ونهاية متوازنة",
+    roleBadge: "chocolate",
     sadaPrice: 1040,
     mohawajPrice: 1160,
     kiloPrice: 1040,
-    description: "بن مكسيكي منتقى من المرتفعات العالية، يضفي على الخلطة لمسة بندق دافئة ونهاية متوازنة في الفم.",
+    description: "بن مكسيكي من المرتفعات العالية بتحميص وسط، يضفي لمسة بندق دافئة ونهاية متوازنة في الفم.",
     flavorNotes: ["بندق دافئ", "كراميل بني", "توازن مثالي"],
     color: "#0D9488", // teal-600
   },
   {
-    id: "ar-ken",
-    name: "بن كيني فاكهي قوي",
-    category: "world",
-    categoryLabel: "أرابيكات العالم الفاخرة",
-    blendRole: "حموضة فوسفورية منعشة ومذاق كشمش",
-    sadaPrice: 960,
-    mohawajPrice: 1080,
-    kiloPrice: 960,
-    description: "أرابيكا كينية مشهورة بحموضتها الفاكهية الحيوية ومذاق الكشمش الأسود المنعش الذي يوقظ الحواس.",
-    flavorNotes: ["كشمش أسود", "حموضة منعشة", "حيوية عالية"],
-    color: "#E11D48", // rose-600
+    id: "ar-mex-dark",
+    name: "بن مكسيكي مرتفعات غامق",
+    category: "latin_arabicas",
+    categoryLabel: "أرابيكات أمريكا اللاتينية",
+    blendRole: "تحميص داكن عميق ونكهات كاكاو محمصة",
+    roleBadge: "chocolate",
+    sadaPrice: 1080,
+    mohawajPrice: 1200,
+    kiloPrice: 1080,
+    description: "تحميص داكن يمنح حبوب المكسيك نكهة كاكاو مكثفة وقواماً مركزاً لمحبي القهوة الثقيلة.",
+    flavorNotes: ["كاكاو محمص", "قوام ثقيل", "مرارة معتدلة"],
+    color: "#0F766E", // teal-700
+  },
+  {
+    id: "ar-costa",
+    name: "بن كوستاريكا تارازو الفاخر",
+    category: "latin_arabicas",
+    categoryLabel: "أرابيكات أمريكا اللاتينية",
+    blendRole: "إيحاءات عسلية وحمضيات راقية",
+    roleBadge: "aromatic",
+    sadaPrice: 1080,
+    mohawajPrice: 1200,
+    kiloPrice: 1080,
+    description: "محصول تارازو الشهير عالمياً بنقاء استثنائي وحموضة برتقالية ناعمة وحلاوة عسلية غنية.",
+    flavorNotes: ["عسل طبيعي", "حمضيات راقية", "قوام ناعم"],
+    color: "#0284C7", // sky-600
+  },
+  {
+    id: "ar-nic",
+    name: "بن نيكاراجوا أرابيكا فاخر",
+    category: "latin_arabicas",
+    categoryLabel: "أرابيكات أمريكا اللاتينية",
+    blendRole: "حموضة ناعمة ونوتات لوز ومكسرات",
+    roleBadge: "chocolate",
+    sadaPrice: 1120,
+    mohawajPrice: 1240,
+    kiloPrice: 1120,
+    description: "حبات أرابيكا كبيرة الحجم بنكهات المكسرات واللوز الحلو وقوام ممتلئ يثري التوليفة.",
+    flavorNotes: ["لوز حلو", "شوكولاتة", "حموضة متزنة"],
+    color: "#4338CA", // indigo-700
   },
   {
     id: "ar-hond",
     name: "بن هندوراس كلاسيك متوازن",
-    category: "world",
-    categoryLabel: "أرابيكات العالم الفاخرة",
+    category: "latin_arabicas",
+    categoryLabel: "أرابيكات أمريكا اللاتينية",
     blendRole: "نعومة وسلاسة للاستهلاك اليومي",
+    roleBadge: "chocolate",
     sadaPrice: 960,
     mohawajPrice: 1080,
     kiloPrice: 960,
@@ -389,11 +377,140 @@ export const BLEND_COFFEE_BEANS: BlendBeanOrigin[] = [
     color: "#059669", // emerald-600
   },
   {
+    id: "ar-venez",
+    name: "بن فنزويلا أرابيكا راقي",
+    category: "latin_arabicas",
+    categoryLabel: "أرابيكات أمريكا اللاتينية",
+    blendRole: "طعم متزن ورائحة عطرية زكية",
+    roleBadge: "aromatic",
+    sadaPrice: 1080,
+    mohawajPrice: 1200,
+    kiloPrice: 1080,
+    description: "أرابيكا كلاسيكية متوازنة بطابع كاريبي هادئ وقوام خفيف معتدل ورائحة ذكية.",
+    flavorNotes: ["عطرية هادئة", "قوام متوازن", "حلاوة خفيفة"],
+    color: "#6D28D9", // purple-700
+  },
+
+  // ================= 5. أرابيكات أفريقيا وآسيا النادرة (النوادر والعطرية الإقليمية) =================
+  {
+    id: "ar-yem",
+    name: "بن يمني مطري أصيل",
+    category: "afro_asian_arabicas",
+    categoryLabel: "أرابيكات أفريقيا وآسيا النادرة",
+    blendRole: "اللمسة الملكية للتوليفات الخاصة",
+    roleBadge: "royal",
+    sadaPrice: 1880,
+    mohawajPrice: 2000,
+    kiloPrice: 1880,
+    description: "أندر وأعرق حبوب البن عالمياً؛ إضافة 10% إلى 20% منه تحول أي توليفة إلى خلطة ملوك وأمراء.",
+    flavorNotes: ["توابل ملكية", "شوكولاتة معقدة", "عطرية استثنائية"],
+    color: "#C5A059", // badran gold
+  },
+  {
+    id: "ar-ken-med",
+    name: "بن كيني فاكهي وسط (Kenya AA)",
+    category: "afro_asian_arabicas",
+    categoryLabel: "أرابيكات أفريقيا وآسيا النادرة",
+    blendRole: "حموضة فوسفورية منعشة ومذاق كشمش",
+    roleBadge: "aromatic",
+    sadaPrice: 960,
+    mohawajPrice: 1080,
+    kiloPrice: 960,
+    description: "أرابيكا كينية مشهورة بحموضتها الفاكهية الحيوية ومذاق الكشمش الأسود المنعش الذي يوقظ الحواس.",
+    flavorNotes: ["كشمش أسود", "حموضة منعشة", "حيوية عالية"],
+    color: "#E11D48", // rose-600
+  },
+  {
+    id: "ar-ken-dark",
+    name: "بن كيني غامق فاكهي",
+    category: "afro_asian_arabicas",
+    categoryLabel: "أرابيكات أفريقيا وآسيا النادرة",
+    blendRole: "حموضة فاكهية داكنة وقوام مكثف",
+    roleBadge: "aromatic",
+    sadaPrice: 1000,
+    mohawajPrice: 1120,
+    kiloPrice: 1000,
+    description: "تحميص داكن يجمع بين إيحاءات التوت الأسود الكيني والقوام الثقيل الممتلئ.",
+    flavorNotes: ["توت أسود", "قوام مكثف", "نهاية عميقة"],
+    color: "#BE123C", // rose-700
+  },
+  {
+    id: "ar-tanzania",
+    name: "بن تنزاني أرابيكا (كليمنجارو)",
+    category: "afro_asian_arabicas",
+    categoryLabel: "أرابيكات أفريقيا وآسيا النادرة",
+    blendRole: "نكهات توت وحموضة برتقالية مبهجة",
+    roleBadge: "aromatic",
+    sadaPrice: 840,
+    mohawajPrice: 960,
+    kiloPrice: 840,
+    description: "يزرع على سفوح جبل كليمنجارو، يتميز بنقاء الحموضة ونوتات الفواكه الاستوائية والقوام المتوسط.",
+    flavorNotes: ["توت بري", "حمضيات مبهجة", "نقاء عالي"],
+    color: "#2563EB", // blue-600
+  },
+  {
+    id: "ar-uganda",
+    name: "بن أوغندي أرابيكا (جبل إلجون)",
+    category: "afro_asian_arabicas",
+    categoryLabel: "أرابيكات أفريقيا وآسيا النادرة",
+    blendRole: "شوكولاتة وقوام ممتلئ وسعر ممتاز",
+    roleBadge: "chocolate",
+    sadaPrice: 800,
+    mohawajPrice: 920,
+    kiloPrice: 800,
+    description: "أرابيكا إفريقية ممتازة من جبل إلجون تمنح الفنجان قواماً ممتلئاً ونكهات الشوكولاتة بسعر اقتصادي.",
+    flavorNotes: ["شوكولاتة", "قوام ممتلئ", "مرارة ناعمة"],
+    color: "#1D4ED8", // blue-700
+  },
+  {
+    id: "ar-sumatra",
+    name: "بن سومطرة إندونيسي بركاني",
+    category: "afro_asian_arabicas",
+    categoryLabel: "أرابيكات أفريقيا وآسيا النادرة",
+    blendRole: "قوام ثقيل ونكهات ترابية وعشبية",
+    roleBadge: "crema",
+    sadaPrice: 960,
+    mohawajPrice: 1080,
+    kiloPrice: 960,
+    description: "معالج بالطريقة الرطبة التقليدية (Giling Basah)، يضفي على التوليفة قواماً سميكاً ونكهات ترابية معقدة.",
+    flavorNotes: ["قوام سميك", "توابل ترابية", "أعشاب برية"],
+    color: "#047857", // emerald-700
+  },
+  {
+    id: "ar-gayo",
+    name: "بن جايو سومطرة المختص",
+    category: "afro_asian_arabicas",
+    categoryLabel: "أرابيكات أفريقيا وآسيا النادرة",
+    blendRole: "محصول مختص عالي التعقيد والأروماتيك",
+    roleBadge: "royal",
+    sadaPrice: 1080,
+    mohawajPrice: 1200,
+    kiloPrice: 1080,
+    description: "من منطقة مرتفعات جايو الشهيرة، قهوة مختصة غنية بنكهات السكر البني والكاكاو والبهارات الدافئة.",
+    flavorNotes: ["سكر بني", "بهارات دافئة", "كاكاو معقد"],
+    color: "#065F46", // emerald-800
+  },
+  {
+    id: "ar-vietnam",
+    name: "بن فيتنامي أرابيكا نقي",
+    category: "afro_asian_arabicas",
+    categoryLabel: "أرابيكات أفريقيا وآسيا النادرة",
+    blendRole: "أرابيكا خفيفة ونقية وسلسة",
+    roleBadge: "chocolate",
+    sadaPrice: 840,
+    mohawajPrice: 960,
+    kiloPrice: 840,
+    description: "أرابيكا فيتنامية مغسولة خفيفة ونظيفة، تمنح التوليفة توازناً سلساً ومرارة هادئة.",
+    flavorNotes: ["سلاسة خفيفة", "حموضة معتدلة", "طعم نقي"],
+    color: "#64748B", // slate-500
+  },
+  {
     id: "ar-viet",
     name: "بن فيتنامي روبوستا منتقى",
-    category: "world",
-    categoryLabel: "أرابيكات العالم الفاخرة",
+    category: "afro_asian_arabicas",
+    categoryLabel: "أرابيكات أفريقيا وآسيا النادرة",
     blendRole: "قوة تركيز ورغوة اقتصادية كثيفة",
+    roleBadge: "crema",
     sadaPrice: 520,
     mohawajPrice: 640,
     kiloPrice: 520,
@@ -401,13 +518,90 @@ export const BLEND_COFFEE_BEANS: BlendBeanOrigin[] = [
     flavorNotes: ["وش كثيف", "تركيز عالي", "طعم قوي"],
     color: "#475569", // slate-600
   },
-];
+  {
+    id: "ar-w",
+    name: "بن دابليو أرابيكا كلاسيك",
+    category: "afro_asian_arabicas",
+    categoryLabel: "أرابيكات أفريقيا وآسيا النادرة",
+    blendRole: "أرابيكا يومية متوازنة واقتصادية",
+    roleBadge: "chocolate",
+    sadaPrice: 640,
+    mohawajPrice: 760,
+    kiloPrice: 640,
+    description: "أرابيكا يومية ممتازة لربط التوليفة وتقديم فنجان متوازن المذاق بسعر اقتصادي.",
+    flavorNotes: ["طعم يومي متوازن", "قوام معتدل", "مرارة هادئة"],
+    color: "#334155", // slate-700
+  },
 
-export const BLEND_ORIGIN_CATEGORIES = [
-  { id: "basics", label: "الأساسيات والتحميص (فاتح، وسط، غامق)" },
-  { id: "brazilian", label: "البن البرازيلي (الأساس والقوام)" },
-  { id: "signature_blends", label: "توليفات بدران الخاصة (اسبيشيال، السلطان، العميد...)" },
-  { id: "indian", label: "البن الهندي (الوش والرغوة)" },
-  { id: "habashi", label: "البن الحبشي (العطرية والفاكهية)" },
-  { id: "world", label: "أرابيكات العالم الفاخرة (كولومبي، يمني، جواتيمالا...)" },
-] as const;
+  // ================= 6. توليفات بدران الملكية (العميد، السلطان، اسبيشيال...) =================
+  {
+    id: "blend-special-badran",
+    name: "توليفة اسبيشيال بدران الملكية",
+    category: "signature_blends",
+    categoryLabel: "توليفات بدران الخاصة",
+    blendRole: "سر عائلة بدران: مزيج سحري متوازن من 4 أصناف أرابيكا عالمية",
+    roleBadge: "royal",
+    sadaPrice: 760,
+    mohawajPrice: 880,
+    kiloPrice: 760,
+    description: "سر الصنعة المتوارث في عائلة بدران: مزيج متناغم من 4 محاصيل أرابيكا عالمية منتقاة لتحقيق فنجان غني النكهة ذو رغوة متماسكة.",
+    flavorNotes: ["سر الصنعة", "أرابيكا عالمية", "قوام مخملي", "رغوة متماسكة"],
+    color: "#D97706", // amber-600
+  },
+  {
+    id: "blend-sultan",
+    name: "توليفة السلطان الفاخرة",
+    category: "signature_blends",
+    categoryLabel: "توليفات بدران الخاصة",
+    blendRole: "توليفة ملوكية بنكهة عميقة وقوام غني لصفوة الذواقة",
+    roleBadge: "royal",
+    sadaPrice: 760,
+    mohawajPrice: 880,
+    kiloPrice: 760,
+    description: "توليفة ملكية خاصة تمزج بين كثافة البن البرازيلي الفاخر ونكهة الأرابيكا المركزة لتمنحك فنجاناً سلطانياً فخماً.",
+    flavorNotes: ["قوام ملوكي", "نكهة عميقة", "توازن فاخر", "كثافة ممتازة"],
+    color: "#B45309", // amber-700
+  },
+  {
+    id: "blend-ameed",
+    name: "توليفة العميد الخاصة",
+    category: "signature_blends",
+    categoryLabel: "توليفات بدران الخاصة",
+    blendRole: "توليفة ثقيلة لتركيز عالي ووش كثيف متماسك",
+    roleBadge: "crema",
+    sadaPrice: 1000,
+    mohawajPrice: 1120,
+    kiloPrice: 1000,
+    description: "توليفة العميد الأكثر ثقلاً وتركيزاً، محمصة بحرفية لعشاق القهوة الثقيلة ذات الوش الذهبي العريض والتركيز العالي.",
+    flavorNotes: ["تركيز عالي", "وش كثيف جداً", "قوام ثقيل", "مزاج عالي"],
+    color: "#78350F", // amber-900
+  },
+  {
+    id: "blend-malaki",
+    name: "توليفة الملكي الراقية",
+    category: "signature_blends",
+    categoryLabel: "توليفات بدران الخاصة",
+    blendRole: "مزيج ثلاثي كولومبي وهندي وبرازيلي بلمسة تحميص خاصة",
+    roleBadge: "royal",
+    sadaPrice: 800,
+    mohawajPrice: 920,
+    kiloPrice: 800,
+    description: "توليفة ثلاثية متقنة تجمع بين حموضة الكولومبي الناعمة، وش الروبوستا الهندي، وقوام البرازيلي الكلاسيكي.",
+    flavorNotes: ["توليفة ثلاثية", "كولومبي وبرازيلي", "وش هندي", "نكهة راقية"],
+    color: "#854D0E", // yellow-800
+  },
+  {
+    id: "blend-asli",
+    name: "توليفة الأصلي التراثية",
+    category: "signature_blends",
+    categoryLabel: "توليفات بدران الخاصة",
+    blendRole: "خلطة الأجداد التراثية التي انطلق بها محل بدران منذ عقود",
+    roleBadge: "royal",
+    sadaPrice: 880,
+    mohawajPrice: 1000,
+    kiloPrice: 880,
+    description: "الخلطة التراثية الأصلية التي عُرف بها بن بدران في ميت غمر، تحميصة متوازنة تجمع عبق الماضي وجودة الحاضر.",
+    flavorNotes: ["تراث بدران", "خلطة الأجداد", "نكهة أصيلة", "تحميصة ميت غمر"],
+    color: "#C2410C", // orange-700
+  },
+];
