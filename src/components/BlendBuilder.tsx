@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import {
   Sparkles,
   Coffee,
@@ -22,6 +22,8 @@ import {
   SlidersHorizontal,
   Layers,
   Award,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import {
   Card,
@@ -181,6 +183,49 @@ export default function BlendBuilder({
   // Default active category: "brazilian" (the foundation)
   const [activeCategory, setActiveCategory] = useState<string>("brazilian");
   const [searchQuery, setSearchQuery] = useState<string>("");
+
+  // Category Tabs Horizontal Scroll Controls
+  const tabsContainerRef = useRef<HTMLDivElement>(null);
+  const [canScrollRight, setCanScrollRight] = useState(false);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+
+  const checkTabsScroll = () => {
+    const el = tabsContainerRef.current;
+    if (!el) return;
+    const { scrollWidth, clientWidth, scrollLeft } = el;
+    const maxScroll = scrollWidth - clientWidth;
+    if (maxScroll <= 4) {
+      setCanScrollRight(false);
+      setCanScrollLeft(false);
+      return;
+    }
+    const currentScroll = Math.abs(scrollLeft);
+    setCanScrollRight(currentScroll > 6);
+    setCanScrollLeft(currentScroll < maxScroll - 6);
+  };
+
+  useEffect(() => {
+    checkTabsScroll();
+    const el = tabsContainerRef.current;
+    if (!el) return;
+    el.addEventListener("scroll", checkTabsScroll, { passive: true });
+    window.addEventListener("resize", checkTabsScroll);
+    const timer = setTimeout(checkTabsScroll, 150);
+    return () => {
+      el.removeEventListener("scroll", checkTabsScroll);
+      window.removeEventListener("resize", checkTabsScroll);
+      clearTimeout(timer);
+    };
+  }, []);
+
+  const handleScrollTabs = (direction: "right" | "left") => {
+    if (!tabsContainerRef.current) return;
+    const scrollAmount = 220;
+    tabsContainerRef.current.scrollBy({
+      left: direction === "left" ? -scrollAmount : scrollAmount,
+      behavior: "smooth",
+    });
+  };
 
   // Customization options
   const [grind, setGrind] = useState<string>("تركي ناعم كلاسيكي (مع الوش)");
@@ -712,43 +757,100 @@ export default function BlendBuilder({
                 </div>
               </div>
 
-              {/* Origin Categories Tabs - Sleek, Compact & Refined */}
+              {/* Origin Categories Tabs - Sleek, Compact & Refined with Movement Indicators */}
               <div className="space-y-2.5">
-                <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
-                  {BLEND_ORIGIN_CATEGORIES.map((cat) => {
-                    const isSelected = activeCategory === cat.id;
-                    const stats = categoryStats[cat.id] || { total: 0, selected: 0 };
-                    return (
-                      <button
-                        key={cat.id}
-                        type="button"
-                        onClick={() => setActiveCategory(cat.id)}
-                        className={`px-3 py-1.5 rounded-lg text-xs font-alexandria font-medium transition-all shrink-0 cursor-pointer flex items-center gap-1.5 border ${
-                          isSelected
-                            ? "bg-[#1A110B] text-white border-[#1A110B] shadow-2xs"
-                            : "bg-white text-[#1A110A]/75 border-[#1A110A]/12 hover:border-[#C5A059]/60 hover:text-[#1A110A]"
-                        }`}
-                      >
-                        <span className={isSelected ? "text-[#C5A059]" : "text-[#1A110A]/50"}>
-                          {getCategoryIcon(cat.iconName)}
-                        </span>
-                        <span>{cat.label}</span>
-                        <span
-                          className={`text-[10px] font-price ${
-                            isSelected ? "text-[#C5A059]" : "text-[#1A110A]/40"
-                          }`}
-                        >
-                          ({stats.total})
-                        </span>
-                        {stats.selected > 0 && (
-                          <span
-                            className="w-1.5 h-1.5 rounded-full bg-[#C5A059] ring-2 ring-[#C5A059]/30 shrink-0"
-                            title={`${stats.selected} أصناف مضافة من هذا القسم`}
-                          />
-                        )}
-                      </button>
-                    );
-                  })}
+                <div className="flex items-center gap-1.5">
+                  {/* Right Scroll Indicator & Button (Towards Beginning in RTL) */}
+                  <button
+                    type="button"
+                    onClick={() => handleScrollTabs("right")}
+                    disabled={!canScrollRight}
+                    className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 border transition-all cursor-pointer ${
+                      canScrollRight
+                        ? "bg-white text-[#1A110A] border-[#1A110A]/15 hover:bg-[#1A110B] hover:text-[#C5A059] hover:border-[#1A110B] shadow-2xs active:scale-95"
+                        : "bg-black/[0.03] text-[#1A110A]/20 border-transparent cursor-not-allowed opacity-40"
+                    }`}
+                    title="تمرير الأقسام لليمين"
+                    aria-label="تمرير الأقسام لليمين"
+                  >
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+
+                  {/* Scrollable Tabs Viewport with Edge Fade Masks */}
+                  <div className="relative flex-1 min-w-0">
+                    {/* Right edge fade mask */}
+                    {canScrollRight && (
+                      <div className="pointer-events-none absolute right-0 top-0 bottom-1 w-6 bg-gradient-to-l from-white via-white/80 to-transparent z-10" />
+                    )}
+
+                    <div
+                      ref={tabsContainerRef}
+                      className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none scroll-smooth"
+                    >
+                      {BLEND_ORIGIN_CATEGORIES.map((cat) => {
+                        const isSelected = activeCategory === cat.id;
+                        const stats = categoryStats[cat.id] || { total: 0, selected: 0 };
+                        return (
+                          <button
+                            key={cat.id}
+                            type="button"
+                            onClick={(e) => {
+                              setActiveCategory(cat.id);
+                              e.currentTarget.scrollIntoView({
+                                behavior: "smooth",
+                                inline: "center",
+                                block: "nearest",
+                              });
+                            }}
+                            className={`px-3 py-1.5 rounded-lg text-xs font-alexandria font-medium transition-all shrink-0 cursor-pointer flex items-center gap-1.5 border ${
+                              isSelected
+                                ? "bg-[#1A110B] text-white border-[#1A110B] shadow-2xs"
+                                : "bg-white text-[#1A110A]/75 border-[#1A110A]/12 hover:border-[#C5A059]/60 hover:text-[#1A110A]"
+                            }`}
+                          >
+                            <span className={isSelected ? "text-[#C5A059]" : "text-[#1A110A]/50"}>
+                              {getCategoryIcon(cat.iconName)}
+                            </span>
+                            <span>{cat.label}</span>
+                            <span
+                              className={`text-[10px] font-price ${
+                                isSelected ? "text-[#C5A059]" : "text-[#1A110A]/40"
+                              }`}
+                            >
+                              ({stats.total})
+                            </span>
+                            {stats.selected > 0 && (
+                              <span
+                                className="w-1.5 h-1.5 rounded-full bg-[#C5A059] ring-2 ring-[#C5A059]/30 shrink-0"
+                                title={`${stats.selected} أصناف مضافة من هذا القسم`}
+                              />
+                            )}
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    {/* Left edge fade mask */}
+                    {canScrollLeft && (
+                      <div className="pointer-events-none absolute left-0 top-0 bottom-1 w-6 bg-gradient-to-r from-white via-white/80 to-transparent z-10" />
+                    )}
+                  </div>
+
+                  {/* Left Scroll Indicator & Button (Towards Remaining Tabs in RTL) */}
+                  <button
+                    type="button"
+                    onClick={() => handleScrollTabs("left")}
+                    disabled={!canScrollLeft}
+                    className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 border transition-all cursor-pointer ${
+                      canScrollLeft
+                        ? "bg-white text-[#1A110A] border-[#1A110A]/15 hover:bg-[#1A110B] hover:text-[#C5A059] hover:border-[#1A110B] shadow-2xs active:scale-95"
+                        : "bg-black/[0.03] text-[#1A110A]/20 border-transparent cursor-not-allowed opacity-40"
+                    }`}
+                    title="تمرير الأقسام لليسار"
+                    aria-label="تمرير الأقسام لليسار"
+                  >
+                    <ChevronLeft className="w-4 h-4" />
+                  </button>
                 </div>
 
                 {/* Subtle Barista Advice Line */}

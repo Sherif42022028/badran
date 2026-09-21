@@ -3,7 +3,6 @@
 import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import {
-  FileDown,
   Sparkles,
   Coffee,
   Flame,
@@ -93,19 +92,6 @@ export default function PrintedMenuBooklet() {
               <span>عرض الكتالوج كاملاً</span>
             </button>
           </div>
-
-          {/* Genuine Real PDF Download Button */}
-          <a
-            href="/budran_coffee_price_list.pdf"
-            download="منيو_بن_بدران_الرسمي_2026.pdf"
-            className="px-4 sm:px-5 py-2.5 bg-[#C5A059] hover:bg-[#b08d47] text-[#1A110B] font-bold text-xs sm:text-sm font-alexandria rounded-xl shadow-xs hover:shadow-md flex items-center gap-2 transition-all cursor-pointer active:scale-98 border border-[#C5A059]/40"
-          >
-            <FileDown className="w-4.5 h-4.5 shrink-0" />
-            <span>تحميل نسخة PDF الرسمية</span>
-            <span className="text-[10px] bg-[#1A110B]/10 px-1.5 py-0.5 rounded font-mono font-bold">
-              149 KB
-            </span>
-          </a>
         </div>
       </div>
 
