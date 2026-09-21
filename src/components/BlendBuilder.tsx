@@ -172,17 +172,11 @@ export default function BlendBuilder({
   isEmbedded = false,
   presetBlend,
 }: BlendBuilderProps) {
-  // Selected coffee beans: defaults to Santos (150g) + Harari (100g)
-  const [selectedGrams, setSelectedGrams] = useState<Record<string, number>>({
-    "br-san": 150,
-    "hab-har": 100,
-  });
+  // Selected coffee beans: starts empty so the user starts with a clean slate
+  const [selectedGrams, setSelectedGrams] = useState<Record<string, number>>({});
 
   // Selected preparation (sada vs mohawaj) per bean
-  const [selectedPreps, setSelectedPreps] = useState<Record<string, "sada" | "mohawaj">>({
-    "br-san": "sada",
-    "hab-har": "mohawaj",
-  });
+  const [selectedPreps, setSelectedPreps] = useState<Record<string, "sada" | "mohawaj">>({});
 
   // Default active category: "brazilian" (the foundation)
   const [activeCategory, setActiveCategory] = useState<string>("brazilian");
