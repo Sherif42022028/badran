@@ -180,8 +180,8 @@ export default function BlendBuilder({
   // Selected preparation (sada vs mohawaj) per bean
   const [selectedPreps, setSelectedPreps] = useState<Record<string, "sada" | "mohawaj">>({});
 
-  // Default active category: "brazilian" (the foundation)
-  const [activeCategory, setActiveCategory] = useState<string>("brazilian");
+  // Default active category: "badran_plain" (Badran's heritage plain coffee)
+  const [activeCategory, setActiveCategory] = useState<string>("badran_plain");
   const [searchQuery, setSearchQuery] = useState<string>("");
 
   // Category Tabs Horizontal Scroll Controls
@@ -426,6 +426,8 @@ export default function BlendBuilder({
   // Helper to get Role Badge Info
   const getRoleBadgeInfo = (badge?: string) => {
     switch (badge) {
+      case "classic":
+        return { label: "⭐ بن بدران الأصلي", color: "bg-amber-100 text-amber-900 border-amber-300" };
       case "crema":
         return { label: "☕ سر الوش والكريمة", color: "bg-amber-100 text-amber-900 border-amber-300" };
       case "chocolate":
@@ -639,7 +641,7 @@ export default function BlendBuilder({
           </h2>
 
           <p className="font-alexandria text-xs sm:text-sm text-[#1A110A]/75 max-w-2xl mx-auto mt-2.5 font-light leading-relaxed">
-            اختر محاصيل وحبوب البن المفضلة لخلطتك من البن البرازيلي الكلاسيكي، الهندي، الحبشي، أجود أرابيكات أمريكا اللاتينية والنوادر وتوليفات بدران الملكية. حدد وزن كل صنف بدقة واختر نوع تجهيزه (ساده أو محوج بالحبهان).
+            اختر محاصيل وحبوب البن المفضلة لخلطتك من بن بدران السادة الأصلي بجميع درجات تحميصه، البن البرازيلي الكلاسيكي، الهندي، الحبشي، وأجود أرابيكات أمريكا اللاتينية والنوادر وتوليفات بدران الملكية. حدد وزن كل صنف بدقة واختر نوع تجهيزه (ساده أو محوج بالحبهان).
           </p>
 
           {/* Quick Counter Ticker */}

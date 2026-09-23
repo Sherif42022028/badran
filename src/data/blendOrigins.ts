@@ -1,4 +1,5 @@
 export type BlendCategoryType =
+  | "badran_plain"
   | "brazilian"
   | "indian"
   | "habashi"
@@ -12,7 +13,7 @@ export interface BlendBeanOrigin {
   category: BlendCategoryType;
   categoryLabel: string;
   blendRole: string; // الدور الأساسي للصنف في التوليفة
-  roleBadge?: "crema" | "chocolate" | "aromatic" | "royal"; // شارة الهدف السريع (وش، شوكولاتة، عطرية، ملوكي)
+  roleBadge?: "crema" | "chocolate" | "aromatic" | "royal" | "classic"; // شارة الهدف السريع (وش، شوكولاتة، عطرية، ملوكي، كلاسيكي)
   sadaPrice: number; // سعر الكيلو ساده
   mohawajPrice: number; // سعر الكيلو محوج بالحبهان
   kiloPrice: number; // السعر الافتراضي (ساده)
@@ -30,6 +31,13 @@ export interface BlendOriginCategoryInfo {
 }
 
 export const BLEND_ORIGIN_CATEGORIES: BlendOriginCategoryInfo[] = [
+  {
+    id: "badran_plain",
+    label: "بن بدران السادة (الأساسي)",
+    sublabel: "درجات التحميص الأصلية الأربعة",
+    iconName: "Flame",
+    advice: "بن بدران النقي بمستويات التحميص الأربعة (فاتح، وسط، غامق، محروق)؛ أساس فنجان القهوة التراثي في ميت غمر، يمكنك استخدامه كقاعدة رئيسية لتوليفة فنجانك أو مزج درجات مختلفة معاً.",
+  },
   {
     id: "brazilian",
     label: "البن البرازيلي",
@@ -75,6 +83,64 @@ export const BLEND_ORIGIN_CATEGORIES: BlendOriginCategoryInfo[] = [
 ];
 
 export const BLEND_COFFEE_BEANS: BlendBeanOrigin[] = [
+  // ================= 0. بن بدران السادة الأصلي بجميع درجاته =================
+  {
+    id: "badran-plain-light",
+    name: "بن ساده بدران (فاتح)",
+    category: "badran_plain",
+    categoryLabel: "بن بدران السادة",
+    blendRole: "تحميص فاتح هادئ يحافظ على النقاء وحموضة خفيفة منعشة",
+    roleBadge: "classic",
+    sadaPrice: 520,
+    mohawajPrice: 600,
+    kiloPrice: 520,
+    description: "البن السادة الأساسي من محامص بدران بدرجة تحميص فاتحة، خفيف وسلس على المعدة مع رغوة ذهبية صافية ومذاق نقي.",
+    flavorNotes: ["تحميص فاتح", "خفيف وسلس", "نقاء المذاق", "رغوة ذهبية"],
+    color: "#D4A373",
+  },
+  {
+    id: "badran-plain-medium",
+    name: "بن ساده بدران (وسط)",
+    category: "badran_plain",
+    categoryLabel: "بن بدران السادة",
+    blendRole: "التحميص الأكثر توازناً وشهرة، يجمع القوام المظبوط والوش الكثيف",
+    roleBadge: "classic",
+    sadaPrice: 520,
+    mohawajPrice: 600,
+    kiloPrice: 520,
+    description: "الدرجة الكلاسيكية الأكثر طلباً في ميت غمر، توازن عبقري بين القوام والوش دون مرارة طاغية، ممتازة كقاعدة يومية لأي توليفة.",
+    flavorNotes: ["تحميص وسط كلاسيكي", "الأكثر طلباً", "وش متماسك", "توازن مثالي"],
+    color: "#9C6644",
+  },
+  {
+    id: "badran-plain-dark",
+    name: "بن ساده بدران (غامق)",
+    category: "badran_plain",
+    categoryLabel: "بن بدران السادة",
+    blendRole: "تحميص غامق عميق لعشاق النكهة القوية والمزاج الثقيل",
+    roleBadge: "classic",
+    sadaPrice: 540,
+    mohawajPrice: 620,
+    kiloPrice: 540,
+    description: "تحميصة غامقة متقنة بلمسة دخانية محببة ومرارة بنية أصيلة تمنح الفنجان ثقلاً وتركيزاً عالياً لعشاق المزاج العالي.",
+    flavorNotes: ["تحميص غامق", "نكهة قوية", "قوام ثقيل", "مرارة محببة"],
+    color: "#582F0E",
+  },
+  {
+    id: "badran-plain-extra-dark",
+    name: "بن ساده بدران (محروق / دوبل دارك)",
+    category: "badran_plain",
+    categoryLabel: "بن بدران السادة",
+    blendRole: "أعلى درجات التحميص لقوة استثنائية ونفحة تحميص فرنسي حادة",
+    roleBadge: "classic",
+    sadaPrice: 580,
+    mohawajPrice: 660,
+    kiloPrice: 580,
+    description: "تحميص إكسترا غامق (دوبل دارك / محروق) لقهوة داكنة قوية ذات طابع مدخن حاد، ممتازة لإعطاء لسعة قوية وتركيز مضاعف لأي توليفة.",
+    flavorNotes: ["تحميص إكسترا دارك", "دوبل دارك", "نكهة مدخنة حادة", "تركيز استثنائي"],
+    color: "#2C1810",
+  },
+
   // ================= 1. البن البرازيلي (حجر الأساس والنعومة) =================
   {
     id: "br-san",
